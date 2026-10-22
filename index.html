@@ -217,7 +217,7 @@ const MUSEUMS = {
   orsay:{n:"오르세 미술관",o:"Musée d'Orsay",c:"프랑스 파리",u:"https://www.musee-orsay.fr"},
   orangerie:{n:"오랑주리 미술관",o:"Musée de l'Orangerie",c:"프랑스 파리",u:"https://www.musee-orangerie.fr"},
   marmottan:{n:"마르모탕 모네 미술관",o:"Musée Marmottan Monet",c:"프랑스 파리",u:"https://www.marmottan.fr"},
-  pompidou:{n:"퐁피두 센터",o:"Centre Pompidou",c:"프랑스 파리",u:"https://www.centrepompidou.fr",note:"2025년 9월부터 리노베이션으로 휴관(2030년 재개관 예정). 소장품 일부는 프랑스 각지와 해외에 순회 전시 중"},
+  pompidou:{n:"퐁피두 센터",o:"Centre Pompidou",c:"프랑스 파리",u:"https://www.centrepompidou.fr",note:"2025년 9월부터 리노베이션으로 휴관(2030년 재개관 예정). 소장품 일부는 서울 여의도 퐁피두센터 한화 등 프랑스 각지와 해외에서 전시 중"},
   fabre:{n:"파브르 미술관",o:"Musée Fabre",c:"프랑스 몽펠리에",u:"https://museefabre.montpellier3m.fr"},
   ngl:{n:"런던 내셔널 갤러리",o:"The National Gallery",c:"영국 런던",u:"https://www.nationalgallery.org.uk"},
   tateb:{n:"테이트 브리튼",o:"Tate Britain",c:"영국 런던",u:"https://www.tate.org.uk"},
@@ -712,6 +712,7 @@ Object.assign(MUSEUMS,{
   nortonsimon:{n:"노턴 사이먼 미술관",o:"Norton Simon Museum",c:"미국 패서디나",u:"https://www.nortonsimon.org"},
   unknown:{n:"소장처 미확인",o:"Location unconfirmed",c:"개인 소장으로 추정",u:""},
   k20:{n:"노르트라인베스트팔렌 미술관 (K20)",o:"Kunstsammlung Nordrhein-Westfalen",c:"독일 뒤셀도르프",u:"https://www.kunstsammlung.de"},
+  hakf:{n:"힐마 아프 클린트 재단",o:"Hilma af Klint Foundation",c:"스웨덴 스톡홀름",u:"https://hilmaafklint.se",note:"재단은 자체 미술관이 없고, 협력 관계인 스톡홀름 현대미술관(Moderna Museet)에서 늘 일부 작품을 전시합니다. 세계 순회전에도 자주 대여됩니다."},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -754,7 +755,7 @@ const EXTRA_WORKS={
 "John Constable":[["주교 정원에서 본 솔즈베리 대성당","Salisbury Cathedral from the Bishop's Grounds","1823","va","Salisbury Cathedral from the Bishop's Grounds",{tip:"여러 버전이 있으며 프릭 컬렉션과 메트로폴리탄에도 있습니다."}],["플랫퍼드 방앗간","Flatford Mill","1816–1817","tateb","Flatford Mill (Scene on a Navigable River)"]],
 "John Everett Millais":[["부모 집의 그리스도","Christ in the House of His Parents","1849–1850","tateb","Christ in the House of His Parents"]],
 "Dante Gabriel Rossetti":[["프로세르피나","Proserpine","1874","tateb","Proserpine (Rossetti painting)"]],
-"Gustave Courbet":[["돌 깨는 사람들","The Stone Breakers","1849","lost","The Stone Breakers",{tip:"사실주의의 상징 같은 작품이지만 지금은 사진으로만 남아 있습니다."}],["절망적인 남자 (자화상)","The Desperate Man","1843–1845","private","File:Gustave Courbet - Le Désespéré (1843).jpg"]],
+"Gustave Courbet":[["돌 깨는 사람들","The Stone Breakers","1849","lost","The Stone Breakers",{tip:"사실주의의 상징 같은 작품이지만 지금은 사진으로만 남아 있습니다."}]],
 "Jean-François Millet":[["씨 뿌리는 사람","The Sower","1850","mfa","The Sower (Millet)"],["괭이를 든 남자","Man with a Hoe","1860–1862","getty","Man with a Hoe"]],
 "Honoré Daumier":[["세탁부","The Laundress","1863경","orsay","The Laundress (Daumier)"]],
 "Jean-Baptiste-Camille Corot":[["진주의 여인","Woman with a Pearl","1868–1870경","louvre","File:Camille Corot - Woman with a Pearl.jpg"],["망트의 다리","The Bridge at Mantes","1868–1870","louvre","File:Jean-Baptiste-Camille Corot - The Bridge at Mantes - WGA05299.jpg"]],
@@ -938,7 +939,7 @@ EXTRA_WORKS3["Amedeo Modigliani"]=[
  ["화가 부인의 초상 (잔 에뷔테른)","Portrait of the Artist's Wife","1918","nortonsimon","File:Portrait-of-the-Artist's-Wife 1918 Amedeo Modigliani.jpg",{tip:"의자 등받이에 팔을 걸치고 앉은 아내 잔 에뷔테른을 그렸습니다. 이듬해 모딜리아니가 세상을 떠나자 잔도 이틀 뒤 뒤따랐습니다."}],
  ["젊은 견습생","The Young Apprentice","1918–1919","orangerie","File:Amedeo Modigliani - The Young Apprentice - Google Art Project.jpg",{tip:"화상 폴 기욤의 컬렉션으로 오랑주리 미술관에 들어왔습니다."}]];
 EXTRA_ARTISTS3["surrealism"]=[{n:"프랑시스 피카비아",o:"Francis Picabia",l:"1879–1953",at:1,d:"인상주의 풍경화로 출발해 입체주의·오르피즘, 다다, 초현실주의, 다시 구상화까지 끊임없이 양식을 바꾼 화가입니다. 뒤샹과 함께 뉴욕과 파리 다다의 핵심 인물이었고, 기계를 사람처럼 그린 '기계 형태' 그림으로 유명합니다.",w:[
-  ["우드니 (젊은 미국 아가씨, 춤)","Udnie (Young American Girl, The Dance)","1913","pompidou","File:Francis Picabia, 1913, Udnie (Young American Girl, The Dance), oil on canvas, 290 x 300 cm, Musée National d’Art Moderne, Centre Pompidou, Paris..jpg",{tip:"1913년 뉴욕으로 가는 배에서 본 무용수의 춤을 거의 추상에 가까운 색면으로 풀어낸 대작(290×300cm)입니다. 다다 이전, 입체주의·오르피즘 시기의 대표작입니다."}],
+  ["우드니 (젊은 미국 아가씨, 춤)","Udnie (Young American Girl, The Dance)","1913","pompidou","File:Francis Picabia, 1913, Udnie (Young American Girl, The Dance), oil on canvas, 290 x 300 cm, Musée National d’Art Moderne, Centre Georges Pompidou, Paris..jpg",{tip:"1913년 뉴욕으로 가는 배에서 본 무용수의 춤을 거의 추상에 가까운 색면으로 풀어낸 대작(290×300cm)입니다. 다다 이전, 입체주의·오르피즘 시기의 대표작입니다. 2026년 서울 여의도 퐁피두센터 한화 개관전 「큐비스트: 시각의 혁신가들」(10월 4일까지)에서도 전시됐습니다."}],
 
   ["가슴 (Seins)","Seins","1927","unknown","File:Francis Picabia, 1927 - Seins.jpg",{tip:"현재 소장처를 공개 자료로 확인하지 못했습니다. 개인 소장품일 가능성이 높습니다."}],
   ["이리스","Iris","1929경","private","File:Francis picabia iris 2019 CKS 16931 0124 000(042608).jpg",{tip:"얼굴, 손, 꽃 같은 여러 이미지를 반투명하게 겹쳐 그린 '투명(Transparences)' 연작 시기의 작품입니다. 2019년 런던 크리스티 경매에 나온 개인 소장품입니다."}]]}];
@@ -948,6 +949,11 @@ EXTRA_WORKS3["Wassily Kandinsky"]=[
 EXTRA_WORKS3["Piet Mondrian"]=[
  ["구성 10 (부두와 바다)","Composition 10 in Black and White (Pier and Ocean)","1915","kroller","File:Mondrian Compositie 10.jpg",{tip:"바다로 뻗은 부두와 물결을 짧은 가로·세로 선으로만 줄여 그렸습니다. 나무 연작에서 격자 추상으로 넘어가는 중간 단계입니다."}],
  ["커다란 빨간 면, 노랑, 검정, 회색, 파랑의 구성","Composition with Large Red Plane, Yellow, Black, Grey and Blue","1921","denhaag","File:Piet Mondriaan, 1921 - Composition en rouge, jaune, bleu et noir.jpg",{tip:"검은 선과 삼원색, 무채색만으로 균형을 잡는 '신조형주의' 양식이 완성된 무렵의 작품입니다."}]];
+EXTRA_ARTISTS3["abstraction"]=[{n:"힐마 아프 클린트",o:"Hilma af Klint",l:"1862–1944",at:0,d:"스웨덴의 화가이자 신비주의자. 칸딘스키보다 몇 년 앞선 1906년부터 추상화를 그렸지만, '사후 20년 동안 공개하지 말라'는 유언 때문에 1980년대에야 세상에 알려져 추상미술의 역사를 다시 쓰게 만들었습니다.",w:[
+  ["원초적 혼돈, No. 16","Primordial Chaos, No. 16","1906–1907","hakf","File:Hilma af Klint, 1906-07, Primordial Chaos - No 16.jpg",{tip:"'신전을 위한 그림' 연작의 첫 그룹으로, 서양 미술사에서 가장 이른 추상화 가운데 하나로 꼽힙니다."}],
+  ["가장 큰 열 점, No. 7, 성년기","The Ten Largest, No. 7, Adulthood","1907","hakf","File:Hilma af Klint - The Ten Largest No. 7 - Adulthood - 1907.jpg",{tip:"유년기부터 노년기까지 인생의 단계를 높이 3m가 넘는 화면 10점에 담은 연작입니다."}],
+  ["백조, No. 17","The Swan, No. 17","1915","hakf","File:Hilma af Klint, 1915, Svanen, No. 17.jpg",{tip:"검은 백조와 흰 백조로 시작한 연작이 점점 기하학적인 원과 면으로 바뀌어 가는 과정의 한 장면입니다."}],
+  ["제단화 No. 1","Altarpiece No. 1","1915","hakf","File:8 hilma af klint, altarpiece no 1, 1915.jpg",{tip:"'신전을 위한 그림' 193점을 마무리하는 제단화 3점 가운데 첫 번째입니다."}]]}];
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
