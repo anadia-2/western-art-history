@@ -707,6 +707,8 @@ Object.assign(MUSEUMS,{
   legion:{n:"리전 오브 아너 미술관",o:"Legion of Honor",c:"미국 샌프란시스코",u:"https://www.famsf.org"},
   harvard:{n:"하버드 미술관 (포그)",o:"Harvard Art Museums – Fogg Museum",c:"미국 케임브리지",u:"https://harvardartmuseums.org"},
   pushkin:{n:"푸시킨 미술관",o:"Pushkin State Museum of Fine Arts",c:"러시아 모스크바",u:"",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
+  annonciade:{n:"아농시아드 미술관",o:"Musée de l'Annonciade",c:"프랑스 생트로페",u:""},
+  dia:{n:"디트로이트 미술관",o:"Detroit Institute of Arts",c:"미국 디트로이트",u:"https://dia.org"},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -755,7 +757,7 @@ const EXTRA_WORKS={
 "Jean-Baptiste-Camille Corot":[["진주의 여인","Woman with a Pearl","1868–1870경","louvre","File:Camille Corot - Woman with a Pearl.jpg"],["망트의 다리","The Bridge at Mantes","1868–1870","louvre","File:Jean-Baptiste-Camille Corot - The Bridge at Mantes - WGA05299.jpg"]],
 "Édouard Manet":[["피리 부는 소년","The Fifer","1866","orsay","The Fifer"],["발코니","The Balcony","1868–1869","orsay","The Balcony (Manet)"],["제비꽃 장식을 단 베르트 모리조","Berthe Morisot with a Bouquet of Violets","1872","orsay","Berthe Morisot with a Bouquet of Violets"],["막시밀리안 황제의 처형","The Execution of Emperor Maximilian","1868–1869","mannheim","The Execution of Emperor Maximilian",{tip:"여러 버전이 있으며 보스턴 미술관, 런던 내셔널 갤러리(조각난 부분)에도 있습니다."}]],
 "Claude Monet":[["생라자르역","La Gare Saint-Lazare","1877","orsay","File:Claude Monet - The Saint-Lazare Station - Google Art Project.jpg"],["루앙 대성당 연작","Rouen Cathedral series","1892–1894","orsay","Rouen Cathedral (Monet series)",{tip:"30여 점의 연작 가운데 다섯 점이 오르세에 나란히 걸려 있습니다."}],["건초더미 연작","Haystacks series","1890–1891","aic","Haystacks (Monet series)",{tip:"시카고 미술관이 건초더미 연작을 여러 점 소장하고 있습니다."}],["라 그르누예르","La Grenouillère","1869","met","La Grenouillère (Monet)"]],
-"Pierre-Auguste Renoir":[["그네","The Swing","1876","orsay","The Swing (Renoir)"],["피아노 치는 소녀들","Young Girls at the Piano","1892","orsay","File:Auguste Renoir - Young Girls at the Piano - Google Art Project.jpg"],["부지발의 무도회","Dance at Bougival","1883","mfa","Dance at Bougival"],["이렌 카엥 당베르 양의 초상","Portrait of Irène Cahen d'Anvers","1880","zurich","Portrait of Irène Cahen d'Anvers",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}]],
+"Pierre-Auguste Renoir":[["그네","The Swing","1876","orsay","The Swing (Renoir)"],["피아노 치는 소녀들 (오르세 버전)","Young Girls at the Piano","1892","orsay","File:Auguste Renoir - Young Girls at the Piano - Google Art Project.jpg",{tip:"프랑스 정부의 의뢰로 같은 구도를 여러 점 그렸고, 그중 이 그림을 국가가 사들였습니다. 르누아르 작품 가운데 프랑스 국가가 처음 산 그림입니다."}],["피아노 치는 소녀들 (메트로폴리탄 버전)","Two Young Girls at the Piano","1892","met","File:Two Young Girls at the Piano MET rl1975.1.201.R.jpg",{tip:"오르세 버전과 같은 해에 그린 다른 판본으로, 로버트 레먼 컬렉션 소장입니다. 두 그림을 비교하면 색감과 마무리 정도가 조금씩 다릅니다."}],["부지발의 무도회","Dance at Bougival","1883","mfa","Dance at Bougival"],["이렌 카엥 당베르 양의 초상","Portrait of Irène Cahen d'Anvers","1880","zurich","Portrait of Irène Cahen d'Anvers",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}]],
 "Edgar Degas":[["무대 위의 무희 (에투알)","L'Étoile","1876–1878경","orsay","File:Edgar Degas - Ballet (L'Étoile).jpg"],["벨렐리 가족","The Bellelli Family","1858–1869","orsay","The Bellelli Family"],["다림질하는 여인들","Women Ironing","1884–1886경","orsay","File:Edgar Degas - Repasseuses - Musée d'Orsay.jpg"],["14세의 어린 무용수 (조각)","Little Dancer of Fourteen Years","1878–1881","nga","Little Dancer of Fourteen Years",{tip:"밀랍 원작은 워싱턴에 있고, 사후 청동 주조본은 오르세 등 여러 곳에 있습니다."}]],
 "Camille Pissarro":[["붉은 지붕","The Red Roofs","1877","orsay","File:Camille Pissarro - Red roofs, corner of a village, winter - Google Art Project.jpg"]],
 "Alfred Sisley":[["루브시엔의 눈","Snow at Louveciennes","1878","orsay","File:La neige à Louveciennes (Snow at Louveciennes).jpg"],["모레의 다리","The Bridge at Moret","1893","orsay","File:Sisley - The-Bridge-At-Moret,-1893.jpg"]],
@@ -909,6 +911,15 @@ const EXTRA_ARTISTS3={
   ["별이 있는 풍경 (수채화)","Landscape with Stars","1905–1908경","met","File:Landscape with Stars MET DT736.jpg",{tip:"말년에 그린 수채화로, 점 대신 짧은 색 획으로 밤하늘을 그렸습니다. 로버트 레먼 컬렉션 소장이며 빛에 약한 종이 작품이라 늘 전시되지는 않습니다."}]]}]
 };
 
+EXTRA_WORKS3["Henri Matisse"]=[
+ ["창문","The Window","1916","dia","File:La Fenêtre, par Henri Matisse.webp",{tip:"파리 근교 이시레물리노 화실의 창가를 그렸습니다. 1922년 디트로이트 미술관이 사들이며 미국 공공 미술관이 소장한 첫 마티스 작품이 되었습니다."}],
+ ["창가의 여인","Woman at the Window","1920","annonciade","File:Femme à la fenêtre, par Henri Matisse.jpg",{tip:"니스 시절, 바다가 보이는 호텔 방 창가를 그린 작품입니다. 퐁피두 센터 소장품으로 생트로페 아농시아드 미술관에 맡겨 전시하고 있습니다."}],
+ ["루마니아 블라우스","La Blouse roumaine","1940","pompidou","La Blouse roumaine",{cr:1,tip:"루마니아 전통 자수 블라우스를 입은 여인을 단순한 선과 색면으로 그렸습니다."}]];
+
+EXTRA_WORKS3["Claude Monet"].push(["꽃병 (아욱꽃)","Vase of Flowers","1881–1882경","courtauld","File:Vase of Flowers Claude Monet.jpg",{tip:"들에서 꺾은 아욱꽃을 꽂은 정물화입니다. 모네는 1880년대 초 풍경화와 함께 꽃 정물을 여러 점 그렸습니다."}]);
+EXTRA_WORKS3["J. M. W. Turner"]=[
+ ["국회의사당의 화재, 1834년 10월 16일","The Burning of the Houses of Lords and Commons","1834–1835","philly","File:Joseph Mallord William Turner, English - The Burning of the Houses of Lords and Commons, October 16, 1834 - Google Art Project.jpg",{tip:"터너가 템스강가에서 직접 본 화재를 그렸습니다. 같은 사건을 다른 각도에서 그린 두 번째 그림은 클리블랜드 미술관에 있습니다."}],
+ ["노럼성, 해돋이","Norham Castle, Sunrise","1845경","tateb","File:Joseph Mallord William Turner - Norham Castle, Sunrise - WGA23182.jpg",{tip:"형태가 빛 속에 거의 녹아 버린 말년작으로, 인상주의와 추상을 앞선 그림으로 자주 꼽힙니다."}]];
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
@@ -983,6 +994,9 @@ function applyTheme(){if(theme==="system")document.documentElement.removeAttribu
 $("#themebtn").onclick=()=>{theme=themes[(themes.indexOf(theme)+1)%3];store.set("wa-theme",theme);applyTheme()};
 applyTheme();
 
+/* sort each artist's works by year (first 4-digit year in the date text) */
+const yearOf=y=>{const m=String(y).match(/\d{4}/);return m?+m[0]:9999};
+MOVEMENTS.forEach(m=>m.artists.forEach(a=>a.w.sort((p,q)=>yearOf(p[2])-yearOf(q[2]))));
 /* flatten works */
 const WORKS=[];
 MOVEMENTS.forEach((m,mi)=>m.artists.forEach((a,ai)=>a.w.forEach((w,wi)=>{
