@@ -147,7 +147,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
 </head>
 <body>
 <header class="masthead wrap">
-  <div class="eyebrow">르네상스부터 추상표현주의까지 · 20개 전시실</div>
+  <div class="eyebrow">르네상스부터 추상표현주의까지 · 21개 전시실</div>
   <h1>서양미술 전시실</h1>
   <p>시대와 사조를 따라 걸으며 대표 화가와 작품을 만나고, 그 작품이 지금 어느 미술관에 걸려 있는지 확인하는 개인 미술사 노트입니다.</p>
   <div class="stats" id="stats"></div>
@@ -676,6 +676,9 @@ Object.assign(MUSEUMS,{
   moca:{n:"LA 현대미술관 MOCA",o:"Museum of Contemporary Art",c:"미국 로스앤젤레스",u:"https://www.moca.org"},
   olmedo:{n:"돌로레스 올메도 미술관",o:"Museo Dolores Olmedo",c:"멕시코 멕시코시티",u:""},
   novecento:{n:"노베첸토 미술관",o:"Museo del Novecento",c:"이탈리아 밀라노",u:"https://www.museodelnovecento.org"},
+  mamparis:{n:"파리 시립 현대미술관",o:"Musée d'Art Moderne de Paris",c:"프랑스 파리",u:"https://www.mam.paris.fr"},
+  garnier:{n:"오페라 가르니에 (파리 오페라 극장)",o:"Palais Garnier",c:"프랑스 파리",u:"https://www.operadeparis.fr"},
+  chagallnice:{n:"마르크 샤갈 국립미술관",o:"Musée national Marc Chagall",c:"프랑스 니스",u:""},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -788,11 +791,38 @@ const EXTRA_ARTISTS={
 "impressionism":[{n:"메리 카사트",o:"Mary Cassatt",l:"1844–1926",d:"파리에서 활동한 미국 화가. 어머니와 아이의 일상을 그렸습니다.",w:[
   ["파란 안락의자의 소녀","Little Girl in a Blue Armchair","1878","nga","Little Girl in a Blue Armchair"],
   ["아이의 목욕","The Child's Bath","1893","aic","The Child's Bath"]]}],
+"fauvism":[{n:"라울 뒤피",o:"Raoul Dufy",l:"1877–1953",d:"1905년 마티스의 〈호사, 평온, 쾌락〉을 보고 야수주의에 합류했습니다. 이후 경쾌한 선과 맑은 색면을 겹치는 독자적인 화풍으로 바다, 경마장, 축제를 그린 '기쁨의 화가'입니다.",at:2,w:[
+  ["트루빌의 포스터","Les Affiches à Trouville","1906","pompidou","File:Les Affiches à Trouville.jpg"],
+  ["깃발로 장식된 거리","La Rue pavoisée","1906","pompidou","File:La Rue pavoisée.jpg"],
+  ["전기 요정","La Fée Électricité","1937","mamparis","La Fée Électricité",{cr:1,tip:"1937년 파리 만국박람회를 위해 그린 길이 약 60m의 대형 벽화로, 전시실 한 곳을 빙 둘러쌉니다."}]]}],
 "cubism":[{n:"로베르 들로네",o:"Robert Delaunay",l:"1885–1941",d:"입체주의에 밝은 색과 리듬을 더한 '오르피즘'을 이끌었습니다.",w:[
   ["에펠탑","Eiffel Tower","1911","guggenheim","File:Robert Delaunay - Eiffel Tower - 1911 - Solomon R. Guggenheim Museum.jpg"]]}]
 };
 
+const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
+ sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
+ traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
+ diff:"같은 시기 파리에서 입체주의와 추상이 형태를 쪼개거나 대상을 지웠다면, 에콜 드 파리의 화가들은 인물과 이야기를 지키며 감정과 서정을 그렸습니다.",
+ note:"샤갈은 입체주의, 표현주의, 초현실주의와 두루 닿아 있지만 어느 유파에도 속하지 않았고, 초현실주의 그룹의 합류 제안도 거절했습니다.",
+ artists:[
+  {n:"마르크 샤갈",o:"Marc Chagall",l:"1887–1985",d:"벨라루스 비텝스크 출신의 유대인 화가. 고향 마을, 연인, 하늘을 나는 사람들을 꿈같은 색채로 그렸고, 98세까지 회화, 스테인드글라스, 무대미술, 천장화를 남겼습니다.",w:[
+   ["나와 마을","I and the Village","1911","moma","I and the Village",{cr:1}],
+   ["생일","Birthday","1915","moma","Birthday (Chagall)",{cr:1}],
+   ["도시 위에서","Over the Town","1914–1918","tretyakov","Over the Town",{cr:1}],
+   ["하얀 십자가","White Crucifixion","1938","aic","White Crucifixion",{cr:1,tip:"프란치스코 교황이 가장 좋아하는 그림으로 꼽아 화제가 되었습니다."}],
+   ["파리 오페라 극장 천장화","Ceiling of the Palais Garnier","1964","garnier","Palais Garnier",{cr:1,tip:"공연이 없는 낮 시간대 극장 견학으로 볼 수 있습니다."}],
+   ["성서 메시지 연작","Le Message Biblique","1954–1967","chagallnice","Musée Marc Chagall",{cr:1,tip:"샤갈이 직접 설립에 참여한 미술관으로, 성서를 주제로 한 대작 17점이 모여 있습니다."}]]},
+  {n:"아메데오 모딜리아니",o:"Amedeo Modigliani",l:"1884–1920",d:"이탈리아 출신. 길게 늘인 목과 눈동자 없는 아몬드형 눈의 초상으로 유명하며, 35세에 요절했습니다.",w:[
+   ["잔 에뷔테른","Jeanne Hébuterne","1919","met","File:Amedeo Modigliani, 1919, Jeanne Hébuterne, oil on canvas, 91.4 x 73 cm, Metropolitan Museum of Art.jpg"],
+   ["누워 있는 누드","Reclining Nude","1917","moma","File:Modigliani, Amedeo - Reclining Nude - MoMA.jpg"],
+   ["폴 기욤, 노보 필로타","Paul Guillaume, Novo Pilota","1915","orangerie","File:Amedeo Modigliani - Paul Guillaume, Novo Pilota - Google Art Project.jpg"]]},
+  {n:"샤임 수틴",o:"Chaïm Soutine",l:"1893–1943",d:"벨라루스 출신 유대인 화가. 뒤틀린 형태와 격렬한 붓질로 훗날 추상표현주의 화가들에게 큰 영향을 주었습니다.",w:[
+   ["쇠고기 덩어리","Carcass of Beef","1925경","buffalo","File:Carcass of Beef by Chaim Soutine, c. 1925, Albright-Knox Art Gallery.jpg",{tip:"렘브란트의 〈도살된 소〉(루브르)에서 영감을 받은 연작입니다."}],
+   ["어린 제과사","The Little Pastry Cook","1922–1923경","orangerie","File:Chaïm Soutine - Le Petit Pâtissier.jpg"]]}
+ ]}}];
+
 (function(){
+  EXTRA_MOVEMENTS.forEach(x=>{const i=MOVEMENTS.findIndex(m=>m.id===x.after);MOVEMENTS.splice(i+1,0,x.m)});
   const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
   for(const [o,ws] of Object.entries(EXTRA_WORKS)){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
   for(const [id,as] of Object.entries(EXTRA_ARTISTS)){const m=MOVEMENTS.find(x=>x.id===id);
