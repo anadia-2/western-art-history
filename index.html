@@ -954,6 +954,7 @@ EXTRA_ARTISTS3["abstraction"]=[{n:"힐마 아프 클린트",o:"Hilma af Klint",l
   ["큰 인물화, No. 5 (지금까지 모든 작업의 열쇠)","The Large Figure Paintings, No. 5, The Key to All Works to Date","1907","hakf","File:Hilma af Klint - 1907 - The Large Figure Paintings - nr 5 - The Key to All Works to Date - Group III - The WU-Rosen Series.jpg",{tip:"'신전을 위한 그림'의 그룹 III '큰 인물화' 연작 가운데 하나로, 제목처럼 그때까지의 작업을 풀어 주는 열쇠 같은 도식을 담았습니다."}],
   ["가장 큰 열 점, No. 3, 청년기","The Ten Largest, No. 3, Youth","1907","hakf","File:Hilma af Klint - The Ten Largest No. 3 - Youth - 1907.jpg",{tip:"'가장 큰 열 점'(그룹 IV)은 유년기 2점, 청년기 2점, 성년기 4점, 노년기 2점으로 이루어져 있습니다. 이 그림은 청년기의 두 번째 작품입니다."}],
   ["가장 큰 열 점, No. 7, 성년기","The Ten Largest, No. 7, Adulthood","1907","hakf","File:Hilma af Klint - The Ten Largest No. 7 - Adulthood - 1907.jpg",{tip:"유년기부터 노년기까지 인생의 단계를 높이 3m가 넘는 화면 10점에 담은 연작(그룹 IV)입니다. 성년기 4점 가운데 하나입니다."}],
+  ["가장 큰 열 점, No. 8, 성년기","The Ten Largest, No. 8, Adulthood","1907","hakf","File:Hilma af Klint - The Ten Largest No. 8 - Adulthood - 1907.jpg",{tip:"성년기 4점(No. 5–8) 가운데 마지막 작품입니다. 영어로는 'Adulthood' 또는 'Maturity'로 소개됩니다."}],
   ["백조, No. 17","The Swan, No. 17","1915","hakf","File:Hilma af Klint, 1915, Svanen, No. 17.jpg",{tip:"검은 백조와 흰 백조로 시작한 연작이 점점 기하학적인 원과 면으로 바뀌어 가는 과정의 한 장면입니다."}],
   ["제단화 No. 1","Altarpiece No. 1","1915","hakf","File:8 hilma af klint, altarpiece no 1, 1915.jpg",{tip:"'신전을 위한 그림' 193점을 마무리하는 제단화 3점 가운데 첫 번째입니다."}]]}];
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
@@ -1016,6 +1017,64 @@ EXTRA_MOVEMENTS.push({after:"abstract-expressionism",m:{id:"pop-neo-expressionis
     as.forEach(a=>{if(a.at!=null)m.artists.splice(a.at,0,a);else m.artists.push(a)})}
   const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
   for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2),...Object.entries(EXTRA_WORKS3)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
+})();
+
+// 사조 설명 보강 (추가된 화가·작품 반영)
+(function(){
+const R={
+"early-renaissance":{
+ sum:"중세의 평면적인 종교화에서 벗어나 원근법과 해부학, 고대 그리스·로마의 이상을 바탕으로 인간과 자연을 현실감 있게 그리기 시작한 시기입니다. 조토가 인물에 무게와 감정을 불어넣었고, 마사초가 수학적 원근법을 회화에 적용했으며, 보티첼리가 우아한 선으로 고대 신화를 되살렸습니다. 피렌체가 중심이었고 메디치 가문 같은 후원자가 예술가를 길렀습니다.",
+ addTraits:["성당과 예배당 벽을 이야기 그림으로 채운 프레스코 연작 (조토의 스크로베니 예배당, 마사초의 브란카치 예배당)"]},
+"high-renaissance":{
+ addTraits:["조각에서도 고전적 이상이 정점에 이름 (미켈란젤로의 〈다비드〉, 〈피에타〉)"]},
+"northern-renaissance":{
+ addTraits:["보스의 기괴하고 환상적인 도상, 홀바인의 정밀한 궁정 초상"]},
+"mannerism":{
+ sum:"전성기 르네상스의 완벽한 조화 이후, 화가들은 그것을 넘어서기 위해 일부러 비례를 늘이고 공간을 비틀었습니다. '매너(양식)'를 과장했다는 뜻의 이름입니다. 피렌체의 폰토르모와 브론치노, 파르마의 파르미자니노가 이끌었고, 스페인 톨레도의 엘 그레코가 이를 독자적인 영적 표현으로 밀고 나갔습니다.",
+ addTraits:["메디치 궁정의 차갑고 매끈한 초상 (브론치노)","형광빛 색과 떠다니는 듯한 인물 (폰토르모)"],
+ note:"엘 그레코는 매너리즘에서 출발해 어느 유파에도 묶이지 않는 독자적 양식에 이르렀습니다. 길게 늘인 인체와 격렬한 색은 300년 뒤 표현주의 화가들에게 재발견되었습니다."},
+"baroque":{
+ addTraits:["플랑드르 바로크: 풍만한 인체와 역동적 대작 (루벤스), 우아한 귀족 초상 (반 다이크)","빠르고 생생한 붓질의 초상 (프란스 할스)","고전주의 바로크: 질서와 절제를 지킨 신화·역사화 (푸생)"],
+ note:"아르테미시아 젠틸레스키는 1616년 피렌체 미술 아카데미에 들어간 첫 여성 화가였습니다."},
+"rococo":{
+ addTraits:["같은 시대의 다른 결: 소박한 정물과 서민 풍속화 (샤르댕)","왕실 초상과 여성 화가의 활약 (비제 르브룅)"],
+ note:"비제 르브룅은 1783년 프랑스 왕립 회화·조각 아카데미 회원이 된 몇 안 되는 여성 화가로, 마리 앙투아네트의 초상을 30점 넘게 그렸습니다."},
+"neoclassicism":{
+ addTraits:["나폴레옹 시대의 영웅적 선전 초상 (다비드 〈알프스를 넘는 나폴레옹〉, 앵그르 〈왕좌에 앉은 나폴레옹 1세〉)"]},
+"romanticism":{
+ addTraits:["전쟁의 참상과 인간의 어둠을 그린 '검은 그림' (고야)","빛과 대기 속에 형태가 녹아드는 말년의 풍경 (터너) → 인상주의와 추상의 선구"]},
+"pre-raphaelite":{
+ years:"1848년 – 1900년대 초", e:1910,
+ sum:"영국 왕립아카데미의 판에 박힌 교육에 반발해 1848년 밀레이, 로세티, 홀먼 헌트가 결성한 모임입니다. 라파엘로 이전 중세·초기 르네상스 미술의 순수함으로 돌아가자는 뜻에서 이름을 지었습니다. 한 세대 뒤 워터하우스가 그 양식을 이어받아 20세기 초까지 영향을 남겼습니다.",
+ addTraits:["종교적·도덕적 메시지를 담은 상징 (홀먼 헌트)","아서왕 전설과 그리스 신화 속 여성 (워터하우스)"]},
+"realism":{
+ addTraits:["사회를 고발한 풍자 석판화 (도미에 〈트랑스노냉 거리〉)","동물을 정밀하게 관찰한 대형 동물화 (로자 보뇌르)"],
+ note:"쿠르베의 〈돌 깨는 사람들〉은 1945년 드레스덴 폭격 때 사라져 지금은 사진으로만 전합니다."},
+"impressionism":{
+ sum:"관전(살롱)에서 거부당한 젊은 화가들이 1874년 사진작가 나다르의 옛 스튜디오에서 독자적인 전시회를 열었습니다. 모네의 〈인상, 해돋이〉를 비꼰 평론에서 '인상주의'라는 이름이 붙었고, 전시는 1886년까지 여덟 번 이어졌습니다. 야외에서 시시각각 변하는 빛과 색, 근대 도시 파리의 일상을 빠른 붓질로 담았습니다.",
+ addTraits:["실내, 무대, 경마장을 사진처럼 잘라 낸 대담한 구도와 원근법 (드가, 카유보트)","여성 화가의 활약: 가정과 여성의 일상을 그림 (모리조, 카사트)"],
+ note:"마네는 인상주의의 선구자이자 정신적 지도자였지만 인상주의 전시회에는 한 번도 참가하지 않았습니다. 바지유는 첫 전시회 4년 전 보불전쟁에서 전사했습니다."},
+"post-impressionism":{
+ addTraits:["더 크고 네모난 색점의 점묘 (크로스) → 마티스와 야수주의에 영향","몽마르트르의 밤 문화와 석판 포스터 (툴루즈로트레크)"],
+ note:"피사로도 1880년대 후반 잠시 점묘법을 받아들였습니다(인상주의 전시실의 〈에라니의 사과 수확〉)."},
+"fauvism":{
+ addTraits:["선과 색면을 따로 겹쳐 그리는 경쾌한 장식 양식 (뒤피)"]},
+"expressionism":{
+ addTraits:["풍경에도 스며든 불안과 죽음의 기운 (실레의 크루마우 '죽음의 도시' 연작)"]},
+"cubism":{
+ addTraits:["오르피즘: 입체주의에 밝은 색과 리듬을 더함 (들로네)","원통 형태로 기계 시대를 그린 '튜비즘' (레제)"],
+ note:"피카비아의 〈우드니〉(1913)도 이 무렵 입체주의·오르피즘에 가까운 작품입니다. 피카비아는 이후 다다로 옮겨 가 「다다와 초현실주의」 전시실에서 다룹니다."},
+"abstraction":{
+ years:"1906년 – 1940년대", s:1906,
+ sum:"그림이 무언가를 '닮아야 한다'는 오랜 전제를 버리고 색, 선, 형태 그 자체로 화면을 구성한 미술입니다. 칸딘스키의 음악적인 서정 추상, 말레비치의 절대주의, 몬드리안의 신조형주의(데 스테일)가 대표적입니다. 오랫동안 칸딘스키가 '최초의 추상화가'로 알려졌지만, 그보다 앞선 1906년부터 추상화를 그린 힐마 아프 클린트가 뒤늦게 알려지며 추상의 역사가 다시 쓰이고 있습니다.",
+ addTraits:["신비주의(신지학)에서 출발한 영적 추상 (힐마 아프 클린트)","동화 같은 기호와 선의 시적인 추상 (클레)"],
+ note:"아프 클린트는 '사후 20년 동안 공개하지 말라'는 유언을 남겼고, 그녀의 추상화는 1986년 로스앤젤레스의 전시 「미술 속의 영성」을 통해 비로소 널리 알려졌습니다."},
+"surrealism":{
+ addTraits:["다다는 취리히에서 시작해 뉴욕·파리·베를린으로 퍼짐 (뉴욕과 파리 다다의 뒤샹, 피카비아)","기계를 사람처럼 그린 '기계 형태' 그림 (피카비아)"]}
+};
+for(const [id,r] of Object.entries(R)){const m=MOVEMENTS.find(x=>x.id===id);if(!m)throw new Error("no movement "+id);
+  if(r.sum)m.sum=r.sum;if(r.diff)m.diff=r.diff;if(r.note)m.note=r.note;if(r.years)m.years=r.years;if(r.e)m.e=r.e;if(r.s)m.s=r.s;
+  if(r.addTraits)m.traits=m.traits.concat(r.addTraits)}
 })();
 
 (function(){
