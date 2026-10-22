@@ -1,0 +1,991 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>서양미술 전시실</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: 시대순 '전시실'이 이어지는 단일 컬럼. 각 전시실은 사조 고유의 벽 색 띠로 시작하고, 작품은 미술관 캡션(월 라벨) 형식 */
+:root{
+  --bg:#f4f4f1; --surface:#ffffff; --fg:#1c1b19; --muted:#67645d; --line:#d9d6ce; --mat:#e6e4de; --ink-on-wall:#fbfaf7; --focus:#2f4f8f;
+  --f-display:"Hahmlet","Nanum Myeongjo",Georgia,serif;
+  --f-body:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141412;--surface:#1d1c1a;--fg:#ebe9e3;--muted:#a3a097;--line:#35332f;--mat:#272623;--ink-on-wall:#fbfaf7;--focus:#8fb0f0;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#141412;--surface:#1d1c1a;--fg:#ebe9e3;--muted:#a3a097;--line:#35332f;--mat:#272623;--ink-on-wall:#fbfaf7;--focus:#8fb0f0;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.65;padding-top:env(safe-area-inset-top,0px)}
+img{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+[hidden]{display:none!important}
+
+/* header */
+.masthead{padding-block:48px 28px;border-bottom:1px solid var(--line)}
+.masthead .eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.masthead h1{font-family:var(--f-display);font-weight:800;font-size:clamp(34px,6vw,60px);line-height:1.1;margin:.2em 0 .3em;text-wrap:balance;letter-spacing:-.01em}
+.masthead p{max-width:62ch;margin:0;color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:8px 24px;margin-top:18px;font-family:var(--f-mono);font-size:13px;color:var(--muted)}
+.stats b{color:var(--fg);font-weight:500}
+
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+.bar .wrap{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;padding-block:10px}
+.tabs{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tabs button{font:inherit;font-size:14px;padding:7px 14px;border:0;background:transparent;color:var(--muted);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg)}
+.search{flex:1 1 220px;min-width:0;position:relative}
+.search input{width:100%;font:inherit;font-size:14px;padding:8px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg)}
+.loadstat{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.themebtn{margin-left:auto;font:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer}
+
+@media (max-width:640px){.bar .wrap{gap:8px}.search{order:3;flex-basis:100%}.loadstat{order:4;white-space:normal}.room{scroll-margin-top:150px}}
+/* timeline */
+.tl-sec{padding-block:28px 8px}
+.h2{font-family:var(--f-display);font-weight:600;font-size:22px;margin:0 0 4px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.tl-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.tl{position:relative;min-width:1060px;padding:10px 12px 0}
+.tl-axis{position:relative;height:24px;border-top:1px solid var(--line);margin-top:6px}
+.tl-tick{position:absolute;top:0;font-family:var(--f-mono);font-size:11px;color:var(--muted);transform:translateX(-50%);padding-top:4px}
+.tl-tick::before{content:"";position:absolute;left:50%;top:-5px;height:5px;border-left:1px solid var(--line)}
+.tl-grid{position:absolute;top:0;bottom:24px;border-left:1px dashed var(--line);opacity:.6}
+.tl-item{position:absolute;height:26px;display:flex;align-items:center;gap:6px;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:var(--fg);text-align:left}
+.tl-bar{height:10px;border-radius:2px;flex:none}
+.tl-label{font-size:12.5px;white-space:nowrap}
+.tl-item:hover .tl-label{text-decoration:underline}
+
+/* rooms */
+.room{margin-top:56px;scroll-margin-top:70px}
+.room-head{color:var(--ink-on-wall);border-radius:10px 10px 0 0}
+.room-head .inner{padding:26px 26px 22px}
+.room-no{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
+.room-head h2{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4.4vw,44px);line-height:1.15;margin:6px 0 2px;text-wrap:balance}
+.room-en{font-family:var(--f-display);font-style:italic;opacity:.9}
+.room-years{font-family:var(--f-mono);font-size:13px;margin-top:10px;opacity:.95}
+.room-body{background:var(--surface);border:1px solid var(--line);border-top:0;border-radius:0 0 10px 10px;padding:24px 26px 30px}
+.intro{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:28px}
+@media (max-width:820px){.intro{grid-template-columns:1fr}}
+.intro p{margin:0 0 12px;max-width:66ch}
+.lbl{font-family:var(--f-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.traits{margin:0;padding-left:1.1em}
+.traits li{margin-bottom:4px}
+.diff{border-left:2px solid var(--line);padding-left:12px;color:var(--fg)}
+.note{background:var(--mat);border-radius:6px;padding:10px 14px;font-size:14px;margin-top:12px}
+.note b{font-weight:600}
+
+.artist{margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
+.artist-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.artist-head h3{font-family:var(--f-display);font-weight:600;font-size:22px;margin:0}
+.artist-head .orig{font-family:var(--f-display);font-style:italic;color:var(--muted)}
+.artist-head .life{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.artist-desc{margin:4px 0 14px;color:var(--muted);max-width:70ch}
+.works{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+
+.work{display:flex;flex-direction:column;min-width:0}
+.work.flash .frame{outline:3px solid var(--focus);outline-offset:3px}
+.frame{background:var(--mat);border-radius:4px;height:230px;display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;border:0;padding:14px;cursor:zoom-in;width:100%;font:inherit;color:inherit}
+.frame img{max-height:100%;max-width:100%;object-fit:contain;box-shadow:0 2px 10px rgba(0,0,0,.18);display:block}
+.frame .ph{font-family:var(--f-mono);font-size:12px;color:var(--muted);text-align:center;padding:10px}
+.frame.cr{cursor:default;flex-direction:column;gap:8px;color:var(--ink-on-wall)}
+.frame.cr .crmark{font-family:var(--f-display);font-size:42px;line-height:1;opacity:.9}
+.frame.cr .crtxt{font-size:12.5px;text-align:center;opacity:.95;max-width:22ch}
+.caption{padding-top:10px;font-size:13.5px;line-height:1.5}
+.caption .t{font-family:var(--f-display);font-weight:600;font-size:16px;line-height:1.35}
+.caption .o{font-style:italic;color:var(--muted)}
+.caption .y{font-family:var(--f-mono);font-size:12.5px;color:var(--muted)}
+.where{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 6px;align-items:baseline}
+.where .mus{font-weight:600}
+.where .city{color:var(--muted)}
+.tip{margin-top:6px;font-size:12.5px;color:var(--muted)}
+.links{margin-top:6px;display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12.5px}
+.links a{color:var(--muted);text-underline-offset:2px}
+.links a:hover{color:var(--fg)}
+
+/* museum view */
+.mv{padding-block:28px 40px}
+.country{margin-top:30px}
+.country h2{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0 0 4px}
+.mcard{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:16px 18px;margin-top:12px}
+.mcard-head{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
+.mcard-head h3{font-family:var(--f-display);font-weight:600;font-size:19px;margin:0}
+.mcard-head .o{color:var(--muted);font-style:italic}
+.mcard-head .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-left:auto}
+.mnote{font-size:13px;color:var(--muted);margin-top:4px}
+.mlist{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px 18px}
+.mrow{display:flex;gap:10px;align-items:center;min-width:0}
+.mthumb{width:52px;height:52px;flex:none;background:var(--mat);border-radius:3px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.mthumb img{width:100%;height:100%;object-fit:cover}
+.mthumb .dot{width:14px;height:14px;border-radius:50%}
+.mrow .txt{min-width:0}
+.mrow button{font:inherit;background:none;border:0;padding:0;color:var(--fg);text-align:left;cursor:pointer;font-weight:600;font-size:14px}
+.mrow button:hover{text-decoration:underline}
+.mrow .meta{font-size:12.5px;color:var(--muted)}
+
+.empty{padding:40px 0;color:var(--muted)}
+footer{border-top:1px solid var(--line);margin-top:60px;padding-block:28px 48px;color:var(--muted);font-size:13.5px}
+footer p{max-width:80ch;margin:0 0 8px}
+
+/* lightbox */
+dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1400px);max-height:96vh;color:var(--fg)}
+dialog::backdrop{background:rgba(10,10,9,.88)}
+.lb{display:flex;flex-direction:column;align-items:center;gap:10px}
+.lb img{max-width:min(94vw,1400px);max-height:80vh;object-fit:contain;display:block}
+.lb .cap{color:#eceae4;text-align:center;font-size:14px;max-width:80ch}
+.lb .cap b{font-family:var(--f-display);font-size:18px}
+.lb .cap a{color:#cfccc4}
+.lb .close{font:inherit;background:#eceae4;color:#141412;border:0;border-radius:6px;padding:6px 14px;cursor:pointer}
+</style>
+</head>
+<body>
+<header class="masthead wrap">
+  <div class="eyebrow">르네상스부터 추상표현주의까지 · 20개 전시실</div>
+  <h1>서양미술 전시실</h1>
+  <p>시대와 사조를 따라 걸으며 대표 화가와 작품을 만나고, 그 작품이 지금 어느 미술관에 걸려 있는지 확인하는 개인 미술사 노트입니다.</p>
+  <div class="stats" id="stats"></div>
+</header>
+
+<div class="bar">
+  <div class="wrap">
+    <div class="tabs" role="tablist">
+      <button id="tab-rooms" role="tab" aria-selected="true">사조별</button>
+      <button id="tab-museums" role="tab" aria-selected="false">미술관별</button>
+    </div>
+    <div class="search"><input id="q" type="search" placeholder="화가, 작품, 미술관, 도시 검색 (예: 모네, 오르세, 런던)" aria-label="검색"></div>
+    <span class="loadstat" id="loadstat"></span>
+    <button class="themebtn" id="themebtn" type="button" aria-label="화면 테마 바꾸기">테마</button>
+  </div>
+</div>
+
+<main>
+  <section id="view-rooms">
+    <div class="wrap tl-sec">
+      <h2 class="h2">연대표</h2>
+      <p class="sub">막대를 누르면 해당 전시실로 이동합니다. 사조의 시작과 끝은 대략적인 연도입니다.</p>
+      <div class="tl-scroll"><div class="tl" id="timeline"></div></div>
+    </div>
+    <div class="wrap" id="rooms"></div>
+  </section>
+  <section id="view-museums" hidden>
+    <div class="wrap mv">
+      <h2 class="h2">미술관별로 보기</h2>
+      <p class="sub">여행 계획용입니다. 나라별로 묶었고, 작품이 많은 미술관부터 보여 줍니다. 작품 이름을 누르면 사조별 전시실의 해당 작품으로 이동합니다.</p>
+      <div id="museums"></div>
+    </div>
+  </section>
+  <div class="wrap empty" id="empty" hidden>검색 결과가 없습니다. 한글 이름이나 원어 이름으로 다시 찾아보세요.</div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><b>이미지</b> · 저작권이 만료된 작품은 위키백과·위키미디어 공용에서 페이지를 열 때 실시간으로 불러옵니다. 인터넷 연결이 필요하며, 드물게 다른 판본이나 부분 이미지가 표시될 수 있습니다.</p>
+    <p><b>저작권</b> · 피카소, 브라크, 달리, 미로, 마그리트, 폴록, 로스코, 드 쿠닝 등 20세기 작가 상당수는 작품 저작권이 아직 유효하여 이미지를 싣지 않고, 이미지 검색과 소장처 링크를 제공합니다.</p>
+    <p><b>관람 전 확인</b> · 유명 작품도 해외 대여, 보존 처리, 전시 교체로 자리를 비울 수 있습니다. 방문 전에 각 미술관 웹사이트에서 전시 여부를 확인하세요. 소장처 정보는 2026년 10월 기준입니다.</p>
+  </div>
+</footer>
+
+<dialog id="lb" aria-label="작품 크게 보기">
+  <div class="lb">
+    <img id="lb-img" alt="">
+    <div class="cap" id="lb-cap"></div>
+    <button class="close" id="lb-close" type="button">닫기</button>
+  </div>
+</dialog>
+<script>
+// m: 미술관 키, w: 영어 위키백과 문서명(이미지 조회용), cr: 저작권 보호 작품(이미지 미표시)
+const MUSEUMS = {
+  uffizi:{n:"우피치 미술관",o:"Galleria degli Uffizi",c:"이탈리아 피렌체",u:"https://www.uffizi.it"},
+  smn:{n:"산타 마리아 노벨라 성당",o:"Santa Maria Novella",c:"이탈리아 피렌체",u:"https://www.smn.it"},
+  brancacci:{n:"산타 마리아 델 카르미네 성당 브란카치 예배당",o:"Cappella Brancacci",c:"이탈리아 피렌체",u:""},
+  scrovegni:{n:"스크로베니 예배당",o:"Cappella degli Scrovegni",c:"이탈리아 파도바",u:"https://www.cappelladegliscrovegni.it"},
+  grazie:{n:"산타 마리아 델레 그라치에 수도원",o:"Santa Maria delle Grazie",c:"이탈리아 밀라노",u:"https://cenacolovinciano.org"},
+  vatican:{n:"바티칸 박물관",o:"Musei Vaticani",c:"바티칸 시국",u:"https://www.museivaticani.va"},
+  frari:{n:"산타 마리아 글로리오사 데이 프라리 성당",o:"Basilica dei Frari",c:"이탈리아 베네치아",u:"https://www.basilicadeifrari.it"},
+  accademia:{n:"아카데미아 미술관",o:"Gallerie dell'Accademia",c:"이탈리아 베네치아",u:"https://www.gallerieaccademia.it"},
+  sanluigi:{n:"산 루이지 데이 프란체시 성당",o:"San Luigi dei Francesi",c:"이탈리아 로마",u:""},
+  doria:{n:"도리아 팜필리 미술관",o:"Galleria Doria Pamphilj",c:"이탈리아 로마",u:"https://www.doriapamphilj.it"},
+  louvre:{n:"루브르 박물관",o:"Musée du Louvre",c:"프랑스 파리",u:"https://www.louvre.fr"},
+  orsay:{n:"오르세 미술관",o:"Musée d'Orsay",c:"프랑스 파리",u:"https://www.musee-orsay.fr"},
+  orangerie:{n:"오랑주리 미술관",o:"Musée de l'Orangerie",c:"프랑스 파리",u:"https://www.musee-orangerie.fr"},
+  marmottan:{n:"마르모탕 모네 미술관",o:"Musée Marmottan Monet",c:"프랑스 파리",u:"https://www.marmottan.fr"},
+  pompidou:{n:"퐁피두 센터",o:"Centre Pompidou",c:"프랑스 파리",u:"https://www.centrepompidou.fr",note:"2025년 9월부터 리노베이션으로 휴관(2030년 재개관 예정). 소장품 일부는 프랑스 각지와 해외에 순회 전시 중"},
+  fabre:{n:"파브르 미술관",o:"Musée Fabre",c:"프랑스 몽펠리에",u:"https://museefabre.montpellier3m.fr"},
+  ngl:{n:"런던 내셔널 갤러리",o:"The National Gallery",c:"영국 런던",u:"https://www.nationalgallery.org.uk"},
+  tateb:{n:"테이트 브리튼",o:"Tate Britain",c:"영국 런던",u:"https://www.tate.org.uk"},
+  tatem:{n:"테이트 모던",o:"Tate Modern",c:"영국 런던",u:"https://www.tate.org.uk"},
+  courtauld:{n:"코톨드 갤러리",o:"The Courtauld Gallery",c:"영국 런던",u:"https://courtauld.ac.uk"},
+  wallace:{n:"월리스 컬렉션",o:"The Wallace Collection",c:"영국 런던",u:"https://www.wallacecollection.org"},
+  edinburgh:{n:"스코틀랜드 국립미술관",o:"Scottish National Gallery",c:"영국 에든버러",u:"https://www.nationalgalleries.org"},
+  prado:{n:"프라도 미술관",o:"Museo del Prado",c:"스페인 마드리드",u:"https://www.museodelprado.es"},
+  reina:{n:"레이나 소피아 국립미술관",o:"Museo Reina Sofía",c:"스페인 마드리드",u:"https://www.museoreinasofia.es"},
+  santotome:{n:"산토 토메 성당",o:"Iglesia de Santo Tomé",c:"스페인 톨레도",u:"https://santotome.org"},
+  ghent:{n:"성 바보 대성당",o:"Sint-Baafskathedraal",c:"벨기에 겐트",u:"https://www.sintbaafskathedraal.be"},
+  antwerp:{n:"안트베르펜 성모 대성당",o:"Onze-Lieve-Vrouwekathedraal",c:"벨기에 안트베르펜",u:"https://www.dekathedraal.be"},
+  brussels:{n:"벨기에 왕립미술관",o:"Musées royaux des Beaux-Arts",c:"벨기에 브뤼셀",u:"https://fine-arts-museum.be"},
+  rijks:{n:"레이크스뮈세움(국립미술관)",o:"Rijksmuseum",c:"네덜란드 암스테르담",u:"https://www.rijksmuseum.nl"},
+  vgm:{n:"반 고흐 미술관",o:"Van Gogh Museum",c:"네덜란드 암스테르담",u:"https://www.vangoghmuseum.nl"},
+  mauritshuis:{n:"마우리츠하위스 미술관",o:"Mauritshuis",c:"네덜란드 헤이그",u:"https://www.mauritshuis.nl"},
+  kroller:{n:"크뢸러뮐러 미술관",o:"Kröller-Müller Museum",c:"네덜란드 오테를로",u:"https://krollermuller.nl"},
+  alte:{n:"알테 피나코테크",o:"Alte Pinakothek",c:"독일 뮌헨",u:"https://www.pinakothek.de"},
+  dresden:{n:"드레스덴 고전 거장 회화관",o:"Gemäldegalerie Alte Meister",c:"독일 드레스덴",u:"https://gemaeldegalerie.skd.museum"},
+  hamburg:{n:"함부르크 쿤스트할레",o:"Hamburger Kunsthalle",c:"독일 함부르크",u:"https://www.hamburger-kunsthalle.de"},
+  khm:{n:"빈 미술사 박물관",o:"Kunsthistorisches Museum",c:"오스트리아 빈",u:"https://www.khm.at"},
+  albertina:{n:"알베르티나 미술관",o:"Albertina",c:"오스트리아 빈",u:"https://www.albertina.at",note:"〈어린 토끼〉는 빛에 약한 수채화라 평소에는 거의 전시하지 않음"},
+  belvedere:{n:"벨베데레 미술관",o:"Belvedere",c:"오스트리아 빈",u:"https://www.belvedere.at"},
+  leopold:{n:"레오폴트 미술관",o:"Leopold Museum",c:"오스트리아 빈",u:"https://www.leopoldmuseum.org"},
+  basel:{n:"바젤 미술관",o:"Kunstmuseum Basel",c:"스위스 바젤",u:"https://kunstmuseumbasel.ch"},
+  bern:{n:"베른 미술관",o:"Kunstmuseum Bern",c:"스위스 베른",u:"https://www.kunstmuseumbern.ch"},
+  zurich:{n:"취리히 미술관",o:"Kunsthaus Zürich",c:"스위스 취리히",u:"https://www.kunsthaus.ch"},
+  oslo:{n:"노르웨이 국립미술관",o:"Nasjonalmuseet",c:"노르웨이 오슬로",u:"https://www.nasjonalmuseet.no"},
+  krakow:{n:"차르토리스키 미술관",o:"Czartoryski Museum",c:"폴란드 크라쿠프",u:"https://mnk.pl"},
+  hermitage:{n:"에르미타주 미술관",o:"State Hermitage Museum",c:"러시아 상트페테르부르크",u:"https://www.hermitagemuseum.org",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
+  tretyakov:{n:"트레티야코프 미술관",o:"State Tretyakov Gallery",c:"러시아 모스크바",u:"https://www.tretyakovgallery.ru",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
+  moma:{n:"뉴욕 현대미술관 (MoMA)",o:"The Museum of Modern Art",c:"미국 뉴욕",u:"https://www.moma.org"},
+  met:{n:"메트로폴리탄 미술관",o:"The Metropolitan Museum of Art",c:"미국 뉴욕",u:"https://www.metmuseum.org"},
+  guggenheim:{n:"솔로몬 R. 구겐하임 미술관",o:"Solomon R. Guggenheim Museum",c:"미국 뉴욕",u:"https://www.guggenheim.org"},
+  neue:{n:"노이에 갤러리",o:"Neue Galerie",c:"미국 뉴욕",u:"https://www.neuegalerie.org"},
+  buffalo:{n:"버펄로 AKG 미술관",o:"Buffalo AKG Art Museum",c:"미국 버펄로",u:"https://buffaloakg.org"},
+  aic:{n:"시카고 미술관",o:"Art Institute of Chicago",c:"미국 시카고",u:"https://www.artic.edu"},
+  mfa:{n:"보스턴 미술관",o:"Museum of Fine Arts, Boston",c:"미국 보스턴",u:"https://www.mfa.org"},
+  philly:{n:"필라델피아 미술관",o:"Philadelphia Art Museum",c:"미국 필라델피아",u:"https://philamuseum.org"},
+  nga:{n:"워싱턴 내셔널 갤러리",o:"National Gallery of Art",c:"미국 워싱턴 D.C.",u:"https://www.nga.gov"},
+  phillips:{n:"필립스 컬렉션",o:"The Phillips Collection",c:"미국 워싱턴 D.C.",u:"https://www.phillipscollection.org"},
+  walker:{n:"워커 아트 센터",o:"Walker Art Center",c:"미국 미니애폴리스",u:"https://walkerart.org"},
+  sfmoma:{n:"샌프란시스코 현대미술관",o:"SFMOMA",c:"미국 샌프란시스코",u:"https://www.sfmoma.org"},
+  lacma:{n:"로스앤젤레스 카운티 미술관",o:"LACMA",c:"미국 로스앤젤레스",u:"https://www.lacma.org"},
+  rothko:{n:"로스코 채플",o:"Rothko Chapel",c:"미국 휴스턴",u:"https://www.rothkochapel.org"},
+  mammx:{n:"멕시코시티 현대미술관",o:"Museo de Arte Moderno",c:"멕시코 멕시코시티",u:""},
+  ngaus:{n:"호주 국립미술관",o:"National Gallery of Australia",c:"호주 캔버라",u:"https://nga.gov.au"},
+  private:{n:"개인 소장",o:"Private collection",c:"일반 공개되지 않음",u:""}
+};
+
+// 작품: [한국어 제목, 원제, 연도, 미술관키, 위키 문서명, 옵션]
+const MOVEMENTS = [
+{id:"early-renaissance",name:"초기 르네상스",en:"Early Renaissance",years:"1300년경 – 1490년",s:1300,e:1490,color:"#8a6a2f",
+ sum:"중세의 평면적인 종교화에서 벗어나 원근법과 해부학, 고대 그리스·로마의 이상을 바탕으로 인간과 자연을 현실감 있게 그리기 시작한 시기입니다. 피렌체가 중심이었고 메디치 가문 같은 후원자가 예술가를 길렀습니다.",
+ traits:["선원근법: 소실점을 이용해 평면에 깊이를 만듦","명암으로 인물에 부피감을 줌","그리스·로마 신화 주제의 부활","프레스코(벽화)와 템페라가 주된 기법"],
+ diff:"고딕 미술의 금박 배경과 평면적 인물 대신, 3차원 공간 안에서 감정을 지닌 인간을 그립니다.",
+ artists:[
+  {n:"조토 디 본도네",o:"Giotto di Bondone",l:"1267경–1337",d:"르네상스의 문을 연 선구자. 인물에 무게와 감정을 처음 불어넣었습니다.",w:[
+   ["그리스도를 애도함","Lamentation","1305경","scrovegni","Lamentation (The Mourning of Christ)"],
+   ["유다의 입맞춤","Kiss of Judas","1305경","scrovegni","File:Giotto di Bondone - No. 31 Scenes from the Life of Christ - 15. The Arrest of Christ (Kiss of Judas) - WGA09216.jpg"]]},
+  {n:"마사초",o:"Masaccio",l:"1401–1428",d:"수학적 원근법을 회화에 처음 본격 적용했습니다. 스물일곱에 요절했습니다.",w:[
+   ["성 삼위일체","Holy Trinity","1427경","smn","Holy Trinity (Masaccio)"],
+   ["성전세","The Tribute Money","1425경","brancacci","The Tribute Money (Masaccio)"]]},
+  {n:"산드로 보티첼리",o:"Sandro Botticelli",l:"1445경–1510",d:"메디치가의 후원 속에서 우아한 선으로 신화를 그렸습니다.",w:[
+   ["비너스의 탄생","The Birth of Venus","1485경","uffizi","The Birth of Venus"],
+   ["봄 (프리마베라)","Primavera","1480경","uffizi","Primavera (Botticelli)"]]}
+ ]},
+{id:"high-renaissance",name:"전성기 르네상스",en:"High Renaissance",years:"1490년 – 1530년 (베네치아파는 16세기 후반까지)",s:1490,e:1576,color:"#6b4f2a",
+ sum:"르네상스가 정점에 이른 짧고 찬란한 시기입니다. 피렌체와 로마에서는 레오나르도·미켈란젤로·라파엘로가 조화와 균형의 고전적 이상을 완성했고, 베네치아에서는 조르조네와 티치아노가 색채 중심의 회화를 발전시켰습니다.",
+ traits:["스푸마토: 윤곽을 연기처럼 부드럽게 흐림","피라미드형 안정 구도와 이상적 비례","유화가 퍼지며 깊은 색과 질감 가능","피렌체·로마는 소묘(디세뇨), 베네치아는 색채(콜로레) 중시"],
+ diff:"초기 르네상스가 기법을 실험했다면, 이 시기에는 그 기법들이 하나의 완벽한 조화로 통합됩니다.",
+ artists:[
+  {n:"레오나르도 다 빈치",o:"Leonardo da Vinci",l:"1452–1519",d:"화가이자 과학자, 발명가. 완성작이 20점이 채 안 됩니다.",w:[
+   ["모나리자","Mona Lisa","1503–1519경","louvre","Mona Lisa",{tip:"방탄유리 안에 전시되며 늘 혼잡합니다. 개관 직후 방문을 추천합니다."}],
+   ["최후의 만찬","The Last Supper","1495–1498","grazie","The Last Supper (Leonardo)",{tip:"수도원 식당 벽화. 사전 예약제이며 관람 시간이 15분 정도로 제한됩니다."}],
+   ["흰 담비를 안은 여인","Lady with an Ermine","1489–1491경","krakow","Lady with an Ermine"]]},
+  {n:"미켈란젤로 부오나로티",o:"Michelangelo Buonarroti",l:"1475–1564",d:"조각가를 자처했지만 시스티나 예배당 천장화로 회화사에도 우뚝 섰습니다.",w:[
+   ["아담의 창조 (시스티나 천장화)","The Creation of Adam","1512경","vatican","The Creation of Adam",{tip:"시스티나 예배당 안에서는 사진 촬영이 금지됩니다."}],
+   ["최후의 심판","The Last Judgment","1536–1541","vatican","The Last Judgment (Michelangelo)"],
+   ["도니 톤도 (성가족)","Doni Tondo","1507경","uffizi","Doni Tondo"]]},
+  {n:"라파엘로 산치오",o:"Raffaello Sanzio",l:"1483–1520",d:"레오나르도와 미켈란젤로를 흡수해 가장 조화로운 고전 양식을 완성했습니다.",w:[
+   ["아테네 학당","The School of Athens","1509–1511","vatican","The School of Athens",{tip:"바티칸 박물관 '라파엘로의 방'에 있는 벽화입니다."}],
+   ["시스티나의 성모","Sistine Madonna","1512–1513","dresden","Sistine Madonna"]]},
+  {n:"조르조네",o:"Giorgione",l:"1477경–1510",d:"풍경과 분위기로 시를 쓰듯 그린 베네치아의 수수께끼 같은 화가입니다.",w:[
+   ["폭풍우","The Tempest","1508경","accademia","The Tempest (Giorgione)"]]},
+  {n:"티치아노 베첼리오",o:"Titian",l:"1488경–1576",d:"베네치아파의 거장. 색채와 붓질로 형태를 만들어 후대 화가들에게 큰 영향을 주었습니다.",w:[
+   ["우르비노의 비너스","Venus of Urbino","1538","uffizi","Venus of Urbino"],
+   ["성모 승천","Assumption of the Virgin","1516–1518","frari","Assumption of the Virgin (Titian)"]]}
+ ]},
+{id:"northern-renaissance",name:"북유럽 르네상스",en:"Northern Renaissance",years:"1420년 – 1570년",s:1420,e:1570,color:"#4a5a3a",
+ sum:"플랑드르(지금의 벨기에·네덜란드)와 독일에서 꽃핀 르네상스입니다. 유화 기법을 정교하게 다듬어 보석, 직물, 거울 속 반사까지 극도로 세밀하게 그렸고, 종교개혁과 인쇄술의 영향으로 판화와 일상 장면도 발전했습니다.",
+ traits:["유화 물감을 얇게 겹쳐 발라 빛나는 색과 정밀한 세부 표현","사물 하나하나에 상징적 의미를 담음","목판화·동판화의 발달 (뒤러)","농민의 생활과 풍경이 독립된 주제로 등장 (브뤼헐)"],
+ diff:"이탈리아가 이상적인 아름다움과 고전을 추구했다면, 북유럽은 눈에 보이는 현실의 세부를 끝까지 파고들었습니다.",
+ artists:[
+  {n:"얀 반 에이크",o:"Jan van Eyck",l:"1390경–1441",d:"유화 기법을 완성한 플랑드르 화가로 알려져 있습니다.",w:[
+   ["아르놀피니 부부의 초상","Arnolfini Portrait","1434","ngl","Arnolfini Portrait"],
+   ["겐트 제단화 (어린 양에 대한 경배)","Ghent Altarpiece","1432","ghent","Ghent Altarpiece"]]},
+  {n:"히에로니무스 보스",o:"Hieronymus Bosch",l:"1450경–1516",d:"기괴하고 환상적인 도상으로 초현실주의자들의 조상으로 불립니다.",w:[
+   ["쾌락의 정원","The Garden of Earthly Delights","1490–1510경","prado","The Garden of Earthly Delights"]]},
+  {n:"알브레히트 뒤러",o:"Albrecht Dürer",l:"1471–1528",d:"이탈리아 르네상스를 독일에 전한 화가이자 판화의 거장입니다.",w:[
+   ["모피 코트를 입은 자화상","Self-Portrait","1500","alte","Self-Portrait (Dürer, Munich)"],
+   ["어린 토끼","Young Hare","1502","albertina","Young Hare"]]},
+  {n:"한스 홀바인 (아들)",o:"Hans Holbein the Younger",l:"1497경–1543",d:"헨리 8세의 궁정화가. 정밀한 초상화로 유명합니다.",w:[
+   ["대사들","The Ambassadors","1533","ngl","The Ambassadors (Holbein)",{tip:"그림 아래쪽 비스듬한 해골은 오른쪽 옆에서 비스듬히 보면 제 모양으로 보입니다."}]]},
+  {n:"피터르 브뤼헐 (아버지)",o:"Pieter Bruegel the Elder",l:"1525경–1569",d:"농민의 삶과 사계절 풍경을 그린 플랑드르의 거장입니다.",w:[
+   ["눈 속의 사냥꾼","The Hunters in the Snow","1565","khm","The Hunters in the Snow"],
+   ["바벨탑","The Tower of Babel","1563","khm","The Tower of Babel (Bruegel)",{tip:"빈 미술사 박물관에는 브뤼헐 작품이 세계에서 가장 많이 모여 있습니다."}]]}
+ ]},
+{id:"mannerism",name:"매너리즘",en:"Mannerism",years:"1520년 – 1600년",s:1520,e:1600,color:"#5c4a6b",
+ sum:"전성기 르네상스의 완벽한 조화 이후, 화가들은 그것을 넘어서기 위해 일부러 비례를 늘이고 공간을 비틀었습니다. '매너(양식)'를 과장했다는 뜻의 이름입니다.",
+ traits:["길게 늘인 인체와 비틀린 자세","불안정하고 모호한 공간","차갑고 인공적인 색","지적인 알레고리와 수수께끼"],
+ diff:"르네상스의 균형과 자연스러움 대신 긴장, 왜곡, 세련된 인공미를 추구합니다.",
+ artists:[
+  {n:"파르미자니노",o:"Parmigianino",l:"1503–1540",d:"우아하게 길어진 인체로 매너리즘을 대표합니다.",w:[
+   ["목이 긴 성모","Madonna with the Long Neck","1535–1540","uffizi","Madonna with the Long Neck"]]},
+  {n:"아뇰로 브론치노",o:"Agnolo Bronzino",l:"1503–1572",d:"메디치 궁정의 화가. 차갑고 매끈한 초상과 알레고리를 그렸습니다.",w:[
+   ["비너스와 큐피드의 알레고리","Venus, Cupid, Folly and Time","1545경","ngl","Venus, Cupid, Folly and Time"]]},
+  {n:"엘 그레코",o:"El Greco",l:"1541–1614",d:"그리스 크레타 출신으로 스페인 톨레도에서 활동. 불꽃처럼 솟구치는 인체를 그렸습니다.",w:[
+   ["오르가스 백작의 매장","The Burial of the Count of Orgaz","1586–1588","santotome","The Burial of the Count of Orgaz"],
+   ["톨레도 풍경","View of Toledo","1599–1600경","met","View of Toledo"]]}
+ ]},
+{id:"baroque",name:"바로크",en:"Baroque",years:"1600년 – 1720년",s:1600,e:1720,color:"#7a2e2a",
+ sum:"가톨릭의 반종교개혁과 절대왕정이 신앙과 권력을 극적으로 보여 줄 미술을 원하던 시대입니다. 강렬한 명암과 움직임으로 보는 이를 압도합니다. 한편 신교국 네덜란드에서는 시민들이 사는 초상화·풍속화·정물화가 크게 발달했습니다.",
+ traits:["테네브리즘: 어둠 속에 한 줄기 빛을 비추는 극단적 명암 (카라바조)","가장 극적인 순간을 포착","대각선 구도와 역동적 움직임","네덜란드 황금시대: 일상 실내, 빛, 시민 초상"],
+ diff:"매너리즘의 인위적 긴장 대신, 현실적인 인물을 극적인 빛과 움직임으로 감정에 직접 호소합니다.",
+ artists:[
+  {n:"카라바조",o:"Caravaggio",l:"1571–1610",d:"거리의 평범한 사람을 성인의 모델로 삼고, 강렬한 명암으로 바로크를 열었습니다.",w:[
+   ["성 마태오의 소명","The Calling of Saint Matthew","1599–1600","sanluigi","The Calling of Saint Matthew",{tip:"성당 안 콘타렐리 예배당에 있으며 입장은 무료입니다."}],
+   ["엠마오의 저녁 식사","Supper at Emmaus","1601","ngl","Supper at Emmaus (Caravaggio, London)"]]},
+  {n:"아르테미시아 젠틸레스키",o:"Artemisia Gentileschi",l:"1593–1656경",d:"카라바조의 화풍을 이은 바로크 시대의 대표적 여성 화가입니다.",w:[
+   ["홀로페르네스의 목을 베는 유디트","Judith Slaying Holofernes","1620경","uffizi","Judith Slaying Holofernes (Artemisia Gentileschi, Florence)"]]},
+  {n:"페테르 파울 루벤스",o:"Peter Paul Rubens",l:"1577–1640",d:"플랑드르 바로크의 거장. 풍만한 인체와 역동적인 대작으로 유명합니다.",w:[
+   ["십자가에서 내려지심","The Descent from the Cross","1612–1614","antwerp","File:Peter Paul Rubens - The Descent from the Cross (1612–1614, Antwerp Cathedral).jpg"]]},
+  {n:"안토니 반 다이크",o:"Anthony van Dyck",l:"1599–1641",d:"루벤스의 제자. 영국 찰스 1세의 궁정화가로 귀족 초상화의 전형을 만들었습니다.",w:[
+   ["사냥 중인 찰스 1세","Charles I at the Hunt","1635경","louvre","Charles I at the Hunt"]]},
+  {n:"렘브란트 판 레인",o:"Rembrandt van Rijn",l:"1606–1669",d:"빛과 어둠으로 인간 내면을 그린 네덜란드 황금시대 최고의 화가입니다.",w:[
+   ["야경 (프란스 바닝 코크 대장의 민병대)","The Night Watch","1642","rijks","The Night Watch",{tip:"대규모 복원 작업 중이지만 유리 부스 너머로 관람할 수 있습니다."}],
+   ["돌아온 탕자","The Return of the Prodigal Son","1668경","hermitage","The Return of the Prodigal Son (Rembrandt)"]]},
+  {n:"디에고 벨라스케스",o:"Diego Velázquez",l:"1599–1660",d:"스페인 펠리페 4세의 궁정화가. 마네가 '화가 중의 화가'라 불렀습니다.",w:[
+   ["시녀들 (라스 메니나스)","Las Meninas","1656","prado","Las Meninas"],
+   ["교황 인노켄티우스 10세","Portrait of Innocent X","1650경","doria","Portrait of Innocent X"]]},
+  {n:"요하네스 페르메이르",o:"Johannes Vermeer",l:"1632–1675",d:"창으로 들어오는 고요한 빛을 그린 델프트의 화가. 현존 작품은 30여 점뿐입니다.",w:[
+   ["진주 귀고리를 한 소녀","Girl with a Pearl Earring","1665경","mauritshuis","Girl with a Pearl Earring"],
+   ["우유 따르는 여인","The Milkmaid","1658경","rijks","The Milkmaid (Vermeer)"],
+   ["델프트 풍경","View of Delft","1660–1661경","mauritshuis","View of Delft"]]},
+  {n:"니콜라 푸생",o:"Nicolas Poussin",l:"1594–1665",d:"바로크 시대에 고전적 질서를 고수한 프랑스 화가. 훗날 신고전주의의 모범이 됩니다.",w:[
+   ["아르카디아의 목자들","Et in Arcadia ego","1637–1638경","louvre","Et in Arcadia ego (Poussin)"]]}
+ ]},
+{id:"rococo",name:"로코코",en:"Rococo",years:"1720년 – 1780년",s:1720,e:1780,color:"#93525d",
+ sum:"루이 14세 사후 프랑스 귀족들은 베르사유의 장엄함 대신 파리 저택의 사교 살롱에서 가볍고 우아한 즐거움을 찾았습니다. 그 취향이 반영된 장식적이고 감각적인 양식입니다.",
+ traits:["파스텔 톤의 밝고 부드러운 색","귀족의 사랑과 유희를 그린 '페트 갈랑트(우아한 연회)'","조개껍데기 모양 같은 장식적 곡선","작은 실내 공간을 위한 친밀한 그림"],
+ diff:"바로크의 무겁고 장엄한 극적 표현이 가볍고 장난스러운 우아함으로 바뀝니다.",
+ artists:[
+  {n:"장 앙투안 와토",o:"Jean-Antoine Watteau",l:"1684–1721",d:"'페트 갈랑트' 장르를 만든 로코코의 시작점입니다.",w:[
+   ["키테라섬의 순례","Pilgrimage to Cythera","1717","louvre","The Embarkation for Cythera"]]},
+  {n:"프랑수아 부셰",o:"François Boucher",l:"1703–1770",d:"퐁파두르 부인이 아낀 궁정화가. 관능적인 신화화를 그렸습니다.",w:[
+   ["목욕을 마친 디아나","Diana Leaving Her Bath","1742","louvre","File:François Boucher - Diana Resting after her Bath, 1742.jpg"]]},
+  {n:"장 오노레 프라고나르",o:"Jean-Honoré Fragonard",l:"1732–1806",d:"로코코 마지막 세대. 경쾌한 붓질로 연애의 순간을 그렸습니다.",w:[
+   ["그네","The Swing","1767","wallace","The Swing (Fragonard)"]]}
+ ]},
+{id:"neoclassicism",name:"신고전주의",en:"Neoclassicism",years:"1760년 – 1830년",s:1760,e:1830,color:"#3d5a73",
+ sum:"폼페이 유적 발굴과 계몽사상의 영향으로 고대 그리스·로마의 절제와 도덕을 되살리려 한 양식입니다. 프랑스 혁명과 나폴레옹 시대에 공화국의 미덕과 영웅을 기리는 공식 미술이 되었습니다.",
+ traits:["고대 조각처럼 명확한 윤곽선과 매끈한 표면","좌우 균형의 안정된 구도","애국심, 희생, 시민의 미덕 같은 교훈적 주제","색보다 선(소묘)을 중시"],
+ diff:"로코코의 경박하고 사치스러운 귀족 취향에 대한 반발로, 엄격함과 이성을 내세웁니다.",
+ artists:[
+  {n:"자크 루이 다비드",o:"Jacques-Louis David",l:"1748–1825",d:"혁명의 화가이자 나폴레옹의 수석 화가입니다.",w:[
+   ["호라티우스 형제의 맹세","Oath of the Horatii","1784","louvre","Oath of the Horatii"],
+   ["마라의 죽음","The Death of Marat","1793","brussels","The Death of Marat"],
+   ["나폴레옹 1세의 대관식","The Coronation of Napoleon","1805–1807","louvre","The Coronation of Napoleon"]]},
+  {n:"장 오귀스트 도미니크 앵그르",o:"Jean-Auguste-Dominique Ingres",l:"1780–1867",d:"다비드의 제자. 선의 순수성을 지킨 신고전주의의 수호자로, 들라크루아와 맞섰습니다.",w:[
+   ["그랑드 오달리스크","Grande Odalisque","1814","louvre","Grande Odalisque"],
+   ["발팽송의 목욕하는 여인","The Valpinçon Bather","1808","louvre","The Valpinçon Bather"]]}
+ ]},
+{id:"romanticism",name:"낭만주의",en:"Romanticism",years:"1790년 – 1850년",s:1790,e:1850,color:"#8c3b1f",
+ sum:"이성과 규범을 앞세운 신고전주의에 맞서 개인의 감정, 상상력, 자연의 숭고함을 표현한 흐름입니다. 혁명과 전쟁, 난파 같은 동시대 사건과 이국적인 동방, 거대한 자연이 주제가 되었습니다.",
+ traits:["격정적인 감정과 극적인 장면","선보다 색, 거친 붓질과 역동적 구도","자연 앞에 선 인간의 '숭고'","영국의 풍경화 혁신 (터너, 컨스터블)"],
+ diff:"신고전주의가 '선과 이성'이라면 낭만주의는 '색과 감정'입니다. 앵그르와 들라크루아의 대립이 이를 상징합니다.",
+ artists:[
+  {n:"프란시스코 고야",o:"Francisco Goya",l:"1746–1828",d:"스페인 궁정화가. 전쟁의 참상과 인간의 어둠을 그려 근대 미술의 문을 열었습니다.",w:[
+   ["1808년 5월 3일","The Third of May 1808","1814","prado","The Third of May 1808"],
+   ["아들을 잡아먹는 사투르누스","Saturn Devouring His Son","1819–1823","prado","Saturn Devouring His Son"]]},
+  {n:"카스파르 다비트 프리드리히",o:"Caspar David Friedrich",l:"1774–1840",d:"독일 낭만주의를 대표하는 풍경화가. 고요하고 명상적인 숭고를 그렸습니다.",w:[
+   ["안개 바다 위의 방랑자","Wanderer above the Sea of Fog","1818경","hamburg","Wanderer above the Sea of Fog"]]},
+  {n:"테오도르 제리코",o:"Théodore Géricault",l:"1791–1824",d:"실제 난파 사건을 거대한 화폭에 담아 프랑스 낭만주의를 열었습니다.",w:[
+   ["메두사호의 뗏목","The Raft of the Medusa","1818–1819","louvre","The Raft of the Medusa"]]},
+  {n:"외젠 들라크루아",o:"Eugène Delacroix",l:"1798–1863",d:"프랑스 낭만주의의 지도자. 강렬한 색채는 인상주의자들에게도 영향을 주었습니다.",w:[
+   ["민중을 이끄는 자유의 여신","Liberty Leading the People","1830","louvre","Liberty Leading the People"],
+   ["사르다나팔루스의 죽음","The Death of Sardanapalus","1827","louvre","The Death of Sardanapalus"]]},
+  {n:"윌리엄 터너",o:"J. M. W. Turner",l:"1775–1851",d:"빛과 대기를 녹여 낸 영국의 풍경화가. 인상주의와 추상의 선구로 평가됩니다.",w:[
+   ["전함 테메레르","The Fighting Temeraire","1839","ngl","The Fighting Temeraire"],
+   ["비, 증기, 속도 – 그레이트 웨스턴 철도","Rain, Steam and Speed","1844","ngl","Rain, Steam and Speed – The Great Western Railway"]]},
+  {n:"존 컨스터블",o:"John Constable",l:"1776–1837",d:"고향 서퍽의 평범한 시골을 직접 관찰해 그린 영국 풍경화가입니다. 프랑스 바르비종파에 영향을 주었습니다.",w:[
+   ["건초 마차","The Hay Wain","1821","ngl","The Hay Wain"]]}
+ ]},
+{id:"pre-raphaelite",name:"라파엘전파",en:"Pre-Raphaelite Brotherhood",years:"1848년 – 1870년대",s:1848,e:1880,color:"#4f6b4a",
+ sum:"영국 왕립아카데미의 판에 박힌 교육에 반발한 젊은 화가들의 모임입니다. 라파엘로 이전 중세·초기 르네상스 미술의 순수함으로 돌아가자는 뜻에서 이름을 지었습니다.",
+ traits:["선명하고 밝은 색","식물 하나까지 정밀하게 관찰한 자연 묘사","중세 전설, 셰익스피어, 문학에서 가져온 주제"],
+ diff:"같은 시기 프랑스 사실주의가 현실의 노동을 그렸다면, 영국 라파엘전파는 문학과 중세의 이상을 정밀한 사실 기법으로 그렸습니다.",
+ artists:[
+  {n:"존 에버렛 밀레이",o:"John Everett Millais",l:"1829–1896",d:"라파엘전파의 창립 멤버입니다.",w:[
+   ["오필리아","Ophelia","1851–1852","tateb","File:John Everett Millais - Ophelia - Google Art Project.jpg"]]},
+  {n:"단테 가브리엘 로세티",o:"Dante Gabriel Rossetti",l:"1828–1882",d:"시인이자 화가로 라파엘전파의 중심인물입니다.",w:[
+   ["베아타 베아트릭스","Beata Beatrix","1864–1870경","tateb","Beata Beatrix"]]}
+ ]},
+{id:"realism",name:"사실주의",en:"Realism",years:"1840년 – 1880년",s:1840,e:1880,color:"#5b5246",
+ sum:"산업혁명과 1848년 혁명 이후, 낭만주의의 상상과 아카데미의 역사화를 거부하고 눈앞의 현실을 있는 그대로 그리자는 운동입니다. 농민과 노동자, 평범한 시민이 처음으로 대형 그림의 주인공이 되었습니다.",
+ traits:["\"천사를 보여 주면 천사를 그리겠다\" (쿠르베)","노동자와 농민의 일상, 사회 문제","역사화 크기의 화폭에 평범한 사람을 그림","바르비종파: 퐁텐블로 숲에서 자연을 직접 관찰해 그린 풍경화"],
+ diff:"낭만주의의 영웅, 이국, 상상 대신 지금 여기의 현실을 그립니다.",
+ artists:[
+  {n:"귀스타브 쿠르베",o:"Gustave Courbet",l:"1819–1877",d:"사실주의라는 이름을 스스로 내건 선언자입니다.",w:[
+   ["오르낭의 매장","A Burial at Ornans","1849–1850","orsay","A Burial at Ornans"],
+   ["화가의 아틀리에","The Painter's Studio","1855","orsay","The Painter's Studio"],
+   ["안녕하세요, 쿠르베 씨","Bonjour, Monsieur Courbet","1854","fabre","Bonjour, Monsieur Courbet"]]},
+  {n:"장 프랑수아 밀레",o:"Jean-François Millet",l:"1814–1875",d:"바르비종에 살며 농민의 노동을 경건하게 그렸습니다.",w:[
+   ["이삭 줍는 여인들","The Gleaners","1857","orsay","The Gleaners"],
+   ["만종","The Angelus","1857–1859","orsay","The Angelus (painting)"]]},
+  {n:"오노레 도미에",o:"Honoré Daumier",l:"1808–1879",d:"풍자 판화가이자 화가로 도시 서민의 삶을 그렸습니다.",w:[
+   ["삼등 열차","The Third-Class Carriage","1862–1864경","met","The Third-Class Carriage"]]},
+  {n:"장 바티스트 카미유 코로",o:"Jean-Baptiste-Camille Corot",l:"1796–1875",d:"바르비종파의 풍경화가. 은빛 대기로 인상주의에 다리를 놓았습니다.",w:[
+   ["모르트퐁텐의 추억","Souvenir de Mortefontaine","1864","louvre","Souvenir de Mortefontaine"]]}
+ ]},
+{id:"impressionism",name:"인상주의",en:"Impressionism",years:"1860년대 – 1890년",s:1863,e:1890,color:"#3f6f8f",
+ sum:"관전(살롱)에서 거부당한 젊은 화가들이 1874년 독자적인 전시회를 열었습니다. 모네의 〈인상, 해돋이〉를 비꼰 평론에서 '인상주의'라는 이름이 붙었습니다. 야외에서 시시각각 변하는 빛과 색, 근대 도시 파리의 일상을 빠른 붓질로 담았습니다.",
+ traits:["야외에서 직접 그림 (튜브 물감의 발명 덕분)","빛과 시간에 따라 변하는 색, 색이 있는 그림자","짧게 끊어 찍은 붓질, 물감을 섞지 않고 나란히 칠함","카페, 기차역, 무도회 같은 근대 도시 생활","사진과 일본 우키요에 판화의 영향"],
+ diff:"사실주의가 '무엇을' 그릴지(현실)를 바꿨다면, 인상주의는 '어떻게' 볼지(빛과 순간)를 바꿨습니다.",
+ note:"마네는 인상주의의 선구자이자 정신적 지도자였지만 인상주의 전시회에는 한 번도 참가하지 않았습니다.",
+ artists:[
+  {n:"에두아르 마네",o:"Édouard Manet",l:"1832–1883",d:"전통 회화를 뒤흔든 스캔들로 근대 회화의 출발점이 된 인상주의의 선구자입니다.",w:[
+   ["풀밭 위의 점심 식사","Le Déjeuner sur l'herbe","1863","orsay","Le Déjeuner sur l'herbe"],
+   ["올랭피아","Olympia","1863","orsay","Olympia (Manet)"],
+   ["폴리베르제르의 술집","A Bar at the Folies-Bergère","1882","courtauld","A Bar at the Folies-Bergère"]]},
+  {n:"클로드 모네",o:"Claude Monet",l:"1840–1926",d:"평생 빛을 좇은 인상주의의 상징. 같은 대상을 시간대별로 그린 연작으로 유명합니다.",w:[
+   ["인상, 해돋이","Impression, Sunrise","1872","marmottan","Impression, Sunrise"],
+   ["수련 (대장식화)","Water Lilies","1914–1926","orangerie","Water Lilies (Monet series)",{tip:"오랑주리 미술관의 타원형 전시실 두 곳을 수련 대작 8점이 둘러쌉니다."}],
+   ["양산을 쓴 여인","Woman with a Parasol","1875","nga","Woman with a Parasol – Madame Monet and Her Son"]]},
+  {n:"피에르 오귀스트 르누아르",o:"Pierre-Auguste Renoir",l:"1841–1919",d:"행복한 사람들과 빛나는 살결을 그린 화가입니다.",w:[
+   ["물랭 드 라 갈레트의 무도회","Bal du moulin de la Galette","1876","orsay","Bal du moulin de la Galette"],
+   ["뱃놀이 일행의 점심","Luncheon of the Boating Party","1880–1881","phillips","Luncheon of the Boating Party"]]},
+  {n:"에드가 드가",o:"Edgar Degas",l:"1834–1917",d:"인상주의 전시를 이끌었지만 야외보다 실내, 무용수와 도시인을 그렸습니다.",w:[
+   ["발레 수업","The Dance Class","1874–1876","orsay","File:Edgar Degas - The Ballet Class - Google Art Project.jpg"],
+   ["압생트","L'Absinthe","1875–1876","orsay","L'Absinthe"]]},
+  {n:"카미유 피사로",o:"Camille Pissarro",l:"1830–1903",d:"여덟 번의 인상주의 전시에 모두 참가한 유일한 화가. 동료들의 아버지 같은 존재였습니다.",w:[
+   ["몽마르트르 대로, 밤","The Boulevard Montmartre at Night","1897","ngl","File:Camille Pissarro, The Boulevard Montmartre at Night, 1897.jpg"]]},
+  {n:"알프레드 시슬레",o:"Alfred Sisley",l:"1839–1899",d:"평생 풍경만 그린 가장 순수한 인상주의자입니다.",w:[
+   ["홍수 속의 배, 포르마를리","The Boat in the Flood, Port-Marly","1876","orsay","File:Sisley - The-Boat-In-The-Flood,-Port-Marly,-1876.jpg"]]},
+  {n:"베르트 모리조",o:"Berthe Morisot",l:"1841–1895",d:"첫 인상주의 전시에 참가한 여성 화가. 가정과 여성의 삶을 섬세하게 그렸습니다.",w:[
+   ["요람","The Cradle","1872","orsay","The Cradle (Morisot)"]]},
+  {n:"귀스타브 카유보트",o:"Gustave Caillebotte",l:"1848–1894",d:"화가이자 후원자. 대담한 원근법으로 새로 바뀐 파리를 그렸습니다.",w:[
+   ["파리의 거리, 비 오는 날","Paris Street; Rainy Day","1877","aic","Paris Street; Rainy Day"],
+   ["마루 깎는 사람들","The Floor Scrapers","1875","orsay","The Floor Scrapers"]]}
+ ]},
+{id:"post-impressionism",name:"신인상주의 · 후기인상주의",en:"Neo- & Post-Impressionism",years:"1886년 – 1905년",s:1886,e:1906,color:"#94690f",
+ sum:"인상주의를 거친 화가들이 각자 다른 길로 나아간 시기입니다. '후기인상주의'는 하나의 양식이 아니라, 1910년 영국 평론가 로저 프라이가 이들을 묶어 붙인 이름입니다. 이들의 길이 20세기 미술의 출발점이 됩니다.",
+ traits:["신인상주의: 색점을 과학적으로 배치하는 점묘법 (쇠라, 시냐크)","세잔: 자연을 원통·구·원뿔로 → 입체주의로","고흐: 감정을 담은 색과 붓질 → 표현주의로","고갱: 평면적 색면과 원시에 대한 동경 → 야수주의와 원시주의로"],
+ diff:"인상주의가 눈에 비친 순간의 빛을 기록했다면, 이들은 구조(세잔), 감정(고흐), 상징(고갱), 과학(쇠라)을 더했습니다.",
+ artists:[
+  {n:"조르주 쇠라",o:"Georges Seurat",l:"1859–1891",d:"색채 이론에 따라 작은 점을 찍어 그린 점묘법의 창시자입니다.",w:[
+   ["그랑드자트섬의 일요일 오후","A Sunday Afternoon on the Island of La Grande Jatte","1884–1886","aic","A Sunday Afternoon on the Island of La Grande Jatte"]]},
+  {n:"폴 시냐크",o:"Paul Signac",l:"1863–1935",d:"쇠라와 함께 신인상주의를 이끌고 이론을 정리했습니다.",w:[
+   ["펠릭스 페네옹의 초상","Portrait of Félix Fénéon","1890","moma","Portrait of Félix Fénéon"]]},
+  {n:"폴 세잔",o:"Paul Cézanne",l:"1839–1906",d:"'현대 미술의 아버지'. 사물의 견고한 구조를 탐구했습니다.",w:[
+   ["생트빅투아르산","Mont Sainte-Victoire","1902–1904","philly","Mont Sainte-Victoire (Cézanne)",{tip:"같은 산을 그린 연작이 여러 점 있으며 세계 각지 미술관에 흩어져 있습니다."}],
+   ["카드놀이하는 사람들","The Card Players","1894–1895","orsay","The Card Players"],
+   ["사과와 오렌지","Apples and Oranges","1899경","orsay","Still Life with Apples and Oranges"]]},
+  {n:"빈센트 반 고흐",o:"Vincent van Gogh",l:"1853–1890",d:"10년 남짓한 화가 생활 동안 약 900점의 유화를 남겼습니다.",w:[
+   ["별이 빛나는 밤","The Starry Night","1889","moma","The Starry Night"],
+   ["해바라기","Sunflowers","1888","ngl","Sunflowers (Van Gogh series)",{tip:"해바라기 연작은 런던, 암스테르담, 뮌헨, 필라델피아, 도쿄 등에 나뉘어 있습니다."}],
+   ["아를의 침실","Bedroom in Arles","1888","vgm","Bedroom in Arles"],
+   ["밤의 카페 테라스","Café Terrace at Night","1888","kroller","Café Terrace at Night"]]},
+  {n:"폴 고갱",o:"Paul Gauguin",l:"1848–1903",d:"문명을 떠나 타히티로 간 화가. 평면적인 색면으로 상징을 그렸습니다.",w:[
+   ["우리는 어디서 왔는가, 우리는 무엇인가, 우리는 어디로 가는가","Where Do We Come From? What Are We? Where Are We Going?","1897–1898","mfa","Where Do We Come From? What Are We? Where Are We Going?"],
+   ["설교 뒤의 환상","Vision After the Sermon","1888","edinburgh","Vision After the Sermon"]]},
+  {n:"앙리 드 툴루즈로트레크",o:"Henri de Toulouse-Lautrec",l:"1864–1901",d:"몽마르트르의 밤 문화와 포스터 예술을 그렸습니다.",w:[
+   ["물랭 루주에서","At the Moulin Rouge","1892–1895","aic","File:Henri de Toulouse-Lautrec - At the Moulin Rouge - Google Art Project.jpg"]]}
+ ]},
+{id:"symbolism",name:"상징주의 · 빈 분리파",en:"Symbolism & Vienna Secession",years:"1880년 – 1910년",s:1880,e:1912,color:"#7a6020",
+ sum:"눈에 보이는 현실보다 꿈, 신화, 죽음, 관능 같은 내면 세계를 상징으로 표현한 흐름입니다. 빈에서는 클림트가 아카데미에서 벗어난 '빈 분리파'를 만들어 장식적이고 화려한 양식을 펼쳤습니다.",
+ traits:["꿈과 신화, 신비주의","팜 파탈, 사랑과 죽음","금박과 장식 문양 (클림트, 아르누보)"],
+ diff:"사실주의와 인상주의가 바깥 세계를 관찰했다면, 상징주의는 안쪽의 정신 세계로 눈을 돌립니다. 뭉크도 이 흐름에서 출발했습니다.",
+ artists:[
+  {n:"귀스타브 모로",o:"Gustave Moreau",l:"1826–1898",d:"보석처럼 빛나는 신화화를 그린 프랑스 상징주의의 선구자. 마티스의 스승이기도 합니다.",w:[
+   ["환영","The Apparition","1876","orsay","File:Gustave Moreau - The Apparition - Google Art Project.jpg"]]},
+  {n:"구스타프 클림트",o:"Gustav Klimt",l:"1862–1918",d:"빈 분리파의 초대 회장. 금박을 쓴 '황금 시기'가 유명합니다.",w:[
+   ["키스","The Kiss","1907–1908","belvedere","The Kiss (Klimt)"],
+   ["아델레 블로흐바우어의 초상 I","Portrait of Adele Bloch-Bauer I","1907","neue","Portrait of Adele Bloch-Bauer I"]]}
+ ]},
+{id:"fauvism",name:"야수주의와 원시주의",en:"Fauvism & Primitivism",years:"1905년 – 1910년",s:1905,e:1910,color:"#c2452d",
+ sum:"1905년 파리 살롱 도톤에서 거칠고 강렬한 원색 그림을 본 평론가가 '야수들(Les Fauves) 사이에 있는 도나텔로 같다'고 해서 붙은 이름입니다. 색을 사물의 재현에서 해방시켜 감정과 장식의 도구로 썼습니다.",
+ traits:["튜브에서 짜낸 듯한 순수 원색","자연의 색과 무관한 자유로운 색 (초록 얼굴, 붉은 나무)","평면적 형태와 단순화","원시주의: 아프리카·오세아니아 조각, 민속 미술, 어린아이 같은 소박함에서 영감"],
+ diff:"고흐와 고갱의 색채 실험을 극단까지 밀어붙였습니다. 형태를 해체한 입체주의와 달리 '색'의 혁명입니다.",
+ note:"마티스는 미술사에서 보통 '야수주의'의 지도자로 분류됩니다. '원시주의'는 하나의 유파라기보다 비서구 미술과 소박함에서 영감을 얻은 넓은 경향을 가리키는 말로, 고갱, 앙리 루소, 초기 피카소, 마티스 등에게 두루 나타납니다.",
+ artists:[
+  {n:"앙리 마티스",o:"Henri Matisse",l:"1869–1954",d:"야수주의의 지도자. 피카소와 함께 20세기 미술의 양대 거장으로 꼽힙니다.",w:[
+   ["모자를 쓴 여인","Woman with a Hat","1905","sfmoma","Woman with a Hat"],
+   ["춤","Dance","1910","hermitage","Dance (Matisse)",{tip:"1909년에 그린 첫 번째 버전은 뉴욕 MoMA에 있습니다."}],
+   ["붉은 화실","The Red Studio","1911","moma","The Red Studio"]]},
+  {n:"앙드레 드랭",o:"André Derain",l:"1880–1954",d:"마티스와 함께 콜리우르에서 야수주의를 탄생시켰습니다.",w:[
+   ["앙리 마티스의 초상","Portrait of Henri Matisse","1905","tatem","File:André derain, ritratto di henri matisse, 1905 (tate modern) 01.jpg"]]},
+  {n:"앙리 루소",o:"Henri Rousseau",l:"1844–1910",d:"세관원 출신의 독학 화가. 소박하고 환상적인 화풍으로 피카소와 초현실주의자들에게 사랑받았습니다.",w:[
+   ["잠자는 집시","The Sleeping Gypsy","1897","moma","The Sleeping Gypsy"],
+   ["꿈","The Dream","1910","moma","The Dream (Rousseau painting)"]]}
+ ]},
+{id:"expressionism",name:"표현주의",en:"Expressionism",years:"1905년 – 1925년",s:1905,e:1925,color:"#a3361f",
+ sum:"외부 세계의 재현보다 화가 내면의 불안, 고독, 분노를 왜곡된 형태와 강렬한 색으로 드러낸 흐름입니다. 독일에서 크게 꽃피었습니다. 1905년 드레스덴의 '다리파(Die Brücke)'와 1911년 뮌헨의 '청기사파(Der Blaue Reiter)'가 대표적인 그룹입니다.",
+ traits:["불안과 고통 같은 내면 감정의 표출","형태의 과장·왜곡과 거친 붓질","도시의 소외, 전쟁 전야의 불안","목판화의 부활 (다리파)"],
+ diff:"야수주의가 색의 기쁨과 조화를 추구했다면, 표현주의는 같은 강렬한 색으로 불안과 고통을 말합니다.",
+ note:"뭉크는 상징주의에서 출발했으며 표현주의의 선구자로 평가됩니다. 칸딘스키는 청기사파를 함께 만들었지만 이 사이트에서는 추상미술에서 다룹니다.",
+ artists:[
+  {n:"에드바르 뭉크",o:"Edvard Munch",l:"1863–1944",d:"사랑, 불안, 죽음을 그린 노르웨이 화가. 표현주의의 선구자입니다.",w:[
+   ["절규","The Scream","1893","oslo","The Scream",{tip:"여러 버전이 있습니다. 1893년 템페라·크레용 버전은 국립미술관, 1910년 버전 등은 오슬로 뭉크 미술관(MUNCH)에 있습니다."}],
+   ["생의 춤","The Dance of Life","1899–1900","oslo","File:Edvard Munch - The Dance of Life - NG.M.00941 - National Museum of Art, Architecture and Design.jpg"]]},
+  {n:"에른스트 루트비히 키르히너",o:"Ernst Ludwig Kirchner",l:"1880–1938",d:"다리파의 창립자. 베를린 거리의 긴장감을 날카롭게 그렸습니다.",w:[
+   ["베를린 거리 풍경","Berlin Street Scene","1913","neue","Berlin Street Scene"],
+   ["드레스덴의 거리","Street, Dresden","1908","moma","File:Kirchner - Street, Dresden, 1908, 12.1951.jpg"]]},
+  {n:"프란츠 마르크",o:"Franz Marc",l:"1880–1916",d:"청기사파의 공동 창립자. 동물을 상징적인 색으로 그렸고 1차 대전에서 전사했습니다.",w:[
+   ["큰 푸른 말들","The Large Blue Horses","1911","walker","File:Franz Marc - Die großen blauen Pferde 1911.jpg"]]},
+  {n:"에곤 실레",o:"Egon Schiele",l:"1890–1918",d:"클림트의 후배. 뒤틀린 선으로 적나라한 인간의 몸과 내면을 그렸습니다.",w:[
+   ["꽈리 열매가 있는 자화상","Self-Portrait with Physalis","1912","leopold","File:Egon Schiele - Self-Portrait with Physalis - Google Art Project.jpg"]]},
+  {n:"오스카어 코코슈카",o:"Oskar Kokoschka",l:"1886–1980",d:"빈 표현주의의 대표 화가입니다.",w:[
+   ["바람의 신부","The Bride of the Wind","1913–1914","basel","The Bride of the Wind",{cr:1}]]}
+ ]},
+{id:"cubism",name:"입체주의",en:"Cubism",years:"1907년 – 1920년대",s:1907,e:1925,color:"#6b5a45",
+ sum:"피카소와 브라크가 세잔의 가르침을 극단까지 밀어붙여 탄생시켰습니다. 대상을 여러 시점에서 본 모습을 기하학적 조각으로 쪼개 한 화면에 재구성했습니다.",
+ traits:["여러 시점을 한 화면에 동시에 표현","형태를 기하학적 면으로 분해","분석적 입체주의(1909–1912): 갈색·회색 위주로 형태 분해","종합적 입체주의(1912–): 신문지 등을 붙이는 콜라주(파피에 콜레)"],
+ diff:"르네상스 이후 500년 가까이 이어진 '한 시점에서 본 원근법'을 무너뜨린, 20세기 가장 근본적인 혁명입니다.",
+ artists:[
+  {n:"파블로 피카소",o:"Pablo Picasso",l:"1881–1973",d:"입체주의의 공동 창시자. 평생 끊임없이 양식을 바꾼 20세기 최고의 화가입니다.",w:[
+   ["아비뇽의 처녀들","Les Demoiselles d'Avignon","1907","moma","Les Demoiselles d'Avignon",{cr:1}],
+   ["게르니카","Guernica","1937","reina","Guernica (Picasso)",{cr:1,tip:"게르니카 전시실은 사진 촬영이 금지됩니다."}],
+   ["우는 여인","The Weeping Woman","1937","tatem","The Weeping Woman",{cr:1}]]},
+  {n:"조르주 브라크",o:"Georges Braque",l:"1882–1963",d:"피카소와 함께 입체주의를 만들었습니다. '입체주의'라는 이름은 그의 그림에서 나왔습니다.",w:[
+   ["레스타크의 집들","Houses at L'Estaque","1908","bern","Houses at L'Estaque",{cr:1}],
+   ["바이올린과 촛대","Violin and Candlestick","1910","sfmoma","Violin and Candlestick",{cr:1}]]},
+  {n:"후안 그리스",o:"Juan Gris",l:"1887–1927",d:"명료한 색과 구성으로 종합적 입체주의를 발전시켰습니다.",w:[
+   ["파블로 피카소의 초상","Portrait of Pablo Picasso","1912","aic","File:Juan Gris - Portrait of Pablo Picasso - Google Art Project.jpg"]]},
+  {n:"페르낭 레제",o:"Fernand Léger",l:"1881–1955",d:"원통형 형태의 '튜비즘'으로 기계 시대를 그렸습니다.",w:[
+   ["도시","The City","1919","philly","The City (Léger)"]]}
+ ]},
+{id:"futurism",name:"미래주의",en:"Futurism",years:"1909년 – 1916년",s:1909,e:1916,color:"#a04823",
+ sum:"1909년 시인 마리네티의 〈미래주의 선언〉으로 시작된 이탈리아 운동입니다. 과거의 미술관을 불태우자고 외치며 속도, 기계, 도시, 역동성을 찬미했습니다.",
+ traits:["속도와 움직임의 연속 동작 표현","입체주의의 분해 기법 + 강렬한 색과 운동감","자동차, 기차, 산업 도시"],
+ diff:"입체주의가 정지한 사물을 여러 각도로 쪼갰다면, 미래주의는 움직이는 대상을 시간 속에서 쪼갰습니다.",
+ artists:[
+  {n:"움베르토 보초니",o:"Umberto Boccioni",l:"1882–1916",d:"미래주의 최고의 화가이자 조각가. 1차 대전 중 사망했습니다.",w:[
+   ["도시가 일어나다","The City Rises","1910","moma","The City Rises"],
+   ["공간 속 연속성의 독특한 형태 (조각)","Unique Forms of Continuity in Space","1913","moma","Unique Forms of Continuity in Space"]]},
+  {n:"자코모 발라",o:"Giacomo Balla",l:"1871–1958",d:"움직임을 연속 사진처럼 겹쳐 그렸습니다.",w:[
+   ["끈에 매인 개의 역동성","Dynamism of a Dog on a Leash","1912","buffalo","Dynamism of a Dog on a Leash",{cr:1}]]}
+ ]},
+{id:"abstraction",name:"추상미술",en:"Abstract Art",years:"1910년 – 1940년대",s:1910,e:1944,color:"#2f4f8f",
+ sum:"그림이 무언가를 '닮아야 한다'는 오랜 전제를 버리고 색, 선, 형태 그 자체로 화면을 구성한 미술입니다. 칸딘스키의 음악적인 서정 추상, 말레비치의 절대주의, 몬드리안의 신조형주의(데 스테일)가 대표적입니다.",
+ traits:["구체적 대상의 재현을 버림","칸딘스키: 색과 형태로 음악처럼 감정을 울림 (뜨거운 추상)","몬드리안: 수직·수평선과 삼원색만 쓰는 질서 (차가운 추상)","말레비치: 순수한 기하학 형태의 '절대주의'","바우하우스 교육과 디자인·건축으로 확산"],
+ diff:"입체주의는 형태를 쪼개도 대상이 남아 있었지만, 추상은 대상을 완전히 지웁니다.",
+ artists:[
+  {n:"바실리 칸딘스키",o:"Wassily Kandinsky",l:"1866–1944",d:"러시아 출신으로 청기사파를 만들고 바우하우스에서 가르쳤습니다. 최초의 추상화가 중 한 명입니다.",w:[
+   ["구성 VII","Composition VII","1913","tretyakov","Composition VII"],
+   ["노랑-빨강-파랑","Yellow-Red-Blue","1925","pompidou","File:Kandinsky - Jaune Rouge Bleu.jpg"]]},
+  {n:"카지미르 말레비치",o:"Kazimir Malevich",l:"1879–1935",d:"흰 바탕 위 검은 사각형으로 회화의 '영도'를 선언한 절대주의의 창시자입니다.",w:[
+   ["검은 사각형","Black Square","1915","tretyakov","Black Square (painting)"],
+   ["절대주의 구성: 흰색 위의 흰색","Suprematist Composition: White on White","1918","moma","White on White"]]},
+  {n:"피트 몬드리안",o:"Piet Mondrian",l:"1872–1944",d:"나무 연작에서 출발해 점점 단순화하여 순수한 격자 추상에 이르렀습니다.",w:[
+   ["빨강, 파랑, 노랑의 구성","Composition with Red, Blue and Yellow","1930","zurich","Composition with Red, Blue and Yellow"],
+   ["브로드웨이 부기우기","Broadway Boogie Woogie","1942–1943","moma","Broadway Boogie Woogie"]]},
+  {n:"파울 클레",o:"Paul Klee",l:"1879–1940",d:"스위스 출신. 바우하우스에서 가르쳤고 시적이고 동화 같은 추상을 그렸습니다.",w:[
+   ["세네치오","Senecio","1922","basel","Senecio (Klee)"],
+   ["지저귀는 기계","Twittering Machine","1922","moma","Twittering Machine"]]}
+ ]},
+{id:"surrealism",name:"다다와 초현실주의",en:"Dada & Surrealism",years:"1916년 – 1950년",s:1916,e:1950,color:"#5a3f7a",
+ sum:"1차 대전의 참혹함 속에서 이성과 기존 예술을 조롱한 다다가 먼저 등장했습니다. 그 뒤를 이어 1924년 앙드레 브르통이 〈초현실주의 선언〉을 발표했습니다. 프로이트의 정신분석에 영향을 받아 꿈과 무의식의 세계를 그렸습니다.",
+ traits:["다다: 기성품(레디메이드)을 예술로 제시하는 반예술","무의식을 끌어내는 자동기술법","데페이즈망: 익숙한 사물을 낯선 맥락에 놓기 (마그리트)","극사실적인 기법으로 그린 비현실 (달리, 마그리트) vs 유기적 형태의 추상 (미로)"],
+ diff:"추상미술이 형태의 질서를 탐구했다면, 초현실주의는 이성 너머 꿈과 무의식을 탐구했습니다.",
+ note:"프리다 칼로는 브르통이 초현실주의자라 불렀지만, 본인은 \"나는 꿈이 아니라 나의 현실을 그렸다\"며 그 분류를 거부했습니다.",
+ artists:[
+  {n:"마르셀 뒤샹",o:"Marcel Duchamp",l:"1887–1968",d:"변기에 서명해 전시한 〈샘〉으로 '무엇이 예술인가'를 물은 다다의 핵심 인물입니다.",w:[
+   ["샘 (1964년 재제작본)","Fountain","1917","tatem","Fountain (Duchamp)",{cr:1,tip:"1917년 원본은 사라졌고, 1960년대 재제작본이 테이트 모던, 퐁피두 등 여러 곳에 있습니다."}],
+   ["계단을 내려오는 누드 No.2","Nude Descending a Staircase, No. 2","1912","philly","Nude Descending a Staircase, No. 2",{cr:1}]]},
+  {n:"조르조 데 키리코",o:"Giorgio de Chirico",l:"1888–1978",d:"텅 빈 광장과 기묘한 사물의 '형이상회화'로 초현실주의에 큰 영향을 주었습니다.",w:[
+   ["사랑의 노래","The Song of Love","1914","moma","The Song of Love",{cr:1}]]},
+  {n:"막스 에른스트",o:"Max Ernst",l:"1891–1976",d:"다다에서 초현실주의로 넘어간 독일 화가. 프로타주 기법을 개발했습니다.",w:[
+   ["셀레베스의 코끼리","Celebes","1921","tatem","Celebes (painting)",{cr:1}]]},
+  {n:"호안 미로",o:"Joan Miró",l:"1893–1983",d:"스페인 카탈루냐 출신. 아이 같은 기호와 원색으로 무의식을 그렸습니다.",w:[
+   ["어릿광대의 사육제","Harlequin's Carnival","1924–1925","buffalo","Harlequin's Carnival",{cr:1}],
+   ["경작지","The Tilled Field","1923–1924","guggenheim","The Tilled Field",{cr:1}]]},
+  {n:"르네 마그리트",o:"René Magritte",l:"1898–1967",d:"평범한 사물을 낯설게 배치해 이미지와 현실의 관계를 묻는 벨기에 화가입니다.",w:[
+   ["이미지의 배반 (이것은 파이프가 아니다)","The Treachery of Images","1929","lacma","The Treachery of Images",{cr:1}],
+   ["빛의 제국","The Empire of Light","1950","moma","The Empire of Light",{cr:1,tip:"20여 점의 연작으로, 브뤼셀 마그리트 미술관과 베네치아 페기 구겐하임 컬렉션에도 있습니다."}],
+   ["사람의 아들","The Son of Man","1964","private","The Son of Man",{cr:1}]]},
+  {n:"살바도르 달리",o:"Salvador Dalí",l:"1904–1989",d:"'편집증적 비판' 방법으로 꿈을 사진처럼 정밀하게 그렸습니다.",w:[
+   ["기억의 지속","The Persistence of Memory","1931","moma","The Persistence of Memory",{cr:1,tip:"가로 33cm 남짓한 작은 그림이라 실물을 보면 놀라는 사람이 많습니다."}],
+   ["불타는 기린","The Burning Giraffe","1937","basel","The Burning Giraffe",{cr:1}]]},
+  {n:"프리다 칼로",o:"Frida Kahlo",l:"1907–1954",d:"고통스러운 삶과 멕시코의 정체성을 자화상에 담았습니다.",w:[
+   ["두 명의 프리다","The Two Fridas","1939","mammx","The Two Fridas",{cr:1}]]}
+ ]},
+{id:"abstract-expressionism",name:"추상표현주의",en:"Abstract Expressionism",years:"1943년 – 1960년",s:1943,e:1960,color:"#2c2c2c",
+ sum:"2차 대전으로 유럽 예술가들이 미국으로 건너오면서 미술의 중심이 파리에서 뉴욕으로 옮겨 갔습니다. 미국 화가들은 초현실주의의 자동기술법을 이어받아, 거대한 캔버스에 형상 없이 행위와 색으로 내면을 표현했습니다. '뉴욕 화파'라고도 부릅니다.",
+ traits:["액션 페인팅: 그리는 행위 자체가 작품 (폴록, 드 쿠닝)","색면 회화: 넓은 색면으로 명상적 경험을 줌 (로스코, 뉴먼)","관객을 감싸는 거대한 화면","드리핑: 바닥에 캔버스를 깔고 물감을 흘리고 뿌림"],
+ diff:"유럽의 추상이 기하학적 질서나 이론을 추구했다면, 추상표현주의는 즉흥적 몸짓과 실존적 감정을 앞세웁니다.",
+ artists:[
+  {n:"잭슨 폴록",o:"Jackson Pollock",l:"1912–1956",d:"드리핑 기법으로 액션 페인팅을 대표합니다.",w:[
+   ["가을의 리듬 (넘버 30)","Autumn Rhythm (Number 30)","1950","met","Autumn Rhythm (Number 30)",{cr:1}],
+   ["라벤더 안개 (넘버 1)","Lavender Mist","1950","nga","Lavender Mist",{cr:1}],
+   ["푸른 기둥들","Blue Poles","1952","ngaus","Blue Poles",{cr:1}]]},
+  {n:"윌렘 드 쿠닝",o:"Willem de Kooning",l:"1904–1997",d:"네덜란드 출신. 격렬한 붓질 속에 인물을 남긴 액션 페인팅의 대가입니다.",w:[
+   ["여인 I","Woman I","1950–1952","moma","Woman I",{cr:1}]]},
+  {n:"마크 로스코",o:"Mark Rothko",l:"1903–1970",d:"부유하는 색면으로 비극과 숭고를 표현한 색면 회화의 대표 화가입니다.",w:[
+   ["로스코 채플 벽화","Rothko Chapel","1964–1967","rothko","Rothko Chapel",{cr:1,tip:"로스코가 직접 설계에 참여한 명상 공간으로 대형 그림 14점이 걸려 있습니다."}],
+   ["시그램 벽화","Seagram Murals","1958–1959","tatem","Seagram murals",{cr:1,tip:"원래 뉴욕 포시즌스 레스토랑을 위해 그렸지만 로스코가 계약을 취소했습니다. 테이트 모던 로스코 전시실에 걸려 있습니다."}]]},
+  {n:"바넷 뉴먼",o:"Barnett Newman",l:"1905–1970",d:"넓은 색면을 세로 띠('지퍼')로 가르는 색면 회화의 대표 화가입니다.",w:[
+   ["인간, 영웅적이며 숭고한","Vir Heroicus Sublimis","1950–1951","moma","Vir Heroicus Sublimis",{cr:1}]]}
+ ]}
+];
+
+// 확장분: 기존 화가에 작품 추가(EXTRA_WORKS), 새 화가 추가(EXTRA_ARTISTS), 새 소장처(EXTRA_MUSEUMS)
+Object.assign(MUSEUMS,{
+  accademiafi:{n:"아카데미아 미술관",o:"Galleria dell'Accademia",c:"이탈리아 피렌체",u:"https://www.galleriaaccademiafirenze.it",note:"〈다비드〉를 보려면 사전 예약을 권합니다"},
+  stpeter:{n:"성 베드로 대성당",o:"Basilica di San Pietro",c:"바티칸 시국",u:"https://www.basilicasanpietro.va"},
+  pitti:{n:"피티 궁전 팔라티나 미술관",o:"Galleria Palatina, Palazzo Pitti",c:"이탈리아 피렌체",u:"https://www.uffizi.it"},
+  borghese:{n:"보르게세 미술관",o:"Galleria Borghese",c:"이탈리아 로마",u:"https://galleriaborghese.beniculturali.it",note:"입장 시간대별 사전 예약제로만 관람할 수 있습니다"},
+  popolo:{n:"산타 마리아 델 포폴로 성당",o:"Santa Maria del Popolo",c:"이탈리아 로마",u:""},
+  felicita:{n:"산타 펠리치타 성당",o:"Santa Felicita",c:"이탈리아 피렌체",u:""},
+  pgc:{n:"페기 구겐하임 컬렉션",o:"Peggy Guggenheim Collection",c:"이탈리아 베네치아",u:"https://www.guggenheim-venice.it"},
+  lisbon:{n:"리스본 국립고미술관",o:"Museu Nacional de Arte Antiga",c:"포르투갈 리스본",u:""},
+  toledocat:{n:"톨레도 대성당",o:"Catedral de Toledo",c:"스페인 톨레도",u:"https://catedralprimada.es"},
+  berlingg:{n:"베를린 회화관",o:"Gemäldegalerie",c:"독일 베를린",u:"https://www.smb.museum"},
+  altenat:{n:"베를린 구 국립미술관",o:"Alte Nationalgalerie",c:"독일 베를린",u:"https://www.smb.museum"},
+  neuenat:{n:"베를린 신 국립미술관",o:"Neue Nationalgalerie",c:"독일 베를린",u:"https://www.smb.museum"},
+  charlottenburg:{n:"샤를로텐부르크 궁전",o:"Schloss Charlottenburg",c:"독일 베를린",u:"https://www.spsg.de"},
+  sanssouci:{n:"상수시 궁전 회화관",o:"Bildergalerie, Sanssouci",c:"독일 포츠담",u:"https://www.spsg.de"},
+  mannheim:{n:"만하임 쿤스트할레",o:"Kunsthalle Mannheim",c:"독일 만하임",u:"https://www.kuma.art"},
+  sprengel:{n:"슈프렝겔 미술관",o:"Sprengel Museum",c:"독일 하노버",u:"https://www.sprengel-museum.de"},
+  reinhart:{n:"오스카 라인하르트 미술관",o:"Museum Oskar Reinhart",c:"스위스 빈터투어",u:""},
+  geneva:{n:"제네바 프티 팔레 미술관",o:"Musée du Petit Palais",c:"스위스 제네바",u:""},
+  secession:{n:"제체시온 (분리파 회관)",o:"Secession",c:"오스트리아 빈",u:"https://www.secession.at"},
+  mak:{n:"빈 응용미술관 MAK",o:"MAK – Museum of Applied Arts",c:"오스트리아 빈",u:"https://www.mak.at"},
+  versailles:{n:"베르사유 궁전",o:"Château de Versailles",c:"프랑스 베르사유",u:"https://www.chateauversailles.fr"},
+  malmaison:{n:"말메종 성",o:"Château de Malmaison",c:"프랑스 뤼에유말메종",u:""},
+  armee:{n:"군사 박물관 (앵발리드)",o:"Musée de l'Armée",c:"프랑스 파리",u:"https://www.musee-armee.fr"},
+  moreau:{n:"귀스타브 모로 미술관",o:"Musée Gustave Moreau",c:"프랑스 파리",u:"https://musee-moreau.fr"},
+  albi:{n:"툴루즈로트레크 미술관",o:"Musée Toulouse-Lautrec",c:"프랑스 알비",u:"https://www.musee-toulouse-lautrec.com"},
+  royal:{n:"영국 왕실 컬렉션",o:"Royal Collection",c:"영국 런던·윈저",u:"https://www.rct.uk",note:"작품은 버킹엄 궁전, 윈저성 등에서 돌아가며 전시됩니다"},
+  kenwood:{n:"켄우드 하우스",o:"Kenwood House",c:"영국 런던",u:"https://www.english-heritage.org.uk"},
+  va:{n:"빅토리아 앤드 앨버트 박물관",o:"Victoria and Albert Museum",c:"영국 런던",u:"https://www.vam.ac.uk"},
+  keble:{n:"옥스퍼드 키블 칼리지 예배당",o:"Keble College Chapel",c:"영국 옥스퍼드",u:""},
+  kelvingrove:{n:"켈빈그로브 미술관",o:"Kelvingrove Art Gallery and Museum",c:"영국 글래스고",u:""},
+  denhaag:{n:"헤이그 시립미술관",o:"Kunstmuseum Den Haag",c:"네덜란드 헤이그",u:"https://www.kunstmuseum.nl"},
+  munch:{n:"뭉크 미술관 (MUNCH)",o:"MUNCH",c:"노르웨이 오슬로",u:"https://www.munchmuseet.no"},
+  russian:{n:"러시아 미술관",o:"State Russian Museum",c:"러시아 상트페테르부르크",u:"",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
+  israel:{n:"이스라엘 박물관",o:"Israel Museum",c:"이스라엘 예루살렘",u:"https://www.imj.org.il"},
+  frick:{n:"프릭 컬렉션",o:"The Frick Collection",c:"미국 뉴욕",u:"https://www.frick.org"},
+  getty:{n:"게티 센터",o:"J. Paul Getty Museum",c:"미국 로스앤젤레스",u:"https://www.getty.edu"},
+  barnes:{n:"반스 재단",o:"Barnes Foundation",c:"미국 필라델피아",u:"https://www.barnesfoundation.org"},
+  yale:{n:"예일 대학교 미술관",o:"Yale University Art Gallery",c:"미국 뉴헤이븐",u:"https://artgallery.yale.edu"},
+  oberlin:{n:"앨런 기념 미술관",o:"Allen Memorial Art Museum",c:"미국 오벌린",u:""},
+  cleveland:{n:"클리블랜드 미술관",o:"Cleveland Museum of Art",c:"미국 클리블랜드",u:"https://www.clevelandart.org"},
+  menil:{n:"메닐 컬렉션",o:"The Menil Collection",c:"미국 휴스턴",u:"https://www.menil.org"},
+  ransom:{n:"해리 랜섬 센터",o:"Harry Ransom Center",c:"미국 오스틴",u:"https://www.hrc.utexas.edu"},
+  moca:{n:"LA 현대미술관 MOCA",o:"Museum of Contemporary Art",c:"미국 로스앤젤레스",u:"https://www.moca.org"},
+  olmedo:{n:"돌로레스 올메도 미술관",o:"Museo Dolores Olmedo",c:"멕시코 멕시코시티",u:""},
+  novecento:{n:"노베첸토 미술관",o:"Museo del Novecento",c:"이탈리아 밀라노",u:"https://www.museodelnovecento.org"},
+  various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
+  lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
+});
+
+const EXTRA_WORKS={
+"Giotto di Bondone":[["오니산티 마돈나","Ognissanti Madonna","1310경","uffizi","Ognissanti Madonna"]],
+"Masaccio":[["낙원에서의 추방","Expulsion from the Garden of Eden","1425경","brancacci","File:Masaccio-TheExpulsionOfAdamAndEveFromEden-Restoration.jpg"]],
+"Sandro Botticelli":[["동방박사의 경배","Adoration of the Magi","1475경","uffizi","Adoration of the Magi (Botticelli, 1475)"],["비너스와 마르스","Venus and Mars","1485경","ngl","Venus and Mars (Botticelli)"],["석류의 성모","Madonna of the Pomegranate","1487경","uffizi","Madonna of the Pomegranate (Botticelli)"]],
+"Leonardo da Vinci":[["암굴의 성모","Virgin of the Rocks","1483–1486","louvre","Virgin of the Rocks",{tip:"두 번째 버전(1495–1508경)은 런던 내셔널 갤러리에 있습니다."}],["수태고지","Annunciation","1472–1476경","uffizi","Annunciation (Leonardo)"],["성 안나와 성모자","The Virgin and Child with Saint Anne","1503–1519경","louvre","The Virgin and Child with Saint Anne (Leonardo)"],["지네브라 데 벤치","Ginevra de' Benci","1474–1478경","nga","Ginevra de' Benci",{tip:"미국에서 볼 수 있는 유일한 레오나르도의 회화입니다."}]],
+"Michelangelo Buonarroti":[["다비드 (조각)","David","1501–1504","accademiafi","David (Michelangelo)"],["피에타 (조각)","Pietà","1498–1499","stpeter","Pietà (Michelangelo)",{tip:"1972년 훼손 사건 이후 방탄유리 너머로 관람합니다."}]],
+"Raffaello Sanzio":[["의자의 성모","Madonna della Seggiola","1513–1514","pitti","Madonna della Seggiola"],["방울새의 성모","Madonna del Cardellino","1505–1506","uffizi","Madonna del Cardellino"],["그리스도의 변용","Transfiguration","1516–1520","vatican","Transfiguration (Raphael)",{tip:"라파엘로의 마지막 작품으로 바티칸 회화관(피나코테카)에 있습니다."}],["발다사레 카스틸리오네의 초상","Portrait of Baldassare Castiglione","1514–1515","louvre","Portrait of Baldassare Castiglione"]],
+"Giorgione":[["잠자는 비너스","Sleeping Venus","1510경","dresden","Sleeping Venus (Giorgione)",{tip:"조르조네 사후 티치아노가 풍경을 완성한 것으로 알려져 있습니다."}],["세 철학자","The Three Philosophers","1508–1509경","khm","The Three Philosophers"]],
+"Titian":[["바쿠스와 아리아드네","Bacchus and Ariadne","1520–1523","ngl","Bacchus and Ariadne"],["신성한 사랑과 세속적 사랑","Sacred and Profane Love","1514경","borghese","Sacred and Profane Love"],["카를 5세 기마상","Equestrian Portrait of Charles V","1548","prado","Equestrian Portrait of Charles V"]],
+"Jan van Eyck":[["재상 롤랭의 성모","Madonna of Chancellor Rolin","1435경","louvre","Madonna of Chancellor Rolin"],["붉은 터번을 쓴 남자","Portrait of a Man in a Red Turban","1433","ngl","Portrait of a Man in a Red Turban",{tip:"화가 자신의 자화상으로 추정됩니다."}]],
+"Hieronymus Bosch":[["건초 수레","The Haywain Triptych","1516경","prado","The Haywain Triptych"],["성 안토니우스의 유혹","Triptych of the Temptation of St. Anthony","1501경","lisbon","Triptych of the Temptation of St. Anthony"]],
+"Albrecht Dürer":[["네 사도","The Four Apostles","1526","alte","File:Albrecht Dürer - The Four Apostles, Saints John, Peter, Mark and Paul.jpg"],["아담과 이브","Adam and Eve","1507","prado","File:Albrecht Dürer - Adam and Eve (Prado).jpg"],["멜랑콜리아 I (판화)","Melencolia I","1514","various","Melencolia I",{tip:"동판화라 여러 장이 있으며 메트로폴리탄, 대영박물관 등 여러 곳이 소장합니다."}]],
+"Hans Holbein the Younger":[["토머스 모어의 초상","Portrait of Sir Thomas More","1527","frick","Portrait of Sir Thomas More (Holbein)"],["무덤 속 그리스도의 시신","The Body of the Dead Christ in the Tomb","1520–1522","basel","File:Holbein — Dead Christ.jpg"]],
+"Pieter Bruegel the Elder":[["농가의 결혼식","The Peasant Wedding","1567경","khm","The Peasant Wedding"],["추수하는 사람들","The Harvesters","1565","met","File:Pieter Bruegel the Elder- The Harvesters - Google Art Project.jpg"],["네덜란드 속담","Netherlandish Proverbs","1559","berlingg","Netherlandish Proverbs"],["이카로스의 추락이 있는 풍경","Landscape with the Fall of Icarus","1560년대","brussels","Landscape with the Fall of Icarus",{tip:"브뤼헐 원작을 모사한 그림이라는 견해가 유력합니다."}]],
+"Parmigianino":[["볼록 거울 속의 자화상","Self-portrait in a Convex Mirror","1524경","khm","File:Francesco Mazzola, called Parmigianino - Self-Portrait in a Convex Mirror - Google Art ProjectFXD.jpg"]],
+"Agnolo Bronzino":[["엘레오노라 디 톨레도와 아들","Portrait of Eleanor of Toledo","1545경","uffizi","Portrait of Eleanor of Toledo"]],
+"El Greco":[["그리스도의 옷을 벗김","El Expolio","1577–1579","toledocat","File:El Expolio, por El Greco.jpg"],["다섯 번째 봉인의 개봉","The Opening of the Fifth Seal","1608–1614","met","The Opening of the Fifth Seal"],["가슴에 손을 얹은 기사","The Nobleman with his Hand on his Chest","1580경","prado","The Nobleman with his Hand on his Chest"]],
+"Caravaggio":[["성 마태오의 순교","The Martyrdom of Saint Matthew","1599–1600","sanluigi","File:The Martyrdom of Saint Matthew-Caravaggio (c. 1599-1600).jpg"],["성 베드로의 십자가형","Crucifixion of Saint Peter","1601","popolo","Crucifixion of Saint Peter (Caravaggio)"],["의심하는 도마","The Incredulity of Saint Thomas","1601–1602","sanssouci","The Incredulity of Saint Thomas (Caravaggio)"],["바쿠스","Bacchus","1596경","uffizi","Bacchus (Caravaggio)"],["메두사","Medusa","1597경","uffizi","Medusa (Caravaggio)"]],
+"Artemisia Gentileschi":[["회화의 알레고리로서의 자화상","Self-Portrait as the Allegory of Painting","1638–1639","royal","Self-Portrait as the Allegory of Painting"]],
+"Peter Paul Rubens":[["십자가에 세워지심","The Elevation of the Cross","1610–1611","antwerp","The Elevation of the Cross"],["레우키포스 딸들의 납치","The Rape of the Daughters of Leucippus","1618경","alte","The Rape of the Daughters of Leucippus"],["삼미신","The Three Graces","1630–1635","prado","File:The Three Graces, by Peter Paul Rubens, from Prado in Google Earth.jpg"],["마리 드 메디시스 연작","Marie de' Medici Cycle","1622–1625","louvre","Marie de' Medici cycle",{tip:"대작 24점이 루브르 '메디시스 전시실' 한 방을 가득 채웁니다."}]],
+"Anthony van Dyck":[["찰스 1세 3면 초상","Charles I in Three Positions","1635–1636","royal","Charles I in Three Positions"],["말을 탄 찰스 1세","Equestrian Portrait of Charles I","1637–1638경","ngl","Equestrian Portrait of Charles I"]],
+"Rembrandt van Rijn":[["튈프 박사의 해부학 강의","The Anatomy Lesson of Dr. Nicolaes Tulp","1632","mauritshuis","The Anatomy Lesson of Dr. Nicolaes Tulp"],["유대인 신부","The Jewish Bride","1665–1669경","rijks","The Jewish Bride"],["직물 길드의 이사들","Syndics of the Drapers' Guild","1662","rijks","Syndics of the Drapers' Guild"],["두 개의 원이 있는 자화상","Self-Portrait with Two Circles","1665–1669경","kenwood","Self-Portrait with Two Circles"],["63세의 자화상","Self Portrait at the Age of 63","1669","ngl","File:Rembrandt, Self Portrait at the Age of 63.jpg"]],
+"Diego Velázquez":[["브레다의 항복","The Surrender of Breda","1634–1635","prado","The Surrender of Breda"],["실 잣는 여인들","Las Hilanderas","1655–1660경","prado","Las Hilanderas"],["거울을 보는 비너스","Rokeby Venus","1647–1651","ngl","Rokeby Venus"],["후안 데 파레하의 초상","Portrait of Juan de Pareja","1650","met","Portrait of Juan de Pareja"]],
+"Johannes Vermeer":[["열린 창가에서 편지를 읽는 여인","Girl Reading a Letter at an Open Window","1657–1659경","dresden","Girl Reading a Letter at an Open Window",{tip:"2021년 복원으로 덧칠 아래 숨어 있던 큐피드 그림이 드러났습니다."}],["회화의 기술","The Art of Painting","1666–1668경","khm","The Art of Painting"],["레이스 뜨는 여인","The Lacemaker","1669–1670경","louvre","The Lacemaker (Vermeer)"],["천문학자","The Astronomer","1668","louvre","The Astronomer (Vermeer)"]],
+"Nicolas Poussin":[["사비니 여인들의 납치","The Abduction of the Sabine Women","1633–1634경","met","File:The Abduction of the Sabine Women MET 46 160.jpg",{tip:"1637–1638년경의 다른 버전은 루브르에 있습니다."}]],
+"Jean-Antoine Watteau":[["피에로 (질)","Pierrot","1718–1719경","louvre","Pierrot (Watteau)"],["제르생의 간판","L'Enseigne de Gersaint","1720","charlottenburg","L'Enseigne de Gersaint"]],
+"François Boucher":[["퐁파두르 부인","Madame de Pompadour","1756","alte","File:François Boucher Madame de Pompadour Munich 26102016 1.jpg"]],
+"Jean-Honoré Fragonard":[["책 읽는 소녀","Young Girl Reading","1770경","nga","File:Jean Honoré Fragonard, Young Girl Reading, c. 1769, NGA 46303.jpg"],["빗장","The Bolt","1777경","louvre","The Bolt (Fragonard)"]],
+"Jacques-Louis David":[["소크라테스의 죽음","The Death of Socrates","1787","met","The Death of Socrates"],["알프스를 넘는 나폴레옹","Napoleon Crossing the Alps","1801","malmaison","File:David - Napoleon crossing the Alps - Malmaison1.jpg",{tip:"다섯 가지 버전이 있으며 베르사유, 샤를로텐부르크, 빈 벨베데레에도 있습니다."}],["레카미에 부인","Portrait of Madame Récamier","1800","louvre","Portrait of Madame Récamier"]],
+"Jean-Auguste-Dominique Ingres":[["왕좌에 앉은 나폴레옹 1세","Napoleon I on His Imperial Throne","1806","armee","Napoleon I on His Imperial Throne"],["터키탕","The Turkish Bath","1862","louvre","The Turkish Bath"],["루이 프랑수아 베르탱의 초상","Portrait of Monsieur Bertin","1832","louvre","Portrait of Monsieur Bertin"]],
+"Francisco Goya":[["1808년 5월 2일","The Second of May 1808","1814","prado","The Second of May 1808"],["카를로스 4세의 가족","Charles IV of Spain and His Family","1800–1801","prado","Charles IV of Spain and His Family"],["옷을 벗은 마하","La maja desnuda","1797–1800경","prado","La maja desnuda"],["옷을 입은 마하","La maja vestida","1800–1807경","prado","La maja vestida",{tip:"두 마하는 프라도에서 나란히 걸려 있습니다."}]],
+"Caspar David Friedrich":[["바닷가의 수도사","The Monk by the Sea","1808–1810","altenat","The Monk by the Sea"],["얼음 바다","The Sea of Ice","1823–1824","hamburg","The Sea of Ice"],["뤼겐섬의 백악 절벽","Chalk Cliffs on Rügen","1818","reinhart","Chalk Cliffs on Rügen"]],
+"Théodore Géricault":[["돌격하는 근위 기병 장교","The Charging Chasseur","1812","louvre","The Charging Chasseur"],["도박에 빠진 여인","The Woman with a Gambling Mania","1819–1822경","louvre","The Woman with a Gambling Mania"]],
+"Eugène Delacroix":[["키오스섬의 학살","The Massacre at Chios","1824","louvre","The Massacre at Chios"],["단테의 조각배","The Barque of Dante","1822","louvre","The Barque of Dante"],["알제의 여인들","The Women of Algiers","1834","louvre","The Women of Algiers"]],
+"J. M. W. Turner":[["눈보라: 알프스를 넘는 한니발과 그의 군대","Snow Storm: Hannibal and his Army Crossing the Alps","1812","tateb","Snow Storm: Hannibal and his Army Crossing the Alps"],["눈보라 – 항구 어귀의 증기선","Snow Storm – Steam-Boat off a Harbour's Mouth","1842","tateb","File:Joseph Mallord William Turner - Snow Storm - Steam-Boat off a Harbour's Mouth - WGA23178.jpg",{tip:"테이트 브리튼 '클로어 갤러리'에 터너 유증 작품이 모여 있습니다."}],["노예선","The Slave Ship","1840","mfa","The Slave Ship"]],
+"John Constable":[["주교 정원에서 본 솔즈베리 대성당","Salisbury Cathedral from the Bishop's Grounds","1823","va","Salisbury Cathedral from the Bishop's Grounds",{tip:"여러 버전이 있으며 프릭 컬렉션과 메트로폴리탄에도 있습니다."}],["플랫퍼드 방앗간","Flatford Mill","1816–1817","tateb","Flatford Mill (Scene on a Navigable River)"]],
+"John Everett Millais":[["부모 집의 그리스도","Christ in the House of His Parents","1849–1850","tateb","Christ in the House of His Parents"]],
+"Dante Gabriel Rossetti":[["프로세르피나","Proserpine","1874","tateb","Proserpine (Rossetti painting)"]],
+"Gustave Courbet":[["돌 깨는 사람들","The Stone Breakers","1849","lost","The Stone Breakers",{tip:"사실주의의 상징 같은 작품이지만 지금은 사진으로만 남아 있습니다."}],["절망적인 남자 (자화상)","The Desperate Man","1843–1845","private","File:Gustave Courbet - Le Désespéré (1843).jpg"]],
+"Jean-François Millet":[["씨 뿌리는 사람","The Sower","1850","mfa","The Sower (Millet)"],["괭이를 든 남자","Man with a Hoe","1860–1862","getty","Man with a Hoe"]],
+"Honoré Daumier":[["세탁부","The Laundress","1863경","orsay","The Laundress (Daumier)"]],
+"Jean-Baptiste-Camille Corot":[["진주의 여인","Woman with a Pearl","1868–1870경","louvre","File:Camille Corot - Woman with a Pearl.jpg"],["망트의 다리","The Bridge at Mantes","1868–1870","louvre","File:Jean-Baptiste-Camille Corot - The Bridge at Mantes - WGA05299.jpg"]],
+"Édouard Manet":[["피리 부는 소년","The Fifer","1866","orsay","The Fifer"],["발코니","The Balcony","1868–1869","orsay","The Balcony (Manet)"],["제비꽃 장식을 단 베르트 모리조","Berthe Morisot with a Bouquet of Violets","1872","orsay","Berthe Morisot with a Bouquet of Violets"],["막시밀리안 황제의 처형","The Execution of Emperor Maximilian","1868–1869","mannheim","The Execution of Emperor Maximilian",{tip:"여러 버전이 있으며 보스턴 미술관, 런던 내셔널 갤러리(조각난 부분)에도 있습니다."}]],
+"Claude Monet":[["생라자르역","La Gare Saint-Lazare","1877","orsay","File:Claude Monet - The Saint-Lazare Station - Google Art Project.jpg"],["루앙 대성당 연작","Rouen Cathedral series","1892–1894","orsay","Rouen Cathedral (Monet series)",{tip:"30여 점의 연작 가운데 다섯 점이 오르세에 나란히 걸려 있습니다."}],["건초더미 연작","Haystacks series","1890–1891","aic","Haystacks (Monet series)",{tip:"시카고 미술관이 건초더미 연작을 여러 점 소장하고 있습니다."}],["라 그르누예르","La Grenouillère","1869","met","La Grenouillère (Monet)"]],
+"Pierre-Auguste Renoir":[["그네","The Swing","1876","orsay","The Swing (Renoir)"],["피아노 치는 소녀들","Young Girls at the Piano","1892","orsay","File:Auguste Renoir - Young Girls at the Piano - Google Art Project.jpg"],["부지발의 무도회","Dance at Bougival","1883","mfa","Dance at Bougival"],["이렌 카엥 당베르 양의 초상","Portrait of Irène Cahen d'Anvers","1880","zurich","Portrait of Irène Cahen d'Anvers",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}]],
+"Edgar Degas":[["무대 위의 무희 (에투알)","L'Étoile","1876–1878경","orsay","File:Edgar Degas - Ballet (L'Étoile).jpg"],["벨렐리 가족","The Bellelli Family","1858–1869","orsay","The Bellelli Family"],["다림질하는 여인들","Women Ironing","1884–1886경","orsay","File:Edgar Degas - Repasseuses - Musée d'Orsay.jpg"],["14세의 어린 무용수 (조각)","Little Dancer of Fourteen Years","1878–1881","nga","Little Dancer of Fourteen Years",{tip:"밀랍 원작은 워싱턴에 있고, 사후 청동 주조본은 오르세 등 여러 곳에 있습니다."}]],
+"Camille Pissarro":[["붉은 지붕","The Red Roofs","1877","orsay","File:Camille Pissarro - Red roofs, corner of a village, winter - Google Art Project.jpg"]],
+"Alfred Sisley":[["루브시엔의 눈","Snow at Louveciennes","1878","orsay","File:La neige à Louveciennes (Snow at Louveciennes).jpg"],["모레의 다리","The Bridge at Moret","1893","orsay","File:Sisley - The-Bridge-At-Moret,-1893.jpg"]],
+"Berthe Morisot":[["부지발 정원의 외젠 마네와 딸","Eugène Manet and His Daughter at Bougival","1881","marmottan","File:Eugene Manet and His Daughter at Bougival 1881 Berthe Morisot.jpg"],["여름날","Summer's Day","1879","ngl","File:Berthe Morisot - Jour d'été, 1879.jpg"]],
+"Gustave Caillebotte":[["유럽 다리","Le Pont de l'Europe","1876","geneva","Le Pont de l'Europe"],["창가의 젊은 남자","Young Man at His Window","1876","getty","Young Man at His Window"]],
+"Georges Seurat":[["아니에르의 물놀이","Bathers at Asnières","1884","ngl","Bathers at Asnières"],["서커스","The Circus","1890–1891","orsay","The Circus (Seurat)"],["포즈를 취하는 여인들","Les Poseuses","1886–1888","barnes","Les Poseuses"]],
+"Paul Cézanne":[["대수욕도","The Large Bathers","1898–1905","philly","The Bathers (Cézanne)"],["붉은 조끼를 입은 소년","The Boy in the Red Vest","1888–1890","zurich","The Boy in the Red Vest",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}]],
+"Vincent van Gogh":[["감자 먹는 사람들","The Potato Eaters","1885","vgm","The Potato Eaters"],["론강의 별이 빛나는 밤","Starry Night Over the Rhône","1888","orsay","File:Starry Night Over the Rhone.jpg"],["밤의 카페","The Night Café","1888","yale","The Night Café"],["귀에 붕대를 감은 자화상","Self-Portrait with Bandaged Ear","1889","courtauld","Self-Portrait with Bandaged Ear"],["붓꽃","Irises","1889","getty","Irises (painting)"],["꽃 피는 아몬드 나무","Almond Blossoms","1890","vgm","Almond Blossoms"],["오베르의 교회","The Church at Auvers","1890","orsay","The Church at Auvers"],["까마귀가 나는 밀밭","Wheatfield with Crows","1890","vgm","Wheatfield with Crows"]],
+"Paul Gauguin":[["황색 그리스도","The Yellow Christ","1889","buffalo","The Yellow Christ"],["타히티의 여인들","Tahitian Women on the Beach","1891","orsay","Tahitian Women on the Beach"],["이아 오라나 마리아","Ia Orana Maria","1891","met","Ia Orana Maria"],["죽은 자의 혼이 지켜본다","Spirit of the Dead Watching","1892","buffalo","Spirit of the Dead Watching"]],
+"Henri de Toulouse-Lautrec":[["물랭 루주의 라 굴뤼 (포스터)","Moulin Rouge: La Goulue","1891","various","Moulin Rouge: La Goulue"],["물랭가의 살롱에서","At the Salon on the Rue des Moulins","1894","albi","File:Au Salon de la rue des Moulins - Henri de Toulouse-Lautrec.jpg"]],
+"Gustave Moreau":[["오이디푸스와 스핑크스","Oedipus and the Sphinx","1864","met","File:Oedipus and the Sphinx MET DP-14201-023.jpg"],["주피터와 세멜레","Jupiter and Semele","1894–1895","moreau","Jupiter and Semele"]],
+"Gustav Klimt":[["유디트 I","Judith I","1901","belvedere","Judith and the Head of Holofernes (Klimt)"],["베토벤 프리즈","Beethoven Frieze","1902","secession","Beethoven Frieze"],["생명의 나무 (스토클레 프리즈 밑그림)","Stoclet Frieze","1905–1911","mak","Stoclet Frieze",{tip:"실제 모자이크는 브뤼셀 스토클레 저택에 있어 공개되지 않고, MAK에서 밑그림을 볼 수 있습니다."}],["죽음과 삶","Death and Life","1910–1915","leopold","Death and Life (Klimt)"]],
+"Henri Matisse":[["호사, 평온, 쾌락","Luxe, Calme et Volupté","1904","orsay","Luxe, Calme et Volupté"],["열린 창문, 콜리우르","Open Window, Collioure","1905","nga","Open Window, Collioure"],["삶의 기쁨","Le Bonheur de vivre","1905–1906","barnes","File:Bonheur Matisse.jpg"],["붉은색의 조화 (붉은 방)","The Dessert: Harmony in Red","1908","hermitage","The Dessert: Harmony in Red"],["음악","Music","1910","hermitage","Music (Matisse)"]],
+"André Derain":[["콜리우르의 산","Mountains at Collioure","1905","nga","Mountains at Collioure"]],
+"Henri Rousseau":[["놀람! (열대 폭풍 속의 호랑이)","Surprised!","1891","ngl","Tiger in a Tropical Storm (Surprised!)"],["뱀을 부리는 여인","The Snake Charmer","1907","orsay","File:Henri Rousseau, known as le Douanier - The Snake Charmer - Google Art Project.jpg"],["전쟁","War","1894","orsay","File:Rousseau - La Guerre, Vers 1894, RF 1946 1.jpg"]],
+"Edvard Munch":[["병든 아이","The Sick Child","1885–1886","oslo","The Sick Child (Munch)"],["마돈나","Madonna","1894–1895","oslo","Madonna (Munch)",{tip:"여러 버전이 있으며 뭉크 미술관과 함부르크 쿤스트할레에도 있습니다."}],["불안","Anxiety","1894","munch","Anxiety (Munch)"],["다리 위의 소녀들","The Girls on the Bridge","1901","oslo","File:Edvard Munch - The Girls on the Bridge - NG.M.00844 - National Museum of Art, Architecture and Design.jpg"]],
+"Ernst Ludwig Kirchner":[["포츠담 광장","Potsdamer Platz","1914","neuenat","File:Ernst Ludwig Kirchner - Potsdamer Platz.jpg"],["군인으로서의 자화상","Self-Portrait as a Soldier","1915","oberlin","Self-Portrait as a Soldier"]],
+"Franz Marc":[["노란 소","Yellow Cow","1911","guggenheim","Yellow Cow"],["동물들의 운명","Fate of the Animals","1913","basel","Fate of the Animals"]],
+"Egon Schiele":[["발리의 초상","Portrait of Wally","1912","leopold","Portrait of Wally"],["포옹","The Embrace","1917","belvedere","File:Egon Schiele - Die Umarmung - 4438 - Österreichische Galerie Belvedere.jpg"],["가족","The Family","1918","belvedere","The Family (Schiele)"]],
+"Pablo Picasso":[["늙은 기타리스트","The Old Guitarist","1903–1904","aic","The Old Guitarist",{cr:1}],["인생","La Vie","1903","cleveland","La Vie (painting)",{cr:1}],["거트루드 스타인의 초상","Portrait of Gertrude Stein","1905–1906","met","Portrait of Gertrude Stein",{cr:1}],["세 악사","Three Musicians","1921","moma","Three Musicians",{cr:1,tip:"같은 해 그린 다른 버전은 필라델피아 미술관에 있습니다."}]],
+"Georges Braque":[["포르투갈 사람","The Portuguese","1911","basel","The Portuguese (Braque)",{cr:1}]],
+"Juan Gris":[["아침 식사","Breakfast","1914","moma","File:1914 Gris Le Petit Déjeuner.jpg"]],
+"Fernand Léger":[["세 여인","Three Women","1921","moma","File:Trois Femmes Fernand Léger.jpg"]],
+"Umberto Boccioni":[["마음의 상태: 이별","States of Mind I: The Farewells","1911","moma","File:Boccioni - States of Mind The Farewells, 1911.jpg"],["거리가 집 안으로 들어오다","The Street Enters the House","1911","sprengel","The Street Enters the House"]],
+"Giacomo Balla":[["발코니를 달리는 소녀","Girl Running on a Balcony","1912","novecento","Girl Running on a Balcony",{cr:1}]],
+"Wassily Kandinsky":[["청기사","The Blue Rider","1903","zurich","File:Kandinsky-Blue Rider.jpg",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}],["구성 VIII","Composition VIII","1923","guggenheim","File:Kandinsky - Composition 8, 1923.jpg"],["몇 개의 원","Several Circles","1926","guggenheim","File:Vassily Kandinsky, 1926 - Several Circles, Gugg 0910 25.jpg"]],
+"Kazimir Malevich":[["붉은 사각형","Red Square","1915","russian","Red Square (painting)"]],
+"Piet Mondrian":[["붉은 나무","Red Tree","1908–1910","denhaag","File:Piet Mondrian, 1908-10, Evening; Red Tree (Avond; De rode boom), oil on canvas, 70 x 99 cm, Gemeentemuseum Den Haag.jpg"],["회색 나무","Gray Tree","1911","denhaag","Gray Tree"],["빅토리 부기우기 (미완성)","Victory Boogie Woogie","1942–1944","denhaag","Victory Boogie Woogie",{tip:"헤이그 시립미술관은 세계 최대 몬드리안 컬렉션을 소장하고 있습니다."}]],
+"Paul Klee":[["새로운 천사","Angelus Novus","1920","israel","Angelus Novus"],["파르나소스로","Ad Parnassum","1932","bern","Ad Parnassum (Klee)",{tip:"베른의 첸트룸 파울 클레에서도 클레 작품을 대규모로 볼 수 있습니다."}],["금붕어","The Goldfish","1925","hamburg","File:Der Goldfisch, 1925 - Paul Klee.jpg"]],
+"Marcel Duchamp":[["큰 유리 (그녀의 독신자들에 의해 발가벗겨진 신부, 조차도)","The Large Glass","1915–1923","philly","The Large Glass",{cr:1}]],
+"Giorgio de Chirico":[["거리의 신비와 우울","Mystery and Melancholy of a Street","1914","private","Mystery and Melancholy of a Street",{cr:1}]],
+"Max Ernst":[["신부의 단장","The Robing of the Bride","1940","pgc","The Robing of the Bride",{cr:1}]],
+"Joan Miró":[["사냥꾼 (카탈루냐 풍경)","The Hunter (Catalan Landscape)","1923–1924","moma","The Hunter (Catalan Landscape)",{cr:1}]],
+"René Magritte":[["연인들","The Lovers","1928","moma","The Lovers (Magritte)",{cr:1}],["골콩드","Golconda","1953","menil","Golconda (painting)",{cr:1}]],
+"Salvador Dalí":[["나르키소스의 변형","Metamorphosis of Narcissus","1937","tatem","Metamorphosis of Narcissus",{cr:1}],["내란의 예감","Soft Construction with Boiled Beans","1936","philly","Soft Construction with Boiled Beans (Premonition of Civil War)",{cr:1}],["십자가의 성 요한의 그리스도","Christ of Saint John of the Cross","1951","kelvingrove","Christ of Saint John of the Cross",{cr:1}]],
+"Frida Kahlo":[["가시 목걸이와 벌새가 있는 자화상","Self-Portrait with Thorn Necklace and Hummingbird","1940","ransom","Self-Portrait with Thorn Necklace and Hummingbird",{cr:1}],["부서진 기둥","The Broken Column","1944","olmedo","The Broken Column",{cr:1}]],
+"Jackson Pollock":[["넘버 1A, 1948","Number 1A, 1948","1948","moma","Number 1A, 1948",{cr:1}],["수렴","Convergence","1952","buffalo","Convergence (Pollock)",{cr:1}]],
+"Willem de Kooning":[["발굴","Excavation","1950","aic","Excavation (de Kooning)",{cr:1}]],
+"Mark Rothko":[["No. 61 (녹과 파랑)","No. 61 (Rust and Blue)","1953","moca","No. 61 (Rust and Blue)",{cr:1}]],
+"Barnett Newman":[["하나됨 I","Onement I","1948","moma","Onement I",{cr:1}]]
+};
+
+const EXTRA_ARTISTS={
+"mannerism":[{n:"야코포 폰토르모",o:"Jacopo Pontormo",l:"1494–1557",d:"불안정한 구도와 형광빛 색채로 피렌체 매너리즘을 연 화가입니다.",at:0,w:[
+  ["십자가에서 내려지심","Deposition from the Cross","1525–1528","felicita","Deposition from the Cross (Pontormo)"]]}],
+"baroque":[{n:"프란스 할스",o:"Frans Hals",l:"1582경–1666",d:"빠르고 생생한 붓질로 웃는 얼굴을 포착한 네덜란드 초상화가입니다.",at:4,w:[
+  ["웃는 기사","The Laughing Cavalier","1624","wallace","The Laughing Cavalier"],
+  ["말레 바베","Malle Babbe","1633–1635경","berlingg","Malle Babbe"]]}],
+"rococo":[{n:"장 바티스트 시메옹 샤르댕",o:"Jean-Baptiste-Siméon Chardin",l:"1699–1779",d:"로코코 시대에 소박한 정물과 서민의 일상을 고요하게 그렸습니다.",w:[
+  ["식전 기도","Saying Grace","1740","louvre","Saying Grace (Chardin)"],
+  ["비눗방울","Soap Bubbles","1733–1734경","met","Soap Bubbles (Chardin)"]]},
+ {n:"엘리자베스 비제 르브룅",o:"Élisabeth Vigée Le Brun",l:"1755–1842",d:"마리 앙투아네트의 초상화가로 이름을 떨친 여성 화가입니다.",w:[
+  ["마리 앙투아네트와 아이들","Marie Antoinette and Her Children","1787","versailles","Marie Antoinette and Her Children"],
+  ["밀짚모자를 쓴 자화상","Self-portrait in a Straw Hat","1782 이후","ngl","Self-portrait in a Straw Hat"]]}],
+"pre-raphaelite":[{n:"윌리엄 홀먼 헌트",o:"William Holman Hunt",l:"1827–1910",d:"라파엘전파 창립 멤버 가운데 평생 그 원칙을 지킨 화가입니다.",w:[
+  ["세상의 빛","The Light of the World","1851–1853","keble","File:Hunt-light-of-the-world.jpeg",{tip:"훗날 그린 대형 버전은 런던 세인트폴 대성당에 있습니다."}]]},
+ {n:"존 윌리엄 워터하우스",o:"John William Waterhouse",l:"1849–1917",d:"한 세대 뒤에 라파엘전파 양식을 이어받아 문학 속 여성을 그렸습니다.",w:[
+  ["샬럿의 아가씨","The Lady of Shalott","1888","tateb","File:Waterhouse, The Lady of Shallott, 1888.jpg"]]}],
+"realism":[{n:"로자 보뇌르",o:"Rosa Bonheur",l:"1822–1899",d:"동물을 정밀하게 관찰해 그린 19세기 가장 유명한 여성 화가입니다.",w:[
+  ["마시장","The Horse Fair","1852–1855","met","The Horse Fair"]]}],
+"impressionism":[{n:"메리 카사트",o:"Mary Cassatt",l:"1844–1926",d:"파리에서 활동한 미국 화가. 어머니와 아이의 일상을 그렸습니다.",w:[
+  ["파란 안락의자의 소녀","Little Girl in a Blue Armchair","1878","nga","Little Girl in a Blue Armchair"],
+  ["아이의 목욕","The Child's Bath","1893","aic","The Child's Bath"]]}],
+"cubism":[{n:"로베르 들로네",o:"Robert Delaunay",l:"1885–1941",d:"입체주의에 밝은 색과 리듬을 더한 '오르피즘'을 이끌었습니다.",w:[
+  ["에펠탑","Eiffel Tower","1911","guggenheim","File:Robert Delaunay - Eiffel Tower - 1911 - Solomon R. Guggenheim Museum.jpg"]]}]
+};
+
+(function(){
+  const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
+  for(const [o,ws] of Object.entries(EXTRA_WORKS)){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
+  for(const [id,as] of Object.entries(EXTRA_ARTISTS)){const m=MOVEMENTS.find(x=>x.id===id);
+    as.forEach(a=>{if(a.at!=null)m.artists.splice(a.at,0,a);else m.artists.push(a)})}
+})();
+
+(function(){
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* theme */
+const themes=["system","light","dark"],tnames={system:"테마: 시스템",light:"테마: 밝게",dark:"테마: 어둡게"};
+let theme=store.get("wa-theme")||"system";
+function applyTheme(){if(theme==="system")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",theme);$("#themebtn").textContent=tnames[theme]}
+$("#themebtn").onclick=()=>{theme=themes[(themes.indexOf(theme)+1)%3];store.set("wa-theme",theme);applyTheme()};
+applyTheme();
+
+/* flatten works */
+const WORKS=[];
+MOVEMENTS.forEach((m,mi)=>m.artists.forEach((a,ai)=>a.w.forEach((w,wi)=>{
+  const opt=w[5]||{};const mu=MUSEUMS[w[3]];
+  const wk={id:`w${mi}-${ai}-${wi}`,mi,m,a,t:w[0],o:w[1],y:w[2],mk:w[3],mu,wiki:w[4],cr:!!opt.cr,tip:opt.tip||""};
+  wk.hay=[m.name,m.en,a.n,a.o,wk.t,wk.o,mu.n,mu.o,mu.c].join(" ").toLowerCase();
+  WORKS.push(wk);
+})));
+const artistsCount=MOVEMENTS.reduce((s,m)=>s+m.artists.length,0);
+const museumKeys=[...new Set(WORKS.map(w=>w.mk))].filter(k=>k!=="private");
+$("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> 사조</span><span><b>${artistsCount}</b> 화가</span><span><b>${WORKS.length}</b> 작품</span><span><b>${museumKeys.length}</b> 소장처</span>`;
+
+/* timeline */
+(function(){
+  const Y0=1300,Y1=1970,W=1036,el=$("#timeline");
+  const x=y=>(y-Y0)/(Y1-Y0)*W;
+  const lanesEnd=[];let html="";
+  MOVEMENTS.forEach(m=>{
+    const x0=x(m.s),bw=Math.max(6,x(m.e)-x0),lw=m.name.length*12.5+10,end=x0+bw+6+lw;
+    let lane=lanesEnd.findIndex(e=>e+8<x0);if(lane<0){lane=lanesEnd.length;lanesEnd.push(0)}lanesEnd[lane]=end;
+    m._lane=lane;m._x=x0;m._w=bw;
+  });
+  const H=lanesEnd.length*28+4;
+  for(let y=1300;y<=1950;y+=50)html+=`<div class="tl-grid" style="left:${x(y)+12}px"></div>`;
+  html+=`<div style="position:relative;height:${H}px">`;
+  MOVEMENTS.forEach(m=>{html+=`<button class="tl-item" style="left:${m._x}px;top:${m._lane*28}px" data-go="${m.id}" title="${esc(m.name)} ${esc(m.years)}"><span class="tl-bar" style="width:${m._w}px;background:${m.color}"></span><span class="tl-label">${esc(m.name)}</span></button>`});
+  html+=`</div><div class="tl-axis">`;
+  for(let y=1300;y<=1950;y+=50)html+=`<span class="tl-tick" style="left:${x(y)}px">${y}</span>`;
+  html+=`</div>`;
+  el.innerHTML=html;
+  el.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)document.getElementById(b.dataset.go).scrollIntoView()});
+})();
+
+/* rooms */
+function workCard(w){
+  const mu=w.mu,q=encodeURIComponent(`${w.o} ${w.a.o}`);
+  const frame=w.cr
+    ?`<div class="frame cr" style="background:${w.m.color}"><div class="crmark">©</div><div class="crtxt">저작권 보호 작품이라 이미지를 싣지 않았습니다</div></div>`
+    :`<button class="frame" type="button" data-img="${w.id}" aria-label="${esc(w.t)} 크게 보기"><span class="ph">이미지 불러오는 중</span></button>`;
+  const links=[];
+  if(w.cr)links.push(`<a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">이미지 검색 ↗</a>`);
+  if(mu.u)links.push(`<a href="${mu.u}" target="_blank" rel="noopener">소장처 웹사이트 ↗</a>`);
+  return `<article class="work" id="${w.id}" data-hay="${esc(w.hay)}">${frame}
+   <div class="caption"><div class="t">${esc(w.t)}</div><div class="o">${esc(w.o)}</div><div class="y">${esc(w.y)}</div>
+   <div class="where"><span class="mus">${esc(mu.n)}</span><span class="city">${esc(mu.c)}</span></div>
+   ${w.tip?`<div class="tip">${esc(w.tip)}</div>`:""}
+   ${mu.note?`<div class="tip">${esc(mu.note)}</div>`:""}
+   ${links.length?`<div class="links">${links.join("")}</div>`:""}</div></article>`;
+}
+let rh="";
+MOVEMENTS.forEach((m,mi)=>{
+  rh+=`<section class="room" id="${m.id}"><div class="room-head" style="background:${m.color}"><div class="inner">
+   <div class="room-no">제${mi+1}전시실</div><h2>${esc(m.name)}</h2><div class="room-en">${esc(m.en)}</div><div class="room-years">${esc(m.years)}</div></div></div>
+   <div class="room-body"><div class="intro"><div><p>${esc(m.sum)}</p><div class="lbl">이전과 달라진 점</div><p class="diff">${esc(m.diff)}</p></div>
+   <div><div class="lbl">특징</div><ul class="traits">${m.traits.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>${m.note?`<div class="note"><b>참고</b> · ${esc(m.note)}</div>`:""}</div></div>`;
+  m.artists.forEach((a,ai)=>{
+    rh+=`<div class="artist"><div class="artist-head"><h3>${esc(a.n)}</h3><span class="orig">${esc(a.o)}</span><span class="life">${esc(a.l)}</span></div><p class="artist-desc">${esc(a.d)}</p><div class="works">`;
+    WORKS.filter(w=>w.mi===mi&&w.a===a).forEach(w=>rh+=workCard(w));
+    rh+=`</div></div>`;
+  });
+  rh+=`</div></section>`;
+});
+$("#rooms").innerHTML=rh;
+
+/* museums */
+function countryOf(mu,k){return k==="private"?"개인 소장":mu.c.split(" ")[0]}
+const byC={};
+WORKS.forEach(w=>{const c=countryOf(w.mu,w.mk);(byC[c]??={});(byC[c][w.mk]??=[]).push(w)});
+const cOrder=Object.keys(byC).sort((a,b)=>a==="개인 소장"?1:b==="개인 소장"?-1:Object.values(byC[b]).flat().length-Object.values(byC[a]).flat().length);
+let mh="";
+cOrder.forEach(c=>{
+  const ms=Object.keys(byC[c]).sort((a,b)=>byC[c][b].length-byC[c][a].length);
+  mh+=`<div class="country" data-country><h2>${esc(c)}</h2>`;
+  ms.forEach(k=>{const mu=MUSEUMS[k],list=byC[c][k];
+    mh+=`<div class="mcard" data-mcard><div class="mcard-head"><h3>${esc(mu.n)}</h3><span class="o">${esc(mu.o)} · ${esc(mu.c)}</span><span class="cnt">${list.length}점</span></div>
+    ${mu.note?`<div class="mnote">${esc(mu.note)}</div>`:""}${mu.u?`<div class="mnote"><a href="${mu.u}" target="_blank" rel="noopener">${esc(mu.u.replace(/^https:\/\/(www\.)?/,""))} ↗</a></div>`:""}
+    <ul class="mlist">${list.map(w=>`<li class="mrow" data-hay="${esc(w.hay)}"><div class="mthumb" data-thumb="${w.id}">${w.cr?`<span class="dot" style="background:${w.m.color}" title="저작권 보호 작품"></span>`:""}</div>
+      <div class="txt"><button type="button" data-jump="${w.id}">${esc(w.t)}</button><div class="meta">${esc(w.a.n)} · ${esc(w.y)} · ${esc(w.m.name)}</div></div></li>`).join("")}</ul></div>`;
+  });
+  mh+=`</div>`;
+});
+$("#museums").innerHTML=mh;
+
+/* tabs */
+let view="rooms";
+function setView(v){view=v;$("#view-rooms").hidden=v!=="rooms";$("#view-museums").hidden=v!=="museums";
+  $("#tab-rooms").setAttribute("aria-selected",v==="rooms");$("#tab-museums").setAttribute("aria-selected",v==="museums");filter()}
+$("#tab-rooms").onclick=()=>setView("rooms");$("#tab-museums").onclick=()=>setView("museums");
+$("#museums").addEventListener("click",e=>{const b=e.target.closest("[data-jump]");if(!b)return;
+  $("#q").value="";setView("rooms");const el=document.getElementById(b.dataset.jump);el.scrollIntoView({block:"center"});
+  el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)});
+
+/* search */
+function filter(){
+  const q=$("#q").value.trim().toLowerCase();let any=false;
+  if(view==="rooms"){
+    document.querySelectorAll(".room").forEach(r=>{let rv=false;
+      r.querySelectorAll(".artist").forEach(a=>{let av=false;
+        a.querySelectorAll(".work").forEach(w=>{const ok=!q||w.dataset.hay.includes(q);w.hidden=!ok;av=av||ok});
+        a.hidden=!av;rv=rv||av});
+      r.hidden=!rv;any=any||rv});
+    document.querySelector(".tl-sec").hidden=!!q;
+  }else{
+    document.querySelectorAll("[data-country]").forEach(c=>{let cv=false;
+      c.querySelectorAll("[data-mcard]").forEach(m=>{let mv=false;
+        m.querySelectorAll(".mrow").forEach(r=>{const ok=!q||r.dataset.hay.includes(q);r.hidden=!ok;mv=mv||ok});
+        m.hidden=!mv;cv=cv||mv});
+      c.hidden=!cv;any=any||cv});
+  }
+  $("#empty").hidden=any;
+}
+$("#q").addEventListener("input",filter);
+
+/* images */
+const CACHE_KEY="wa-img-v1";
+const cache=store.get(CACHE_KEY)||{};
+const imgs={};
+function show(w,info){
+  imgs[w.id]=info;
+  const f=document.querySelector(`[data-img="${w.id}"]`);
+  if(f){f.innerHTML=info?`<img src="${info.s}" alt="${esc(w.a.n)}, 〈${esc(w.t)}〉" loading="lazy">`:`<span class="ph">이미지를 찾지 못했습니다</span>`;
+    if(!info){f.style.cursor="default";const cap=f.parentElement.querySelector(".links")||f.parentElement.querySelector(".caption").appendChild(Object.assign(document.createElement("div"),{className:"links"}));
+      cap.insertAdjacentHTML("afterbegin",`<a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(w.o+" "+w.a.o)}" target="_blank" rel="noopener">이미지 검색 ↗</a>`)}}
+  const t=document.querySelector(`[data-thumb="${w.id}"]`);
+  if(t&&info)t.innerHTML=`<img src="${info.s}" alt="" loading="lazy">`;
+}
+const pd=WORKS.filter(w=>!w.cr);
+let done=0;
+function progress(){$("#loadstat").textContent=done<pd.length?`이미지 ${done}/${pd.length}`:""}
+async function wikiBatch(titles){
+  const p=new URLSearchParams({action:"query",format:"json",formatversion:"2",origin:"*",redirects:"1",prop:"pageimages",piprop:"thumbnail|name",pithumbsize:"500",pilimit:"50",titles:titles.join("|")});
+  const j=await (await fetch("https://en.wikipedia.org/w/api.php?"+p)).json();
+  const alias={};(j.query.normalized||[]).forEach(n=>alias[n.from]=n.to);(j.query.redirects||[]).forEach(n=>alias[n.from]=n.to);
+  const pages={};(j.query.pages||[]).forEach(pg=>pages[pg.title]=pg);
+  const out={};
+  titles.forEach(t=>{let k=t;for(let i=0;i<3&&alias[k];i++)k=alias[k];const pg=pages[k];
+    out[t]=pg&&pg.thumbnail?{s:pg.thumbnail.source,f:"File:"+pg.pageimage}:null});
+  return out;
+}
+async function commonsBatch(titles){
+  const p=new URLSearchParams({action:"query",format:"json",formatversion:"2",origin:"*",prop:"imageinfo",iiprop:"url",iiurlwidth:"500",titles:titles.join("|")});
+  const j=await (await fetch("https://commons.wikimedia.org/w/api.php?"+p)).json();
+  const alias={};(j.query.normalized||[]).forEach(n=>alias[n.from]=n.to);
+  const pages={};(j.query.pages||[]).forEach(pg=>pages[pg.title]=pg);
+  const out={};titles.forEach(t=>{const pg=pages[alias[t]||t];out[t]=pg&&pg.imageinfo?{s:pg.imageinfo[0].thumburl||pg.imageinfo[0].url,f:pg.title}:null});
+  return out;
+}
+async function loadImages(){
+  const need=[];
+  pd.forEach(w=>{if(w.wiki in cache){show(w,cache[w.wiki]);done++}else need.push(w)});
+  progress();
+  const titles=[...new Set(need.map(w=>w.wiki))];
+  const wt=titles.filter(t=>!t.startsWith("File:")),ft=titles.filter(t=>t.startsWith("File:"));
+  const res={};
+  try{
+    for(let i=0;i<wt.length;i+=50)Object.assign(res,await wikiBatch(wt.slice(i,i+50)));
+    for(let i=0;i<ft.length;i+=50)Object.assign(res,await commonsBatch(ft.slice(i,i+50)));
+  }catch(e){$("#loadstat").textContent="이미지를 불러오지 못했습니다 · 인터넷 연결을 확인하세요";need.forEach(w=>show(w,null));return}
+  need.forEach(w=>{const r=res[w.wiki]||null;if(r)cache[w.wiki]=r;show(w,r);done++});
+  store.set(CACHE_KEY,cache);progress();
+}
+loadImages();
+
+/* lightbox */
+const lb=$("#lb");
+$("#rooms").addEventListener("click",e=>{
+  const f=e.target.closest("[data-img]");if(!f)return;const info=imgs[f.dataset.img];if(!info)return;
+  const w=WORKS.find(x=>x.id===f.dataset.img);
+  const big=info.s.replace(/\/\d+px-/,"/1280px-");const im=$("#lb-img");
+  im.onerror=()=>{im.onerror=null;im.src=info.s};im.src=big;im.alt=`${w.a.n}, 〈${w.t}〉`;
+  $("#lb-cap").innerHTML=`<b>${esc(w.t)}</b><br>${esc(w.a.n)} · ${esc(w.y)} · ${esc(w.mu.n)}, ${esc(w.mu.c)}<br><a href="https://commons.wikimedia.org/wiki/${encodeURIComponent(info.f.replace(/ /g,"_"))}" target="_blank" rel="noopener">위키미디어 공용 원본 보기 ↗</a>`;
+  if(lb.showModal)lb.showModal();
+});
+$("#lb-close").onclick=()=>lb.close();
+lb.addEventListener("click",e=>{if(e.target===lb)lb.close()});
+})();
+</script>
+</body></html>
