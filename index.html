@@ -62,6 +62,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tl-bar{height:10px;border-radius:2px;flex:none}
 .tl-label{font-size:12.5px;white-space:nowrap}
 .tl-item:hover .tl-label{text-decoration:underline}
+.tl-item.flip{flex-direction:row-reverse}
 
 /* rooms */
 .room{margin-top:56px;scroll-margin-top:70px}
@@ -147,7 +148,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
 </head>
 <body>
 <header class="masthead wrap">
-  <div class="eyebrow">르네상스부터 추상표현주의까지 · 21개 전시실</div>
+  <div class="eyebrow">르네상스부터 신표현주의까지 · 22개 전시실</div>
   <h1>서양미술 전시실</h1>
   <p>시대와 사조를 따라 걸으며 대표 화가와 작품을 만나고, 그 작품이 지금 어느 미술관에 걸려 있는지 확인하는 개인 미술사 노트입니다.</p>
   <div class="stats" id="stats"></div>
@@ -679,6 +680,25 @@ Object.assign(MUSEUMS,{
   mamparis:{n:"파리 시립 현대미술관",o:"Musée d'Art Moderne de Paris",c:"프랑스 파리",u:"https://www.mam.paris.fr"},
   garnier:{n:"오페라 가르니에 (파리 오페라 극장)",o:"Palais Garnier",c:"프랑스 파리",u:"https://www.operadeparis.fr"},
   chagallnice:{n:"마르크 샤갈 국립미술관",o:"Musée national Marc Chagall",c:"프랑스 니스",u:""},
+  thyssen:{n:"티센보르네미사 국립미술관",o:"Museo Nacional Thyssen-Bornemisza",c:"스페인 마드리드",u:"https://www.museothyssen.org"},
+  wallraf:{n:"발라프 리하르츠 미술관",o:"Wallraf-Richartz-Museum",c:"독일 쾰른",u:"https://www.wallraf.museum"},
+  lenbachhaus:{n:"렌바흐하우스 미술관",o:"Lenbachhaus",c:"독일 뮌헨",u:"https://www.lenbachhaus.de"},
+  pommersfelden:{n:"바이센슈타인 성",o:"Schloss Weißenstein",c:"독일 포머스펠덴",u:""},
+  carmignano:{n:"산 미켈레 성당",o:"Pieve di San Michele",c:"이탈리아 카르미냐노",u:""},
+  capodimonte:{n:"카포디몬테 미술관",o:"Museo di Capodimonte",c:"이탈리아 나폴리",u:"https://capodimonte.cultura.gov.it"},
+  troyes:{n:"트루아 현대미술관",o:"Musée d'Art Moderne de Troyes",c:"프랑스 트루아",u:""},
+  birmingham:{n:"버밍엄 미술관",o:"Birmingham Museum and Art Gallery",c:"영국 버밍엄",u:"https://www.birminghammuseums.org.uk"},
+  ladylever:{n:"레이디 레버 미술관",o:"Lady Lever Art Gallery",c:"영국 포트선라이트",u:""},
+  manchester:{n:"맨체스터 미술관",o:"Manchester Art Gallery",c:"영국 맨체스터",u:"https://manchesterartgallery.org"},
+  walkerliv:{n:"워커 미술관",o:"Walker Art Gallery",c:"영국 리버풀",u:""},
+  snmga:{n:"스코틀랜드 국립현대미술관",o:"Scottish National Gallery of Modern Art",c:"영국 에든버러",u:"https://www.nationalgalleries.org"},
+  stedelijk:{n:"스테델레이크 미술관",o:"Stedelijk Museum",c:"네덜란드 암스테르담",u:"https://www.stedelijk.nl"},
+  wadsworth:{n:"워즈워스 아테니움 미술관",o:"Wadsworth Atheneum Museum of Art",c:"미국 하트퍼드",u:"https://www.thewadsworth.org"},
+  whitney:{n:"휘트니 미술관",o:"Whitney Museum of American Art",c:"미국 뉴욕",u:"https://whitney.org"},
+  masp:{n:"상파울루 미술관 (MASP)",o:"Museu de Arte de São Paulo",c:"브라질 상파울루",u:"https://masp.org.br"},
+  broad:{n:"더 브로드",o:"The Broad",c:"미국 로스앤젤레스",u:"https://www.thebroad.org",note:"상설 전시는 무료지만 온라인 사전 예약을 권합니다"},
+  pisa:{n:"산탄토니오 아바테 성당 외벽",o:"Sant'Antonio Abate",c:"이탈리아 피사",u:""},
+  harlem:{n:"할렘 리버 드라이브 핸드볼 코트",o:"Harlem River Drive",c:"미국 뉴욕",u:""},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -799,6 +819,59 @@ const EXTRA_ARTISTS={
   ["에펠탑","Eiffel Tower","1911","guggenheim","File:Robert Delaunay - Eiffel Tower - 1911 - Solomon R. Guggenheim Museum.jpg"]]}]
 };
 
+const EXTRA_WORKS2={
+"Camille Pissarro":[["퐁투아즈의 에르미타주 언덕","The Hermitage at Pontoise","1867","guggenheim","File:Pissarro L'Hermitage à Pontoise,1867.jpg"],["서리 내린 아침 (에느리 옛길)","Hoarfrost","1873","orsay","File:Camille Pissarro - Gelée blanche, ancienne route d´Ennery, Pontoise - 1873.jpg"],["자화상","Self-Portrait","1873","orsay","File:Pissarro, Camille - Autoportrait 1873 040.jpg"],["로드십 레인 역, 덜위치","Lordship Lane Station, Dulwich","1871","courtauld","File:Pissarro - Lordship Lane Station, Dulwich (1871).jpg",{tip:"보불전쟁을 피해 런던에 머물던 시기에 그린 기차 풍경입니다."}],["몽마르트르 대로, 겨울 아침","The Boulevard Montmartre on a Winter Morning","1897","met","File:The Boulevard Montmartre on a Winter Morning MET DT1906.jpg",{tip:"호텔 창문에서 같은 거리를 시간과 날씨를 바꿔 가며 그린 연작 14점 가운데 하나입니다."}],["테아트르 프랑세 광장","La Place du Théâtre Français","1898","lacma","File:Camille Pissarro, La Place du Théâtre Français.jpg"]],
+"Paul Signac":[["붉은 부표 (생트로페)","The Red Buoy","1895","orsay","File:Signac - Saint-Tropez. La Bouée rouge, 1895, RF 1957 12.jpg"],["우물가의 여인들","Women at the Well","1892","orsay","File:Paul Signac Femmes au puits 1892.jpg"],["아비뇽, 저녁 (교황청)","Avignon, Evening (Palace of the Popes)","1909","orsay","File:Signac - Avignon. Soir (le château des Papes), 1909, RF 1977 323.jpg"],["아침 식사 (식당)","Breakfast (The Dining Room)","1886–1887","kroller","File:Paul Signac - Breakfast - Google Art Project.jpg"],["카포 디 놀리","Capo di Noli","1898","wallraf","File:Paul Signac - Capo di Noli.jpg"]],
+"Mary Cassatt":[["특별석에서","In the Loge","1878","mfa","File:Mary Stevenson Cassatt - In the Loge - Google Art Project.jpg"],["진주 목걸이를 한 여인","Woman with a Pearl Necklace in a Loge","1879","philly","File:Mary Stevenson Cassatt, American - Woman with a Pearl Necklace in a Loge - Google Art Project.jpg"],["차 한 잔","The Cup of Tea","1880–1881","met","File:Mary Cassatt - The Cup of Tea - MMA 22.16.17.jpg"],["뱃놀이","The Boating Party","1893–1894","nga","File:Mary Cassatt, The Boating Party, 1893-1894, NGA 46569.jpg"],["편지 (판화)","The Letter","1890–1891","various","File:Mary Cassatt - The Letter - NGC 29876.jpg",{tip:"일본 우키요에에서 영감을 받은 컬러 판화 연작으로, 여러 미술관이 소장하고 있습니다."}]],
+"Giotto di Bondone":[["성흔을 받는 성 프란체스코","Saint Francis Receiving the Stigmata","1295–1300경","louvre","File:Giotto - Saint Francis Receiving the Stigmata.jpg",{tip:"아래 칸(프레델라)에 새들에게 설교하는 장면이 함께 그려져 있습니다."}]],
+"Masaccio":[["성모자 (피사 다폭 제단화 중앙)","Madonna and Child","1426","ngl","File:Masaccio. Madonna and Child. 1426. National Gallery, London.jpg"]],
+"Giorgione":[["라우라","Laura","1506","khm","File:Giorgione - Young Woman (“Laura”) - Google Art Project.jpg"]],
+"Hieronymus Bosch":[["바보들의 배","The Ship of Fools","1500경","louvre","File:Hieronymus Bosch - The Ship of Fools - WGA2553.jpg"]],
+"Hans Holbein the Younger":[["에라스뮈스의 초상","Portrait of Erasmus","1523","basel","File:Portrait of Erasmus by Hans Holbein d. J.-Kunstmuseum Basel.jpg",{tip:"비슷한 구도의 초상이 루브르에도 있습니다."}],["헨리 8세의 초상","Portrait of Henry VIII","1537경","thyssen","File:Hans Holbein, the Younger, Around 1497-1543 - Portrait of Henry VIII of England - Google Art Project.jpg"]],
+"Jacopo Pontormo":[["방문","The Visitation","1528–1529","carmignano","File:Pontormo-visitation-after-restorationRGB.jpg"],["미늘창을 든 병사","Portrait of a Halberdier","1528–1530경","getty","File:Jacopo Pontormo - Halberdier - WGA18130.jpg"]],
+"Parmigianino":[["안테아","Antea","1535경","capodimonte","File:Antea (Parmigianino).jpg"],["성 히에로니무스의 환영","The Vision of Saint Jerome","1526–1527","ngl","File:Parmigianino - The Madonna and Child with Saints (The Vision of St Jerome).jpg"]],
+"Agnolo Bronzino":[["젊은 남자의 초상","Portrait of a Young Man","1530년대","met","File:Portrait of a Young Man MET Bronzino overall.jpg"],["루크레치아 판차티키의 초상","Portrait of Lucrezia Panciatichi","1545경","uffizi","File:Portrait painting of Lucrezia Panciatichi by Bronzino 1540 c. in the Uffizi Gallery.jpg"]],
+"Artemisia Gentileschi":[["수산나와 장로들","Susanna and the Elders","1610","pommersfelden","File:Susanna and the Elders (1610), Artemisia GentileschiFXD.jpg",{tip:"열일곱 살 무렵에 그린, 서명이 남은 가장 이른 작품입니다."}],["류트 연주자로서의 자화상","Self-Portrait as a Lute Player","1615–1618경","wadsworth","File:Artemisia Gentileschi - Self-Portrait as a Lute Player.JPG"]],
+"Anthony van Dyck":[["엘레나 그리말디 후작 부인","Marchesa Elena Grimaldi Cattaneo","1623","nga","File:Sir Anthony van Dyck, Marchesa Elena Grimaldi Cattaneo, 1623, NGA 1231.jpg"]],
+"Frans Hals":[["집시 소녀","The Gypsy Girl","1628–1630경","louvre","File:Frans Hals - Gypsy Girl - WGA11100.jpg"]],
+"Nicolas Poussin":[["시인의 영감","The Inspiration of the Poet","1629경","louvre","File:L'Inspiration du poète - circa 1629 - Nicolas Poussin - Louvre - RF 1774.jpg"],["겨울 (대홍수)","Winter (The Flood)","1660–1664","louvre","File:Nicolas Poussin - L'Hiver ou Le Déluge.jpg",{tip:"푸생의 마지막 연작 〈사계〉의 마지막 그림입니다."}]],
+"Jean-Antoine Watteau":[["메즈탱","Mezzetin","1718–1720경","met","File:Mezzetin MET DP170811.jpg"]],
+"François Boucher":[["아침 식사","The Breakfast","1739","louvre","File:Boucher - Das Frühstück - 1739.jpeg"],["쉬고 있는 소녀 (마리루이즈 오머피)","Resting Girl","1752","alte","File:Resting Girl by François Boucher (1753) - Alte Pinakothek - Munich - Germany 2017 (crop).jpg"]],
+"Jean-Honoré Fragonard":[["사랑의 진전: 만남","The Progress of Love: The Meeting","1771–1772","frick","File:The Progress of Love - The Meeting - Fragonard 1771-72.jpg",{tip:"뒤바리 부인이 주문했다가 돌려보낸 연작으로, 프릭 컬렉션의 '프라고나르 방'에 걸려 있습니다."}]],
+"Jean-Baptiste-Siméon Chardin":[["가오리","The Ray","1728","louvre","File:Jean Siméon Chardin - The Ray - WGA04738.jpg"],["어린 여선생","The Little Schoolmistress","1740 이후","nga","File:Jean Siméon Chardin, The Little Schoolmistress, after 1740, NGA 98.jpg"]],
+"Élisabeth Vigée Le Brun":[["딸 쥘리와 함께 있는 자화상","Self-Portrait with Her Daughter, Julie","1789","louvre","File:Elisabeth Vigée-Lebrun - Self-Portrait with Her Daughter, Julie - WGA25083.jpg"],["장미를 든 마리 앙투아네트","Marie Antoinette with a Rose","1783","versailles","File:Louise Elisabeth Vigée-Lebrun - Marie-Antoinette dit « à la Rose » - Google Art Project.jpg"]],
+"Théodore Géricault":[["엡섬의 더비 경마","The Derby at Epsom","1821","louvre","File:Le Derby de 1821 à Epsom - Théodore Géricault - Musée du Louvre Peintures MI 708.jpg"]],
+"John Constable":[["데덤 골짜기","Dedham Vale","1828","edinburgh","File:John Constable - Dedham Vale - NG 2016 - National Galleries of Scotland.jpg"]],
+"John Everett Millais":[["마리아나","Mariana","1850–1851","tateb","File:John Everett Millais - Mariana - Google Art Project.jpg"],["눈먼 소녀","The Blind Girl","1854–1856","birmingham","File:John Everett Millais - The Blind Girl.jpg"]],
+"Dante Gabriel Rossetti":[["수태고지 (주님의 여종을 보라!)","Ecce Ancilla Domini!","1849–1850","tateb","File:Dante Gabriel Rossetti - Ecce Ancilla Domini! - Google Art Project.jpg"]],
+"William Holman Hunt":[["깨어나는 양심","The Awakening Conscience","1853","tateb","File:William Holman Hunt - The Awakening Conscience - Google Art Project.jpg"],["속죄양","The Scapegoat","1854–1856","ladylever","File:William Holman Hunt - The Scapegoat - WGA11808.jpg",{tip:"사해 근처에서 직접 그렸으며, 작은 버전이 맨체스터 미술관에 있습니다."}]],
+"John William Waterhouse":[["마법의 원","The Magic Circle","1886","tateb","File:John William Waterhouse - Magic Circle.JPG"],["힐라스와 님프들","Hylas and the Nymphs","1896","manchester","File:Waterhouse Hylas and the Nymphs Manchester Art Gallery 1896.15.jpg"],["에코와 나르키소스","Echo and Narcissus","1903","walkerliv","File:John William Waterhouse - Echo and Narcissus - Google Art Project.jpg"]],
+"Honoré Daumier":[["돈키호테와 산초 판사","Don Quixote and Sancho Panza","1870경","courtauld","File:Honoré Daumier (1808-1879) - Don Quixote and Sancho Panza - P.1932.SC.86 - Courtauld Institute of Art.jpg"],["트랑스노냉 거리, 1834년 4월 15일 (석판화)","Rue Transnonain, April 15, 1834","1834","various","File:Honoré Daumier, Rue Transnonain, le 15 avril 1834, 1834, NGA 6133.jpg",{tip:"정부군의 민간인 학살을 고발한 석판화로, 여러 미술관이 소장하고 있습니다."}]],
+"Jean-Baptiste-Camille Corot":[["빌다브레","Ville-d'Avray","1865경","nga","File:Jean-Baptiste Camille Corot - Ville-d’Avray.jpg"]],
+"Rosa Bonheur":[["니베르네의 쟁기질","Ploughing in the Nivernais","1849","orsay","File:Rosa Bonheur - Ploughing in Nevers - Google Art Project.jpg"],["엘 시드 (사자)","El Cid","1879","prado","File:Museo del Prado - P004318 - El Cid.jpg"]],
+"Alfred Sisley":[["생마르탱 운하","View of the Canal Saint-Martin","1870","orsay","File:Sisley - View-Of-The-Canal-Saint-Martin,-Paris,-1870.jpg"]],
+"Berthe Morisot":[["무도회 드레스를 입은 젊은 여인","Young Woman in a Ball Gown","1879","orsay","File:Berthe Morisot - Young Girl in a Ball Gown - Google Art Project.jpg"],["프시케 (전신 거울)","Psyché","1876","thyssen","File:El espejo de vestir.jpg"]],
+"Henri de Toulouse-Lautrec":[["침대에서","In Bed","1892","orsay","File:Toulouse-Lautrec - In Bed, 1892.jpg"],["화장 (빨강 머리 여인)","La Toilette","1889","orsay","File:Toulouse-Lautrec - Rousse (La toilette), RF 2242.jpg"]],
+"Gustave Moreau":[["오르페우스","Orpheus","1865","orsay","File:Gustave Moreau - Orpheus - Google Art Project.jpg"]],
+"André Derain":[["빅벤","Big Ben","1906","troyes","File:Troyes (Aube) - Musée d'Art Moderne - \"Big Ben\" (André Derain, 1906).jpg",{tip:"화상 볼라르의 의뢰로 런던을 30점 가까이 그린 연작 가운데 하나입니다."}]],
+"Franz Marc":[["푸른 말 I","Blue Horse I","1911","lenbachhaus","File:Franz Marc Blaues Pferd 1911.jpg",{tip:"렌바흐하우스는 청기사파 작품을 세계에서 가장 많이 소장한 미술관입니다."}]],
+"Juan Gris":[["차양","The Sunblind","1914","tatem","File:Juan Gris 001.jpg"],["체크무늬 식탁보가 있는 정물","Still Life with Checked Tablecloth","1915","met","File:Still Life with Checked Tablecloth MET DP332907 ms.jpg"]],
+"Fernand Léger":[["형태의 대비","Contrast of Forms","1913","philly","File:Contrast of Forms, 1913-1914 - Fernand Léger.png"]],
+"Robert Delaunay":[["도시의 동시적 창들","Simultaneous Windows on the City","1912","hamburg","File:Robert Delaunay, 1912, Les Fenêtres simultanée sur la ville (Simultaneous Windows on the City), 40 x 46 cm, Kunsthalle Hamburg.jpg"],["파리 시","The City of Paris","1910–1912","pompidou","File:Robert Delaunay, 1912, La Ville de Paris, oil on canvas, 267 × 406 cm, Musée National d'Art Moderne.jpg"],["블레리오에게 바치는 경의","Homage to Blériot","1914","basel","File:Robert Delaunay, Hommage à Blériot, 1914.jpg"]],
+"Kazimir Malevich":[["눈보라 뒤 마을의 아침","Morning in the Village after Snowstorm","1912","guggenheim","File:Morning in the Village after Snowstorm (Malevich, 1912).jpg"],["칼 가는 사람","The Knife Grinder","1912–1913","yale","File:The Knife Grinder Principle of Glittering by Kazimir Malevich.jpeg"]],
+"Amedeo Modigliani":[["노란 스웨터를 입은 잔 에뷔테른","Jeanne Hébuterne with Yellow Sweater","1918–1919","guggenheim","File:Modigliani, Amedeo - Jeanne Hébuterne with yellow sweater.jpeg"],["레오폴드 즈보롭스키의 초상","Portrait of Léopold Zborowski","1916–1919","masp","File:Amedeo modigliani - retrato de leopoldo zborowski 03.jpg"]],
+"Chaïm Soutine":[["막심 레스토랑의 시동","Page Boy at Maxim's","1927경","buffalo","File:Soutine - Page Boy at Maxim's, ca. 1927, 19534.tif"]],
+"Oskar Kokoschka":[["퇴폐 예술가로서의 자화상","Self-Portrait of a 'Degenerate Artist'","1937","snmga","x",{cr:1,tip:"나치가 그의 작품을 '퇴폐 미술'로 몰아 압수하자 이에 맞서 그린 자화상입니다."}]],
+"Marcel Duchamp":[["자전거 바퀴 (1951년 재제작)","Bicycle Wheel","1913","moma","x",{cr:1}]],
+"Giorgio de Chirico":[["몽파르나스역 (출발의 우울)","Gare Montparnasse (The Melancholy of Departure)","1914","moma","x",{cr:1}],["아리아드네","Ariadne","1913","met","x",{cr:1}]],
+"Max Ernst":[["나이팅게일에게 위협받는 두 아이","Two Children Are Threatened by a Nightingale","1924","moma","x",{cr:1}],["비 온 뒤의 유럽 II","Europe after the Rain II","1940–1942","wadsworth","x",{cr:1}]],
+"Joan Miró":[["달을 보고 짖는 개","Dog Barking at the Moon","1926","philly","x",{cr:1}],["블루 II","Blue II","1961","pompidou","x",{cr:1}]],
+"Frida Kahlo":[["짧은 머리의 자화상","Self-Portrait with Cropped Hair","1940","moma","x",{cr:1}]],
+"Willem de Kooning":[["다락방","Attic","1949","met","x",{cr:1}],["강으로 가는 문","Door to the River","1960","whitney","x",{cr:1}]],
+"Mark Rothko":[["No. 14","No. 14, 1960","1960","sfmoma","x",{cr:1}],["무제 (회색 위의 검정)","Untitled (Black on Gray)","1969–1970","guggenheim","x",{cr:1,tip:"세상을 떠나기 직전 그린 마지막 연작 가운데 하나입니다."}]],
+"Barnett Newman":[["십자가의 길","The Stations of the Cross","1958–1966","nga","x",{cr:1,tip:"흑백으로만 그린 14점 연작이 한 전시실에 걸려 있습니다."}],["누가 빨강, 노랑, 파랑을 두려워하랴 III","Who's Afraid of Red, Yellow and Blue III","1966–1967","stedelijk","x",{cr:1}]]
+};
+
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
@@ -821,12 +894,44 @@ const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 
    ["어린 제과사","The Little Pastry Cook","1922–1923경","orangerie","File:Chaïm Soutine - Le Petit Pâtissier.jpg"]]}
  ]}}];
 
+EXTRA_MOVEMENTS.push({after:"abstract-expressionism",m:{id:"pop-neo-expressionism",name:"팝아트와 신표현주의",en:"Pop Art & Neo-Expressionism",years:"1955년 – 1990년",s:1955,e:1990,color:"#9c2f5a",
+ sum:"1950년대 후반 영국과 미국에서 등장한 팝아트는 추상표현주의의 진지한 내면 표현 대신 광고, 만화, 영화 스타, 슈퍼마켓 상품처럼 누구나 아는 대중 이미지를 미술로 끌어들였습니다. 1980년대에는 이에 대한 반작용으로 거친 붓질과 강렬한 감정, 인물을 되살린 신표현주의가 미국과 독일에서 크게 일어났습니다.",
+ traits:["팝아트: 대중문화와 소비 사회의 이미지를 그대로 차용","실크스크린, 망점(벤데이 점) 같은 인쇄 기법으로 반복과 대량생산을 표현","신표현주의: 거친 붓질, 큰 화면, 강렬한 색으로 회화를 되살림","거리의 낙서(그라피티)가 미술관에 들어옴 (바스키아, 해링)","독일 신표현주의는 전쟁과 역사의 기억을 다룸 (키퍼)"],
+ diff:"추상표현주의가 화가 내면의 숭고한 감정을 그렸다면, 팝아트는 차갑고 무표정하게 대중 이미지를 복제했습니다. 신표현주의는 다시 손으로 그리는 회화와 감정을 되찾았습니다.",
+ note:"이 전시실의 화가들은 모두 작품 저작권이 살아 있어 이미지를 싣지 않았습니다. 호크니와 키퍼는 지금도 활동 중인 작가입니다.",
+ artists:[
+  {n:"앤디 워홀",o:"Andy Warhol",l:"1928–1987",d:"상업 일러스트레이터 출신. 수프 캔과 스타의 얼굴을 실크스크린으로 반복 찍어 내며 '예술의 대량생산'을 보여 준 팝아트의 아이콘입니다.",w:[
+   ["캠벨 수프 캔","Campbell's Soup Cans","1962","moma","x",{cr:1,tip:"32가지 맛을 그린 캔버스 32점이 한 세트입니다."}],
+   ["황금빛 마릴린 먼로","Gold Marilyn Monroe","1962","moma","x",{cr:1}],
+   ["마릴린 두 폭","Marilyn Diptych","1962","tatem","x",{cr:1}]]},
+  {n:"로이 리히텐슈타인",o:"Roy Lichtenstein",l:"1923–1997",d:"만화 한 칸을 인쇄 망점까지 확대해 그려 대중 이미지와 순수 회화의 경계를 흔들었습니다.",w:[
+   ["봐, 미키","Look Mickey","1961","nga","x",{cr:1,tip:"만화를 소재로 한 그의 첫 작품입니다."}],
+   ["물에 빠진 소녀","Drowning Girl","1963","moma","x",{cr:1}],
+   ["꽝!","Whaam!","1963","tatem","x",{cr:1}]]},
+  {n:"데이비드 호크니",o:"David Hockney",l:"1937–",d:"영국 출신. 캘리포니아의 햇빛과 수영장을 밝은 색으로 그렸고, 최근에는 아이패드 드로잉까지 작업 영역을 넓혔습니다.",w:[
+   ["더 큰 첨벙","A Bigger Splash","1967","tatem","x",{cr:1,tip:"테이트 소장품으로 테이트 모던과 테이트 브리튼에서 번갈아 전시됩니다."}],
+   ["클라크 부부와 퍼시","Mr and Mrs Clark and Percy","1970–1971","tateb","x",{cr:1}],
+   ["예술가의 초상 (두 인물이 있는 수영장)","Portrait of an Artist (Pool with Two Figures)","1972","private","x",{cr:1,tip:"2018년 경매에서 생존 작가 작품 최고가 기록을 세웠습니다."}]]},
+  {n:"장미셸 바스키아",o:"Jean-Michel Basquiat",l:"1960–1988",d:"뉴욕 거리의 낙서 'SAMO'로 출발해 해골, 왕관, 글자로 흑인 역사와 인종 문제를 그렸습니다. 27세에 세상을 떠났습니다.",w:[
+   ["무제 (두개골)","Untitled (Skull)","1981","broad","x",{cr:1}],
+   ["혼 플레이어스","Horn Players","1983","broad","x",{cr:1,tip:"찰리 파커와 디지 길레스피 같은 재즈 연주자에게 바친 작품입니다."}],
+   ["할리우드 아프리칸스","Hollywood Africans","1983","whitney","x",{cr:1}],
+   ["무제","Untitled","1982","private","x",{cr:1,tip:"2017년 경매에서 일본 사업가 마에자와 유사쿠가 약 1억 1,050만 달러에 낙찰받았습니다."}]]},
+  {n:"키스 해링",o:"Keith Haring",l:"1958–1990",d:"뉴욕 지하철 광고판에 분필로 그린 낙서에서 출발했습니다. 단순한 선의 인물로 에이즈 경각심과 반마약 같은 사회 메시지를 전했습니다.",w:[
+   ["투토몬도 (모든 세상)","Tuttomondo","1989","pisa","x",{cr:1,tip:"세상을 떠나기 1년 전 남긴 마지막 대형 공공 벽화로, 성당 외벽이라 누구나 볼 수 있습니다."}],
+   ["크랙은 끔찍해","Crack Is Wack","1986","harlem","x",{cr:1,tip:"마약 반대 메시지를 담은 벽화로, 고속도로 옆 핸드볼 코트 벽에 그대로 남아 있습니다."}]]},
+  {n:"안젤름 키퍼",o:"Anselm Kiefer",l:"1945–",d:"독일 신표현주의의 거장. 짚, 납, 재, 흙을 섞은 거대한 화면에 나치 시대와 독일 역사의 기억을 담았습니다.",w:[
+   ["독일의 정신적 영웅들","Germany's Spiritual Heroes","1973","broad","x",{cr:1}],
+   ["오시리스와 이시스","Osiris and Isis","1985–1987","sfmoma","x",{cr:1}],
+   ["보헤미아는 바닷가에 있다","Bohemia Lies by the Sea","1996","met","x",{cr:1}]]}
+ ]}});
+
 (function(){
   EXTRA_MOVEMENTS.forEach(x=>{const i=MOVEMENTS.findIndex(m=>m.id===x.after);MOVEMENTS.splice(i+1,0,x.m)});
-  const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
-  for(const [o,ws] of Object.entries(EXTRA_WORKS)){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
   for(const [id,as] of Object.entries(EXTRA_ARTISTS)){const m=MOVEMENTS.find(x=>x.id===id);
     as.forEach(a=>{if(a.at!=null)m.artists.splice(a.at,0,a);else m.artists.push(a)})}
+  const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
+  for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
 })();
 
 (function(){
@@ -855,20 +960,21 @@ $("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> 사조</span><span><b>${
 
 /* timeline */
 (function(){
-  const Y0=1300,Y1=1970,W=1036,el=$("#timeline");
+  const Y0=1300,Y1=2000,W=1036,el=$("#timeline");
   const x=y=>(y-Y0)/(Y1-Y0)*W;
   const lanesEnd=[];let html="";
   MOVEMENTS.forEach(m=>{
-    const x0=x(m.s),bw=Math.max(6,x(m.e)-x0),lw=m.name.length*12.5+10,end=x0+bw+6+lw;
-    let lane=lanesEnd.findIndex(e=>e+8<x0);if(lane<0){lane=lanesEnd.length;lanesEnd.push(0)}lanesEnd[lane]=end;
-    m._lane=lane;m._x=x0;m._w=bw;
+    const x0=x(m.s),bw=Math.max(6,x(m.e)-x0),lw=m.name.length*12.5+10;
+    const flip=x0+bw+6+lw>W, start=flip?x0+bw-(bw+6+lw):x0, end=flip?x0+bw:x0+bw+6+lw;
+    let lane=lanesEnd.findIndex(e=>e+8<start);if(lane<0){lane=lanesEnd.length;lanesEnd.push(0)}lanesEnd[lane]=end;
+    m._lane=lane;m._x=start;m._w=bw;m._flip=flip;
   });
   const H=lanesEnd.length*28+4;
-  for(let y=1300;y<=1950;y+=50)html+=`<div class="tl-grid" style="left:${x(y)+12}px"></div>`;
+  for(let y=1300;y<=2000;y+=50)html+=`<div class="tl-grid" style="left:${x(y)+12}px"></div>`;
   html+=`<div style="position:relative;height:${H}px">`;
-  MOVEMENTS.forEach(m=>{html+=`<button class="tl-item" style="left:${m._x}px;top:${m._lane*28}px" data-go="${m.id}" title="${esc(m.name)} ${esc(m.years)}"><span class="tl-bar" style="width:${m._w}px;background:${m.color}"></span><span class="tl-label">${esc(m.name)}</span></button>`});
+  MOVEMENTS.forEach(m=>{html+=`<button class="tl-item${m._flip?" flip":""}" style="left:${m._x}px;top:${m._lane*28}px" data-go="${m.id}" title="${esc(m.name)} ${esc(m.years)}"><span class="tl-bar" style="width:${m._w}px;background:${m.color}"></span><span class="tl-label">${esc(m.name)}</span></button>`});
   html+=`</div><div class="tl-axis">`;
-  for(let y=1300;y<=1950;y+=50)html+=`<span class="tl-tick" style="left:${x(y)}px">${y}</span>`;
+  for(let y=1300;y<=2000;y+=50)html+=`<span class="tl-tick" style="left:${x(y)}px">${y}</span>`;
   html+=`</div>`;
   el.innerHTML=html;
   el.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)document.getElementById(b.dataset.go).scrollIntoView()});
