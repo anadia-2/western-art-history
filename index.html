@@ -709,6 +709,9 @@ Object.assign(MUSEUMS,{
   pushkin:{n:"푸시킨 미술관",o:"Pushkin State Museum of Fine Arts",c:"러시아 모스크바",u:"",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
   annonciade:{n:"아농시아드 미술관",o:"Musée de l'Annonciade",c:"프랑스 생트로페",u:""},
   dia:{n:"디트로이트 미술관",o:"Detroit Institute of Arts",c:"미국 디트로이트",u:"https://dia.org"},
+  nortonsimon:{n:"노턴 사이먼 미술관",o:"Norton Simon Museum",c:"미국 패서디나",u:"https://www.nortonsimon.org"},
+  unknown:{n:"소장처 미확인",o:"Location unconfirmed",c:"개인 소장으로 추정",u:""},
+  k20:{n:"노르트라인베스트팔렌 미술관 (K20)",o:"Kunstsammlung Nordrhein-Westfalen",c:"독일 뒤셀도르프",u:"https://www.kunstsammlung.de"},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -765,7 +768,7 @@ const EXTRA_WORKS={
 "Gustave Caillebotte":[["유럽 다리","Le Pont de l'Europe","1876","geneva","Le Pont de l'Europe"],["창가의 젊은 남자","Young Man at His Window","1876","getty","Young Man at His Window"]],
 "Georges Seurat":[["아니에르의 물놀이","Bathers at Asnières","1884","ngl","Bathers at Asnières"],["서커스","The Circus","1890–1891","orsay","The Circus (Seurat)"],["포즈를 취하는 여인들","Les Poseuses","1886–1888","barnes","Les Poseuses"]],
 "Paul Cézanne":[["대수욕도","The Large Bathers","1898–1905","philly","The Bathers (Cézanne)"],["붉은 조끼를 입은 소년","The Boy in the Red Vest","1888–1890","zurich","The Boy in the Red Vest",{tip:"뷔를레 재단 소장품으로 취리히 미술관에서 전시됩니다."}]],
-"Vincent van Gogh":[["감자 먹는 사람들","The Potato Eaters","1885","vgm","The Potato Eaters"],["론강의 별이 빛나는 밤","Starry Night Over the Rhône","1888","orsay","File:Starry Night Over the Rhone.jpg"],["밤의 카페","The Night Café","1888","yale","The Night Café"],["귀에 붕대를 감은 자화상","Self-Portrait with Bandaged Ear","1889","courtauld","Self-Portrait with Bandaged Ear"],["붓꽃","Irises","1889","getty","Irises (painting)"],["꽃 피는 아몬드 나무","Almond Blossoms","1890","vgm","Almond Blossoms"],["오베르의 교회","The Church at Auvers","1890","orsay","The Church at Auvers"],["까마귀가 나는 밀밭","Wheatfield with Crows","1890","vgm","Wheatfield with Crows"]],
+"Vincent van Gogh":[["감자 먹는 사람들","The Potato Eaters","1885","vgm","The Potato Eaters"],["론강의 별이 빛나는 밤","Starry Night Over the Rhône","1888","orsay","File:Starry Night Over the Rhone.jpg"],["밤의 카페","The Night Café","1888","yale","The Night Café"],["귀에 붕대를 감은 자화상","Self-Portrait with Bandaged Ear","1889","courtauld","Self-Portrait with Bandaged Ear"],["붓꽃 (생레미 정원)","Irises","1889","getty","Irises (painting)",{tip:"생레미 요양원 정원의 붓꽃밭을 그렸습니다. 이듬해 그린 꽃병 속 아이리스는 메트로폴리탄에 있습니다."}],["꽃 피는 아몬드 나무","Almond Blossoms","1890","vgm","Almond Blossoms"],["오베르의 교회","The Church at Auvers","1890","orsay","The Church at Auvers"],["까마귀가 나는 밀밭","Wheatfield with Crows","1890","vgm","Wheatfield with Crows"]],
 "Paul Gauguin":[["황색 그리스도","The Yellow Christ","1889","buffalo","The Yellow Christ"],["타히티의 여인들","Tahitian Women on the Beach","1891","orsay","Tahitian Women on the Beach"],["이아 오라나 마리아","Ia Orana Maria","1891","met","Ia Orana Maria"],["죽은 자의 혼이 지켜본다","Spirit of the Dead Watching","1892","buffalo","Spirit of the Dead Watching"]],
 "Henri de Toulouse-Lautrec":[["물랭 루주의 라 굴뤼 (포스터)","Moulin Rouge: La Goulue","1891","various","Moulin Rouge: La Goulue"],["물랭가의 살롱에서","At the Salon on the Rue des Moulins","1894","albi","File:Au Salon de la rue des Moulins - Henri de Toulouse-Lautrec.jpg"]],
 "Gustave Moreau":[["오이디푸스와 스핑크스","Oedipus and the Sphinx","1864","met","File:Oedipus and the Sphinx MET DP-14201-023.jpg"],["주피터와 세멜레","Jupiter and Semele","1894–1895","moreau","Jupiter and Semele"]],
@@ -830,7 +833,7 @@ const EXTRA_ARTISTS={
 };
 
 const EXTRA_WORKS2={
-"Camille Pissarro":[["퐁투아즈의 에르미타주 언덕","The Hermitage at Pontoise","1867","guggenheim","File:Pissarro L'Hermitage à Pontoise,1867.jpg"],["서리 내린 아침 (에느리 옛길)","Hoarfrost","1873","orsay","File:Camille Pissarro - Gelée blanche, ancienne route d´Ennery, Pontoise - 1873.jpg"],["자화상","Self-Portrait","1873","orsay","File:Pissarro, Camille - Autoportrait 1873 040.jpg"],["로드십 레인 역, 덜위치","Lordship Lane Station, Dulwich","1871","courtauld","File:Pissarro - Lordship Lane Station, Dulwich (1871).jpg",{tip:"보불전쟁을 피해 런던에 머물던 시기에 그린 기차 풍경입니다."}],["몽마르트르 대로, 겨울 아침","The Boulevard Montmartre on a Winter Morning","1897","met","File:The Boulevard Montmartre on a Winter Morning MET DT1906.jpg",{tip:"호텔 창문에서 같은 거리를 시간과 날씨를 바꿔 가며 그린 연작 14점 가운데 하나입니다."}],["테아트르 프랑세 광장","La Place du Théâtre Français","1898","lacma","File:Camille Pissarro, La Place du Théâtre Français.jpg"]],
+"Camille Pissarro":[["퐁투아즈의 에르미타주 언덕","The Hermitage at Pontoise","1867","guggenheim","File:Pissarro L'Hermitage à Pontoise,1867.jpg"],["서리 내린 아침 (에느리 옛길)","Hoarfrost","1873","orsay","File:Camille Pissarro - Gelée blanche, ancienne route d´Ennery, Pontoise - 1873.jpg"],["로드십 레인 역, 덜위치","Lordship Lane Station, Dulwich","1871","courtauld","File:Pissarro - Lordship Lane Station, Dulwich (1871).jpg",{tip:"보불전쟁을 피해 런던에 머물던 시기에 그린 기차 풍경입니다."}],["몽마르트르 대로, 겨울 아침","The Boulevard Montmartre on a Winter Morning","1897","met","File:The Boulevard Montmartre on a Winter Morning MET DT1906.jpg",{tip:"호텔 창문에서 같은 거리를 시간과 날씨를 바꿔 가며 그린 연작 14점 가운데 하나입니다."}],["테아트르 프랑세 광장","La Place du Théâtre Français","1898","lacma","File:Camille Pissarro, La Place du Théâtre Français.jpg"]],
 "Paul Signac":[["붉은 부표 (생트로페)","The Red Buoy","1895","orsay","File:Signac - Saint-Tropez. La Bouée rouge, 1895, RF 1957 12.jpg"],["우물가의 여인들","Women at the Well","1892","orsay","File:Paul Signac Femmes au puits 1892.jpg"],["아비뇽, 저녁 (교황청)","Avignon, Evening (Palace of the Popes)","1909","orsay","File:Signac - Avignon. Soir (le château des Papes), 1909, RF 1977 323.jpg"],["아침 식사 (식당)","Breakfast (The Dining Room)","1886–1887","kroller","File:Paul Signac - Breakfast - Google Art Project.jpg"],["카포 디 놀리","Capo di Noli","1898","wallraf","File:Paul Signac - Capo di Noli.jpg"]],
 "Mary Cassatt":[["특별석에서","In the Loge","1878","mfa","File:Mary Stevenson Cassatt - In the Loge - Google Art Project.jpg"],["진주 목걸이를 한 여인","Woman with a Pearl Necklace in a Loge","1879","philly","File:Mary Stevenson Cassatt, American - Woman with a Pearl Necklace in a Loge - Google Art Project.jpg"],["차 한 잔","The Cup of Tea","1880–1881","met","File:Mary Cassatt - The Cup of Tea - MMA 22.16.17.jpg"],["뱃놀이","The Boating Party","1893–1894","nga","File:Mary Cassatt, The Boating Party, 1893-1894, NGA 46569.jpg"],["편지 (판화)","The Letter","1890–1891","various","File:Mary Cassatt - The Letter - NGC 29876.jpg",{tip:"일본 우키요에에서 영감을 받은 컬러 판화 연작으로, 여러 미술관이 소장하고 있습니다."}]],
 "Giotto di Bondone":[["성흔을 받는 성 프란체스코","Saint Francis Receiving the Stigmata","1295–1300경","louvre","File:Giotto - Saint Francis Receiving the Stigmata.jpg",{tip:"아래 칸(프레델라)에 새들에게 설교하는 장면이 함께 그려져 있습니다."}]],
@@ -920,6 +923,31 @@ EXTRA_WORKS3["Claude Monet"].push(["꽃병 (아욱꽃)","Vase of Flowers","1881�
 EXTRA_WORKS3["J. M. W. Turner"]=[
  ["국회의사당의 화재, 1834년 10월 16일","The Burning of the Houses of Lords and Commons","1834–1835","philly","File:Joseph Mallord William Turner, English - The Burning of the Houses of Lords and Commons, October 16, 1834 - Google Art Project.jpg",{tip:"터너가 템스강가에서 직접 본 화재를 그렸습니다. 같은 사건을 다른 각도에서 그린 두 번째 그림은 클리블랜드 미술관에 있습니다."}],
  ["노럼성, 해돋이","Norham Castle, Sunrise","1845경","tateb","File:Joseph Mallord William Turner - Norham Castle, Sunrise - WGA23182.jpg",{tip:"형태가 빛 속에 거의 녹아 버린 말년작으로, 인상주의와 추상을 앞선 그림으로 자주 꼽힙니다."}]];
+EXTRA_WORKS3["Edgar Degas"].push(
+ ["꽃병 옆에 앉은 여인","A Woman Seated beside a Vase of Flowers","1865","met","File:A Woman Seated beside a Vase of Flowers (Madame Paul Valpinçon?) MET DT1566.jpg",{tip:"화면 한가운데를 꽃다발이 차지하고 인물은 가장자리로 밀려난 대담한 구도가 특징입니다."}],
+ ["오페라 극장의 오케스트라","The Orchestra at the Opera","1870경","orsay","File:Edgar Degas - The Orchestra at the Opera - Google Art Project.jpg",{tip:"바순 연주자인 친구 데지레 디오를 중심에 두고, 무대 위 무희들은 다리와 치마만 보이도록 잘라 냈습니다."}]);
+EXTRA_WORKS3["Vincent van Gogh"].push(
+ ["아이리스 (꽃병의 붓꽃)","Irises","1890","met","File:Vincent van Gogh - Irises (1890).jpg",{tip:"생레미 요양원을 떠나기 직전에 그린 정물화로, 원래 분홍색이던 배경이 세월이 흐르며 빛이 바래 지금의 흰색에 가깝게 변했습니다."}]);
+EXTRA_WORKS3["Egon Schiele"]=[
+ ["죽음의 도시 III (푸른 강가의 도시 III)","Dead City III","1911","leopold","File:Egon Schiele - Dead City III (City on the Blue River III) - Google Art Project.jpg",{tip:"어머니의 고향인 체코 크루마우(지금의 체스키크룸로프)를 내려다본 풍경입니다. 실레는 이 마을을 '죽음의 도시'라 부르며 여러 번 그렸습니다."}],
+ ["강가의 집들 (옛 도시)","Houses on the River (The Old Town)","1914","thyssen","File:Egon Schiele - Häuser am Fluss.jpg"],
+ ["크루마우 집들의 반원 (작은 도시 V)","Krumau – Crescent of Houses (The Small City V)","1915","israel","File:Egon Schiele - Krumau - Crescent of Houses (The small City V) - Google Art Project.jpg"],
+ ["강가의 집 벽","House Wall on the River","1915","leopold","File:Egon Schiele - House Wall on the River - Google Art Project.jpg",{tip:"블타바강에 바로 맞닿은 크루마우의 집 벽을 정면에서 평면적으로 그렸습니다."}]];
+EXTRA_WORKS3["Amedeo Modigliani"]=[
+ ["여인","A Woman","1917–1920","dia","x",{noimg:1,link:"https://dia.org/collection/woman-54775",tip:"디트로이트 미술관 소장품이지만 현재는 전시하지 않는 상태(Not On View)입니다. 방문 전에 작품 페이지에서 전시 여부를 확인하세요."}],
+ ["화가 부인의 초상 (잔 에뷔테른)","Portrait of the Artist's Wife","1918","nortonsimon","File:Portrait-of-the-Artist's-Wife 1918 Amedeo Modigliani.jpg",{tip:"의자 등받이에 팔을 걸치고 앉은 아내 잔 에뷔테른을 그렸습니다. 이듬해 모딜리아니가 세상을 떠나자 잔도 이틀 뒤 뒤따랐습니다."}],
+ ["젊은 견습생","The Young Apprentice","1918–1919","orangerie","File:Amedeo Modigliani - The Young Apprentice - Google Art Project.jpg",{tip:"화상 폴 기욤의 컬렉션으로 오랑주리 미술관에 들어왔습니다."}]];
+EXTRA_ARTISTS3["surrealism"]=[{n:"프랑시스 피카비아",o:"Francis Picabia",l:"1879–1953",at:1,d:"인상주의 풍경화로 출발해 입체주의·오르피즘, 다다, 초현실주의, 다시 구상화까지 끊임없이 양식을 바꾼 화가입니다. 뒤샹과 함께 뉴욕과 파리 다다의 핵심 인물이었고, 기계를 사람처럼 그린 '기계 형태' 그림으로 유명합니다.",w:[
+  ["우드니 (젊은 미국 아가씨, 춤)","Udnie (Young American Girl, The Dance)","1913","pompidou","File:Francis Picabia, 1913, Udnie (Young American Girl, The Dance), oil on canvas, 290 x 300 cm, Musée National d’Art Moderne, Centre Pompidou, Paris..jpg",{tip:"1913년 뉴욕으로 가는 배에서 본 무용수의 춤을 거의 추상에 가까운 색면으로 풀어낸 대작(290×300cm)입니다. 다다 이전, 입체주의·오르피즘 시기의 대표작입니다."}],
+
+  ["가슴 (Seins)","Seins","1927","unknown","File:Francis Picabia, 1927 - Seins.jpg",{tip:"현재 소장처를 공개 자료로 확인하지 못했습니다. 개인 소장품일 가능성이 높습니다."}],
+  ["이리스","Iris","1929경","private","File:Francis picabia iris 2019 CKS 16931 0124 000(042608).jpg",{tip:"얼굴, 손, 꽃 같은 여러 이미지를 반투명하게 겹쳐 그린 '투명(Transparences)' 연작 시기의 작품입니다. 2019년 런던 크리스티 경매에 나온 개인 소장품입니다."}]]}];
+EXTRA_WORKS3["Wassily Kandinsky"]=[
+ ["구성 IV","Composition IV","1911","k20","File:Vassily Kandinsky, 1911 - Composition No 4.jpg",{tip:"말 탄 기사, 언덕 위의 성 같은 형상이 색과 선 속으로 녹아들며 추상으로 넘어가는 과정을 보여 줍니다."}],
+ ["즉흥 28 (두 번째 버전)","Improvisation 28 (second version)","1912","guggenheim","File:Vasily Kandinsky Improvisation 28 (second version).jpg",{tip:"무의식적으로 떠오른 내면의 감정을 그린 '즉흥' 연작의 하나입니다. 구겐하임은 세계에서 칸딘스키 작품을 가장 많이 소장한 미술관 가운데 하나입니다."}]];
+EXTRA_WORKS3["Piet Mondrian"]=[
+ ["구성 10 (부두와 바다)","Composition 10 in Black and White (Pier and Ocean)","1915","kroller","File:Mondrian Compositie 10.jpg",{tip:"바다로 뻗은 부두와 물결을 짧은 가로·세로 선으로만 줄여 그렸습니다. 나무 연작에서 격자 추상으로 넘어가는 중간 단계입니다."}],
+ ["커다란 빨간 면, 노랑, 검정, 회색, 파랑의 구성","Composition with Large Red Plane, Yellow, Black, Grey and Blue","1921","denhaag","File:Piet Mondriaan, 1921 - Composition en rouge, jaune, bleu et noir.jpg",{tip:"검은 선과 삼원색, 무채색만으로 균형을 잡는 '신조형주의' 양식이 완성된 무렵의 작품입니다."}]];
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
@@ -1001,7 +1029,7 @@ MOVEMENTS.forEach(m=>m.artists.forEach(a=>a.w.sort((p,q)=>yearOf(p[2])-yearOf(q[
 const WORKS=[];
 MOVEMENTS.forEach((m,mi)=>m.artists.forEach((a,ai)=>a.w.forEach((w,wi)=>{
   const opt=w[5]||{};const mu=MUSEUMS[w[3]];
-  const wk={id:`w${mi}-${ai}-${wi}`,mi,m,a,t:w[0],o:w[1],y:w[2],mk:w[3],mu,wiki:w[4],cr:!!opt.cr,tip:opt.tip||""};
+  const wk={id:`w${mi}-${ai}-${wi}`,mi,m,a,t:w[0],o:w[1],y:w[2],mk:w[3],mu,wiki:w[4],cr:!!opt.cr,noimg:!!opt.noimg,link:opt.link||"",tip:opt.tip||""};
   wk.hay=[m.name,m.en,a.n,a.o,wk.t,wk.o,mu.n,mu.o,mu.c].join(" ").toLowerCase();
   WORKS.push(wk);
 })));
@@ -1036,9 +1064,11 @@ function workCard(w){
   const mu=w.mu,q=encodeURIComponent(`${w.o} ${w.a.o}`);
   const frame=w.cr
     ?`<div class="frame cr" style="background:${w.m.color}"><div class="crmark">©</div><div class="crtxt">저작권 보호 작품이라 이미지를 싣지 않았습니다</div></div>`
+    :w.noimg?`<div class="frame cr" style="background:${w.m.color}"><div class="crmark">○</div><div class="crtxt">공개된 고화질 이미지가 없어 소장처 링크로 대신합니다</div></div>`
     :`<button class="frame" type="button" data-img="${w.id}" aria-label="${esc(w.t)} 크게 보기"><span class="ph">이미지 불러오는 중</span></button>`;
   const links=[];
-  if(w.cr)links.push(`<a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">이미지 검색 ↗</a>`);
+  if(w.link)links.push(`<a href="${w.link}" target="_blank" rel="noopener">작품 페이지 ↗</a>`);
+  if(w.cr||w.noimg)links.push(`<a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">이미지 검색 ↗</a>`);
   if(mu.u)links.push(`<a href="${mu.u}" target="_blank" rel="noopener">소장처 웹사이트 ↗</a>`);
   return `<article class="work" id="${w.id}" data-hay="${esc(w.hay)}">${frame}
    <div class="caption"><div class="t">${esc(w.t)}</div><div class="o">${esc(w.o)}</div><div class="y">${esc(w.y)}</div>
@@ -1124,7 +1154,7 @@ function show(w,info){
   const t=document.querySelector(`[data-thumb="${w.id}"]`);
   if(t&&info)t.innerHTML=`<img src="${info.s}" alt="" loading="lazy">`;
 }
-const pd=WORKS.filter(w=>!w.cr);
+const pd=WORKS.filter(w=>!w.cr&&!w.noimg);
 let done=0;
 function progress(){$("#loadstat").textContent=done<pd.length?`이미지 ${done}/${pd.length}`:""}
 async function wikiBatch(titles){
