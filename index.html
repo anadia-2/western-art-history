@@ -699,6 +699,14 @@ Object.assign(MUSEUMS,{
   broad:{n:"더 브로드",o:"The Broad",c:"미국 로스앤젤레스",u:"https://www.thebroad.org",note:"상설 전시는 무료지만 온라인 사전 예약을 권합니다"},
   pisa:{n:"산탄토니오 아바테 성당 외벽",o:"Sant'Antonio Abate",c:"이탈리아 피사",u:""},
   harlem:{n:"할렘 리버 드라이브 핸드볼 코트",o:"Harlem River Drive",c:"미국 뉴욕",u:""},
+  pau:{n:"포 미술관",o:"Musée des Beaux-Arts de Pau",c:"프랑스 포",u:""},
+  muma:{n:"앙드레 말로 현대미술관 (MuMa)",o:"MuMa – Musée d'art moderne André Malraux",c:"프랑스 르아브르",u:"https://www.muma-lehavre.fr"},
+  rodin:{n:"로댕 미술관",o:"Musée Rodin",c:"프랑스 파리",u:"https://www.musee-rodin.fr"},
+  dallas:{n:"댈러스 미술관",o:"Dallas Museum of Art",c:"미국 댈러스",u:"https://dma.org"},
+  mfah:{n:"휴스턴 미술관",o:"Museum of Fine Arts, Houston",c:"미국 휴스턴",u:"https://www.mfah.org"},
+  legion:{n:"리전 오브 아너 미술관",o:"Legion of Honor",c:"미국 샌프란시스코",u:"https://www.famsf.org"},
+  harvard:{n:"하버드 미술관 (포그)",o:"Harvard Art Museums – Fogg Museum",c:"미국 케임브리지",u:"https://harvardartmuseums.org"},
+  pushkin:{n:"푸시킨 미술관",o:"Pushkin State Museum of Fine Arts",c:"러시아 모스크바",u:"",note:"러시아 방문 전 외교부 해외안전여행 정보를 꼭 확인하세요"},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -872,6 +880,35 @@ const EXTRA_WORKS2={
 "Barnett Newman":[["십자가의 길","The Stations of the Cross","1958–1966","nga","x",{cr:1,tip:"흑백으로만 그린 14점 연작이 한 전시실에 걸려 있습니다."}],["누가 빨강, 노랑, 파랑을 두려워하랴 III","Who's Afraid of Red, Yellow and Blue III","1966–1967","stedelijk","x",{cr:1}]]
 };
 
+const EXTRA_WORKS3={
+"Édouard Manet":[["튈르리 정원의 음악회","Music in the Tuileries","1862","ngl","File:Édouard Manet - Music in the Tuileries Gardens.jpg",{tip:"더블린 휴 레인 미술관과 공동 소장하여 두 곳을 오가며 전시됩니다."}],["철도 (생라자르역)","The Railway","1873","nga","File:Edouard Manet, The Railway, 1873, NGA 43624.jpg"],["아스파라거스 한 줄기","Asparagus","1880","orsay","File:Edouard Manet - Asparagus - Google Art Project.jpg",{tip:"아스파라거스 다발 그림값을 넉넉히 받은 마네가 '하나가 빠졌다'며 덤으로 그려 보낸 작품입니다."}]],
+"Claude Monet":[["정원의 여인들","Women in the Garden","1866–1867","orsay","File:Claude Monet 024.jpg",{tip:"야외에서 그리려고 땅에 도랑을 파 큰 캔버스를 내려 가며 작업했다고 전해집니다."}],["개양귀비 들판 (아르장퇴유)","Poppy Field","1873","orsay","File:Claude Monet - Poppy Field - Google Art Project.jpg"],["수련 연못 (일본식 다리)","The Water-Lily Pond","1899","ngl","File:Claude Monet, The Water-Lily Pond (National Gallery, London).jpg"],["런던 국회의사당, 안개 속의 햇빛","Houses of Parliament, Sunlight in the Fog","1904","orsay","File:London, the Houses of Parliament, Sunlight Opening in Fog, by Claude Monet.jpg"]],
+"Pierre-Auguste Renoir":[["특별석","La Loge","1874","courtauld","File:Pierre-Auguste Renoir, La Loge, Courtauld Gallery.jpg"],["샤르팡티에 부인과 아이들","Madame Georges Charpentier and Her Children","1878","met","File:Renoir - Madame Georges Charpentier et ses enfants.jpg"],["시골의 무도회","Dance in the Country","1883","orsay","File:Pierre Auguste Renoir - Country Dance - Google Art Project.jpg"],["도시의 무도회","Dance in the City","1883","orsay","File:Pierre-Auguste Renoir 019.jpg",{tip:"모델은 훗날 화가가 된 쉬잔 발라동입니다. 〈시골의 무도회〉와 나란히 걸려 있습니다."}],["우산","The Umbrellas","1881–1886경","ngl","File:Pierre-Auguste Renoir, The Umbrellas, ca. 1881-86.jpg"]],
+"Edgar Degas":[["뉴올리언스의 면화 사무소","A Cotton Office in New Orleans","1873","pau","File:Cottonexchange1873-Degas.jpg",{tip:"외가가 있던 미국 뉴올리언스에서 그렸으며, 미술관이 산 그의 첫 작품입니다."}],["욕조","The Tub","1886","orsay","File:Degas - Le tub, RF 4046, Recto.jpg"],["푸른 무희들","Blue Dancers","1893경","orsay","File:Edgar degas, ballerine blu, 1893 ca. 01.JPG"]],
+"Camille Pissarro":[["에라니의 사과 수확","Apple Harvest","1888","dallas","File:Camille Pissarro - Apple Harvest - 1955.17.M - Dallas Museum of Art.jpg",{tip:"쇠라의 점묘법을 받아들였던 신인상주의 시기의 작품입니다."}]],
+"Alfred Sisley":[["빌뇌브라가렌의 다리","The Bridge at Villeneuve-la-Garenne","1872","met","File:The Bridge at Villeneuve-la-Garenne MET DT1040.jpg"],["몰지의 보트 경주","Regatta at Molesey","1874","orsay","File:Sisley - Regatta-At-Molesey,-1874.jpg"]],
+"Berthe Morisot":[["로리앙 항구","The Harbor at Lorient","1869","nga","File:Berthe Morisot, The Harbor at Lorient, 1869, NGA 52192.jpg"],["화장하는 여인","Woman at Her Toilette","1875–1880","aic","File:Berthe Morisot - Woman at Her Toilette - 1924.127 - Art Institute of Chicago.jpg"]],
+"Gustave Caillebotte":[["오렌지 나무","The Orange Trees","1878","mfah","File:Gustave Caillebotte - The Orange Trees - Google Art Project.jpg"],["목욕하는 남자","Man at His Bath","1884","mfa","File:Gustave Caillebotte -Man at His Bath.jpg"]],
+"Georges Seurat":[["에펠탑","The Eiffel Tower","1889경","legion","File:Georges Seurat - La Tour Eiffel (ca. 1889).jpg",{tip:"완공 직전의 에펠탑을 그린 작은 그림입니다."}],["르 샤위 (캉캉 춤)","Le Chahut","1889–1890","kroller","File:Georges Seurat, 1889-90, Le Chahut, oil on canvas, 170 x 141 cm, Kröller-Müller Museum.jpeg"]],
+"Paul Signac":[["생트로페의 소나무","The Pine Tree at Saint-Tropez","1909","pushkin","File:Paul Signac, 1909, The Pine Tree at Saint Tropez, oil on canvas, 72 x 92 cm, Pushkin Museum, Moscow.jpg"]],
+"Paul Cézanne":[["목맨 사람의 집","The House of the Hanged Man","1873","orsay","File:Paul Cezanne, The Hanged Man's House, 1873.jpg",{tip:"1874년 첫 인상주의 전시회에 출품한 작품입니다."}],["붉은 안락의자의 세잔 부인","Madame Cézanne in a Red Armchair","1877경","mfa","File:Paul Cézanne - Madame Cézanne in a Red Armchair - Google Art Project.jpg"],["사과 바구니","The Basket of Apples","1893경","aic","File:Paul Cézanne - The Basket of Apples - 1926.252 - Art Institute of Chicago.jpg",{tip:"식탁과 병이 서로 다른 시점에서 그려져 있어 입체주의의 출발점으로 꼽힙니다."}]],
+"Vincent van Gogh":[["탕기 영감의 초상","Portrait of Père Tanguy","1887","rodin","File:Van Gogh - Portrait of Pere Tanguy 1887-8.JPG",{tip:"배경을 일본 우키요에로 가득 채웠습니다. 조각가 로댕이 사들여 로댕 미술관에 있습니다."}],["노란 집","The Yellow House","1888","vgm","File:Vincent van Gogh - The yellow house ('The street').jpg",{tip:"고갱과 함께 살며 '남쪽의 화실'을 꿈꾸었던 아를의 집입니다."}],["사이프러스가 있는 밀밭","Wheat Field with Cypresses","1889","met","File:Wheat-Field-with-Cypresses-(1889)-Vincent-van-Gogh-Met.jpg",{tip:"같은 구도의 다른 버전이 런던 내셔널 갤러리에 있습니다."}]],
+"Paul Gauguin":[["황색 그리스도가 있는 자화상","Self-Portrait with Yellow Christ","1890–1891","orsay","File:Paul Gauguin 109.jpg"],["아레아레아 (즐거움)","Arearea","1892","orsay","File:Paul Gauguin - Arearea - Google Art Project.jpg"],["백마","The White Horse","1898","orsay","File:Paul Gauguin - The White Horse - Google Art Project.jpg"],["두 타히티 여인","Two Tahitian Women","1899","met","File:Two Tahitian Women MET DT1342.jpg"]],
+"Henri de Toulouse-Lautrec":[["물랭 루주에서: 춤","At the Moulin Rouge: The Dance","1890","philly","File:Toulouse-Lautrec - At the Moulin Rouge The Dance, 1986-26-32.jpg"],["자르댕 드 파리의 제인 아브릴 (포스터)","Jane Avril (Jardin de Paris)","1893","various","File:Lautrec jane avril at the jardin de paris (poster) 1893.jpg"]]
+};
+const EXTRA_ARTISTS3={
+"impressionism":[{n:"프레데리크 바지유",o:"Frédéric Bazille",l:"1841–1870",d:"모네, 르누아르와 화실을 함께 쓰며 가난한 동료들을 도운 인상주의 초기 멤버. 보불전쟁에서 스물여덟에 전사해 첫 인상주의 전시회를 보지 못했습니다.",at:4,w:[
+  ["가족 모임","Family Reunion","1867","orsay","File:Réunion de famille - Frédéric Bazille - musée d'Orsay RF 2749.jpg"],
+  ["분홍 드레스","The Pink Dress","1864경","orsay","File:Frédéric Bazille - The Pink Dress - Google Art Project.jpg"],
+  ["여름 풍경 (멱 감는 사람들)","Summer Scene","1869","harvard","File:Bazille, Frédéric ~ Summer Scene, 1869, Oil on canvas Fogg Art Museum, Cambridge, Massachusetts.jpg"],
+  ["바지유의 화실","Bazille's Studio","1870","orsay","File:Frédéric Bazille - Bazille's Studio - Google Art Project.jpg",{tip:"마네, 르누아르, 모네 등 동료들이 화실에 모인 장면으로, 키 큰 바지유 자신은 마네가 그려 넣었습니다."}]]}],
+"post-impressionism":[{n:"앙리 에드몽 크로스",o:"Henri-Edmond Cross",l:"1856–1910",d:"시냐크와 함께 지중해의 빛을 점묘법으로 그린 신인상주의 화가. 크고 네모난 색점은 마티스의 야수주의에 영향을 주었습니다.",at:2,w:[
+  ["황금 섬","The Golden Isles","1891–1892","orsay","File:Les Îles d'Or, par Henri-Edmond Cross.jpg"],
+  ["저녁 바람","The Evening Air","1893–1894","orsay","File:Cross - L'air du soir.JPG"],
+  ["비냐스 해변","Beach at La Vignasse","1891–1892","muma","File:Plage de la Vignasse (Cross).jpg"],
+  ["별이 있는 풍경 (수채화)","Landscape with Stars","1905–1908경","met","File:Landscape with Stars MET DT736.jpg",{tip:"말년에 그린 수채화로, 점 대신 짧은 색 획으로 밤하늘을 그렸습니다. 로버트 레먼 컬렉션 소장이며 빛에 약한 종이 작품이라 늘 전시되지는 않습니다."}]]}]
+};
+
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
@@ -928,10 +965,10 @@ EXTRA_MOVEMENTS.push({after:"abstract-expressionism",m:{id:"pop-neo-expressionis
 
 (function(){
   EXTRA_MOVEMENTS.forEach(x=>{const i=MOVEMENTS.findIndex(m=>m.id===x.after);MOVEMENTS.splice(i+1,0,x.m)});
-  for(const [id,as] of Object.entries(EXTRA_ARTISTS)){const m=MOVEMENTS.find(x=>x.id===id);
+  for(const [id,as] of [...Object.entries(EXTRA_ARTISTS),...Object.entries(EXTRA_ARTISTS3)]){const m=MOVEMENTS.find(x=>x.id===id);
     as.forEach(a=>{if(a.at!=null)m.artists.splice(a.at,0,a);else m.artists.push(a)})}
   const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
-  for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
+  for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2),...Object.entries(EXTRA_WORKS3)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
 })();
 
 (function(){
