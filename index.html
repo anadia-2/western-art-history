@@ -148,7 +148,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
 </head>
 <body>
 <header class="masthead wrap">
-  <div class="eyebrow">르네상스부터 신표현주의까지 · 22개 전시실</div>
+  <div class="eyebrow">르네상스부터 신표현주의까지 · 23개 전시실</div>
   <h1>서양미술 전시실</h1>
   <p>시대와 사조를 따라 걸으며 대표 화가와 작품을 만나고, 그 작품이 지금 어느 미술관에 걸려 있는지 확인하는 개인 미술사 노트입니다.</p>
   <div class="stats" id="stats"></div>
@@ -713,6 +713,16 @@ Object.assign(MUSEUMS,{
   unknown:{n:"소장처 미확인",o:"Location unconfirmed",c:"개인 소장으로 추정",u:""},
   k20:{n:"노르트라인베스트팔렌 미술관 (K20)",o:"Kunstsammlung Nordrhein-Westfalen",c:"독일 뒤셀도르프",u:"https://www.kunstsammlung.de"},
   hakf:{n:"힐마 아프 클린트 재단",o:"Hilma af Klint Foundation",c:"스웨덴 스톡홀름",u:"https://hilmaafklint.se",note:"재단은 자체 미술관이 없고, 협력 관계인 스톡홀름 현대미술관(Moderna Museet)에서 늘 일부 작품을 전시합니다. 세계 순회전에도 자주 대여됩니다."},
+  desmoines:{n:"디모인 아트 센터",o:"Des Moines Art Center",c:"미국 디모인",u:"https://desmoinesartcenter.org"},
+  ponce:{n:"폰세 미술관",o:"Museo de Arte de Ponce",c:"푸에르토리코 폰세",u:"https://www.museoarteponce.org"},
+  joslyn:{n:"조슬린 미술관",o:"Joslyn Art Museum",c:"미국 오마하",u:"https://joslyn.org"},
+  deyoung:{n:"드 영 미술관",o:"de Young Museum",c:"미국 샌프란시스코",u:"https://www.famsf.org"},
+  vincoli:{n:"산 피에트로 인 빈콜리 성당",o:"San Pietro in Vincoli",c:"이탈리아 로마",u:""},
+  stsulpice:{n:"생쉴피스 성당",o:"Église Saint-Sulpice",c:"프랑스 파리",u:""},
+  smk:{n:"덴마크 국립미술관 (SMK)",o:"Statens Museum for Kunst",c:"덴마크 코펜하겐",u:"https://www.smk.dk"},
+  museupicasso:{n:"피카소 미술관",o:"Museu Picasso",c:"스페인 바르셀로나",u:"https://museupicassobcn.cat"},
+  necker:{n:"네케르 아동병원",o:"Hôpital Necker-Enfants malades",c:"프랑스 파리",u:""},
+  phillymural:{n:"필라델피아 거리 벽화",o:"Public mural, Philadelphia",c:"미국 필라델피아",u:""},
   various:{n:"여러 미술관",o:"Various collections",c:"판화·포스터라 여러 장이 존재",u:""},
   lost:{n:"소실",o:"Destroyed",c:"1945년 드레스덴 폭격 때 사라짐",u:""}
 });
@@ -957,6 +967,68 @@ EXTRA_ARTISTS3["abstraction"]=[{n:"힐마 아프 클린트",o:"Hilma af Klint",l
   ["가장 큰 열 점, No. 8, 성년기","The Ten Largest, No. 8, Adulthood","1907","hakf","File:Hilma af Klint - The Ten Largest No. 8 - Adulthood - 1907.jpg",{tip:"성년기 4점(No. 5–8) 가운데 마지막 작품입니다. 영어로는 'Adulthood' 또는 'Maturity'로 소개됩니다."}],
   ["백조, No. 17","The Swan, No. 17","1915","hakf","File:Hilma af Klint, 1915, Svanen, No. 17.jpg",{tip:"검은 백조와 흰 백조로 시작한 연작이 점점 기하학적인 원과 면으로 바뀌어 가는 과정의 한 장면입니다."}],
   ["제단화 No. 1","Altarpiece No. 1","1915","hakf","File:8 hilma af klint, altarpiece no 1, 1915.jpg",{tip:"'신전을 위한 그림' 193점을 마무리하는 제단화 3점 가운데 첫 번째입니다."}]]}];
+EXTRA_WORKS3["Caravaggio"]=[["도마뱀에게 물린 소년","Boy Bitten by a Lizard","1594–1596경","ngl","File:Boy Bitten by a Lizard-Caravaggio (National Gallery London).jpg",{tip:"꽃 속에 숨은 도마뱀에게 손가락을 물린 순간의 놀람을 포착한 초기작입니다. 거의 같은 구도의 다른 버전이 피렌체 로베르토 롱기 재단에 있습니다."}]];
+EXTRA_ARTISTS3["symbolism"]=[{n:"조지 프레더릭 와츠",o:"George Frederic Watts",l:"1817–1904",at:0,d:"빅토리아 시대 영국의 화가이자 조각가. 희망, 사랑, 죽음 같은 보편적 주제를 우의적인 인물로 그려 영국 상징주의를 대표합니다. 대표작 상당수를 국가에 기증해 테이트 브리튼에서 볼 수 있습니다.",w:[
+  ["사랑과 죽음","Love and Death","1885–1887경","tateb","File:George Frederic Watts - Love and Death - Tate Britain.jpg",{tip:"문 앞을 막아서는 어린 사랑(큐피드)을 거대한 죽음이 밀고 들어오는 장면입니다. 와츠가 여러 버전을 그린 작품입니다."}],
+  ["가장 깊은 곳에 사는 자","The Dweller in the Innermost","1885–1886","tateb","File:George Frederic Watts (1817-1904) - The Dweller in the Innermost - N01631 - National Gallery.jpg",{tip:"인간 내면의 양심을 신비로운 인물로 형상화한 작품입니다."}],
+  ["희망","Hope","1886","tateb","File:Assistants and George Frederic Watts - Hope - Google Art Project.jpg",{tip:"눈을 가린 여인이 줄이 하나만 남은 리라를 켜며 그 소리에 귀 기울이는 모습입니다. 테이트 소장본은 두 번째 버전이며, 이 그림을 다룬 설교가 버락 오바마의 책 제목 '담대한 희망(The Audacity of Hope)'으로 이어진 것으로도 유명합니다."}]]}];
+EXTRA_ARTISTS3["pre-raphaelite"]=[{n:"프레더릭 레이턴",o:"Frederic Leighton",l:"1830–1896",at:3,d:"빅토리아 시대 영국 미술계의 중심인물로 왕립아카데미 회장을 지냈고, 화가로는 처음으로 귀족 작위를 받았습니다. 라파엘전파 회원은 아니지만 같은 시대에 고대 그리스·로마 신화를 아름다운 인체와 화려한 색으로 그린 탐미주의·고전주의 화가입니다.",w:[
+  ["포로가 된 안드로마케","Captive Andromache","1886–1888경","manchester","File:Leighton Captive Andromache.jpg",{tip:"트로이 전쟁 뒤 노예가 되어 우물에서 물을 긷는 헥토르의 아내를 그린 가로 4m가 넘는 대작입니다."}],
+  ["프시케의 목욕","The Bath of Psyche","1890경","tateb","File:Frederic Lord, Leighton - The Bath of Psyche - Google Art Project.jpg"],
+  ["헤스페리데스의 정원","The Garden of the Hesperides","1892","ladylever","File:Frederic Leighton (1830-1896) - The Garden of Hesperides - LL 3139 - Lady Lever Art Gallery.jpg",{tip:"황금 사과를 지키는 세 님프를 둥근 화면에 그렸습니다."}],
+  ["타오르는 6월","Flaming June","1895","ponce","File:Frederic Leighton - Flaming June (1895) - Museo de Arte de Ponce.jpg",{tip:"레이턴의 가장 유명한 작품입니다. 20세기 중반 빅토리아 시대 미술이 외면받던 시절 경매에서 팔리지 않을 만큼 값이 떨어졌는데, 1963년 푸에르토리코 폰세 미술관이 사들였습니다."}]]}];
+const EXTRA_WORKS4={
+"Michelangelo Buonarroti":[["죽어 가는 노예 (조각)","Dying Slave","1513–1516","louvre","File:Dying slave Louvre MR 1590, Louvre.jpg",{tip:"교황 율리우스 2세의 무덤을 위해 만든 조각으로, 짝을 이루는 〈반항하는 노예〉와 함께 루브르에 있습니다."}],["맨체스터 성모 (미완성)","The Manchester Madonna","1497경","ngl","File:Michelangelo manchaster.jpg",{tip:"미켈란젤로의 몇 안 되는 패널화로, 미완성 상태라 그림 그리는 과정을 엿볼 수 있습니다."}],["모세 (조각)","Moses","1513–1515","vincoli","File:Moses in San Pietro in Vincoli, Roim.png",{tip:"율리우스 2세 무덤 기념물의 중심 조각입니다. 성당은 입장료 없이 들어갈 수 있습니다."}]],
+"Titian":[["장갑을 낀 남자","Man with a Glove","1520경","louvre","File:Titien-homme-au-gant-Louvre.jpg"],["다나에","Danaë","1560–1565경","prado","File:Tizian - Danae receiving the Golden Rain - Prado.jpg",{tip:"스페인 펠리페 2세를 위해 그린 신화화 연작 '포에지' 가운데 하나입니다."}],["디아나와 악타이온","Diana and Actaeon","1556–1559","ngl","File:Titian - Diana and Actaeon - Google Art Project.jpg",{tip:"런던 내셔널 갤러리와 스코틀랜드 국립미술관이 공동 소장해 두 곳을 오가며 전시됩니다."}]],
+"Albrecht Dürer":[["엉겅퀴를 든 자화상","Self-Portrait with a Thistle","1493","louvre","File:Albrecht Dürer - Self-portrait at 22 - WGA06910.jpg",{tip:"스물두 살에 그린, 유럽 회화사에서 가장 이른 독립 자화상 가운데 하나입니다."}],["1498년 자화상","Self-Portrait (1498)","1498","prado","File:Selbstporträt, by Albrecht Dürer, from Prado in Google Earth.jpg"],["기도하는 손 (드로잉)","Praying Hands","1508","albertina","File:Albrecht Dürer - Praying Hands, 1508 - Google Art Project.jpg",{tip:"제단화를 위한 사도의 손 습작입니다. 종이 작품이라 평소에는 거의 전시하지 않습니다."}]],
+"El Greco":[["추기경 니뇨 데 게바라","Cardinal Fernando Niño de Guevara","1600경","met","File:Cardinal Fernando Niño de Guevara (1541–1609) MET DT854.jpg",{tip:"종교재판소장이던 추기경의 날카로운 눈빛을 그린 초상입니다."}],["라오콘","Laocoön","1610–1614경","nga","File:El Greco (Domenikos Theotokopoulos) - Laocoön - Google Art Project.jpg",{tip:"엘 그레코가 그린 유일한 신화화로, 배경에 톨레도 풍경이 보입니다."}],["목자들의 경배","The Adoration of the Shepherds","1612–1614","prado","File:La adoración de los pastores (El Greco).jpg",{tip:"엘 그레코가 자신의 무덤 예배당을 위해 그린 말년작입니다."}]],
+"Peter Paul Rubens":[["밀짚모자","Le Chapeau de Paille","1622–1625경","ngl","File:Le Chapeau de Paille by Peter Paul Rubens.jpg",{tip:"모델은 훗날 루벤스의 처제가 된 수잔나 룬던으로 알려져 있습니다. 실제 모자는 밀짚이 아니라 펠트입니다."}],["사랑의 정원","The Garden of Love","1633경","prado","File:Peter Paul Rubens - Garden of Love - WGA20421.jpg"],["모피 (엘렌 푸르망)","Het Pelsken (Helena Fourment)","1636–1638경","khm","File:Peter Paul Rubens, Kunsthistorisches Museum Wien, Gemäldegalerie - Helena Fourment (\"Das Pelzchen\") - GG 688 - Kunsthistorisches Museum.jpg",{tip:"모피 한 장만 두른 젊은 두 번째 아내 엘렌 푸르망을 그렸습니다. 루벤스가 죽을 때까지 곁에 둔 그림입니다."}]],
+"Jean-Honoré Fragonard":[["영감","Inspiration","1769경","louvre","File:Jean-Honoré Fragonard - Inspiration.jpg",{tip:"한 시간 만에 그렸다고 전해지는 '환상의 인물' 연작 가운데 하나로, 빠른 붓질이 돋보입니다."}],["목욕하는 여인들","The Bathers","1765경","louvre","File:Jean-Honoré Fragonard - The Bathers - WGA8074.jpg"]],
+"Jean-Auguste-Dominique Ingres":[["오송빌 백작부인","Comtesse d'Haussonville","1845","frick","File:Jean-Auguste-Dominique Ingres - Comtesse d'Haussonville - Google Art Project.jpg"],["무아테시에 부인 (앉은 모습)","Madame Moitessier","1856","ngl","File:Dominique Ingres - Mme Moitessier.jpg",{tip:"서 있는 모습을 그린 다른 초상(1851)은 워싱턴 내셔널 갤러리에 있습니다."}],["샘","La Source","1856","orsay","File:Jean Auguste Dominique Ingres - The Spring - Google Art Project 2.jpg",{tip:"40년 가까이 구상해 일흔여섯 살에 완성한 이상적인 누드입니다."}]],
+"Eugène Delacroix":[["프레데리크 쇼팽의 초상","Frédéric Chopin","1838","louvre","File:Eugène Delacroix - Frédéric Chopin - WGA06194.jpg",{tip:"원래 쇼팽과 조르주 상드를 함께 그린 그림이 둘로 잘린 것으로, 상드 부분은 코펜하겐 오르드룹고르 미술관에 있습니다."}],["십자군의 콘스탄티노플 입성","The Entry of the Crusaders into Constantinople","1840","louvre","File:The Entry of the Crusaders into Constantinople - 1840 - Eugène Delacroix - Louvre - Inv 3821.jpg"],["천사와 씨름하는 야곱 (벽화)","Jacob Wrestling with the Angel","1855–1861","stsulpice","File:Jacob Angel Delacroix.jpg",{tip:"들라크루아의 마지막 대작으로, 생쉴피스 성당 '천사들의 예배당' 벽에 그렸습니다."}]],
+"Gustave Courbet":[["앵무새와 여인","Woman with a Parrot","1866","met","File:Gustave Courbet - Woman with a Parrot - Google Art Project.jpg"],["폭풍우 뒤의 에트르타 절벽","The Cliffs at Étretat after the Storm","1870","orsay","File:Gustave Courbet - The Etretat Cliffs after the Storm - Google Art Project.jpg"],["폭풍우 치는 바다 (파도)","The Stormy Sea (The Wave)","1870","orsay","File:La Mer orageuse - Gustave Courbet.jpg",{tip:"노르망디 에트르타에서 그린 '파도' 연작의 대표작입니다."}]],
+"Jean-François Millet":[["봄","Spring","1868–1873","orsay","File:Jean-François Millet (II) - Spring - WGA15693.jpg",{tip:"사계절 연작 가운데 하나로, 비 갠 뒤 무지개가 뜬 바르비종 들판을 그렸습니다."}]],
+"Édouard Manet":[["에밀 졸라의 초상","Portrait of Émile Zola","1868","orsay","File:Manet, Edouard - Portrait of Emile Zola.jpg",{tip:"마네를 옹호한 소설가 졸라를 그렸습니다. 벽에 〈올랭피아〉와 일본 판화가 걸려 있습니다."}],["뱃놀이","Boating","1874","met","File:Edouard Manet Boating.jpg"],["온실에서","In the Conservatory","1879","altenat","File:In the Conservatory.jpg"]],
+"Claude Monet":[["생타드레스의 정원","Garden at Sainte-Adresse","1867","met","File:Garden at Sainte-Adresse MET DT48.jpg"],["트루빌 해변","The Beach at Trouville","1870","ngl","File:Claude Monet 002.jpg",{tip:"신혼여행 중에 그린 그림으로, 물감 속에 실제 모래알이 박혀 있습니다."}],["일본 여인 (기모노를 입은 카미유)","La Japonaise","1876","mfa","File:Claude Monet-Madame Monet en costume japonais.jpg",{tip:"당시 파리에 불던 일본 취향(자포니즘)을 보여 주는 작품입니다."}]],
+"Pierre-Auguste Renoir":[["퐁뇌프","Pont-Neuf, Paris","1872","nga","File:Auguste Renoir, Pont Neuf, Paris, 1872, NGA 52202.jpg"],["첫 외출","La Première Sortie","1876–1877","ngl","File:Pierre-Auguste Renoir - La Première Sortie.jpg"],["목욕하는 여인들","The Large Bathers","1884–1887","philly","File:Pierre-Auguste Renoir, French - The Large Bathers - Google Art Project.jpg",{tip:"인상주의의 흐릿한 붓질에서 벗어나 윤곽이 뚜렷한 고전적 화풍을 시도한 작품입니다."}]],
+"Edgar Degas":[["시골의 경마장에서","At the Races in the Countryside","1869","mfa","File:Edgar Degas - At the Races in the Countryside - Google Art Project.jpg"],["무대 위의 발레 리허설","The Rehearsal of the Ballet Onstage","1874경","met","File:The Rehearsal of the Ballet Onstage MET DT1565.jpg"],["모자 가게에서 (파스텔)","At the Milliner's","1882","met","File:At the Milliner's MET DT1046.jpg"]],
+"Alfred Sisley":[["아르장퇴유의 보행자 다리","The Footbridge at Argenteuil","1872","orsay","File:Sisley, Alfred - Passerelle d'Argenteuil.jpg"],["루브시엔의 마신 길","The Road from the Machine, Louveciennes","1873","orsay","File:Alfred sisley, strada de la machine, louveciennes, 1872.JPG"]],
+"Georges Seurat":[["그랑캉의 베크 뒤 오크","Le Bec du Hoc, Grandcamp","1885","tatem","File:Seurat-Le Bec du Hoc à Grandcamp.jpg"],["분 바르는 젊은 여인","Young Woman Powdering Herself","1889–1890","courtauld","File:Georges Seurat, 1889-90, Jeune femme se poudrant (Young Woman Powdering Herself), oil on canvas, 95.5 x 79.5 cm, Courtauld Institute of Art.jpg",{tip:"모델은 쇠라의 연인 마들렌 크노블로흐입니다."}]],
+"Gustav Klimt":[["프리차 리들러의 초상","Portrait of Fritza Riedler","1906","belvedere","File:Gustav Klimt - Fritza Riedler - 3379 - Österreichische Galerie Belvedere.jpg"],["희망 II","Hope II","1907–1908","moma","File:Gustav Klimt - Hope, II - Google Art Project.jpg"],["아터 호숫가의 캄머 성 III","Schloss Kammer am Attersee III","1910","belvedere","File:Gustav Klimt - Schloss Kammer am Attersee III - 4318 - Österreichische Galerie Belvedere.jpg",{tip:"여름마다 머물던 아터 호숫가의 풍경입니다. 클림트는 풍경화도 50점 넘게 남겼습니다."}]],
+"Henri Matisse":[["녹색 줄무늬 (마티스 부인의 초상)","The Green Stripe","1905","smk","File:Matisse - Green Line.jpeg",{tip:"얼굴 한가운데를 가르는 초록색 선으로 야수주의의 대담한 색 사용을 보여 줍니다. 코펜하겐의 덴마크 국립미술관은 마티스 작품을 많이 소장하고 있습니다."}],["강가의 목욕하는 사람들","Bathers by a River","1909–1917","aic","File:Bathers by a River.jpg",{tip:"8년에 걸쳐 고쳐 그리며 입체주의의 영향을 받아들인 대작입니다."}],["피아노 레슨","The Piano Lesson","1916","moma","File:La Leçon de piano, par Henri Matisse.jpg"]],
+"Raoul Dufy":[["레스타크의 나무들","Trees at L'Estaque","1908","pompidou","File:Dufy, Arbres à l'Estaque.jpg",{tip:"브라크와 함께 레스타크에서 그린 작품으로, 세잔과 입체주의의 영향이 보입니다."}]],
+"Egon Schiele":[["죽음과 소녀","Death and the Maiden","1915","belvedere","File:Egon Schiele - Tod und Mädchen - 3171 - Österreichische Galerie Belvedere.jpg",{tip:"연인 발리와 헤어지고 에디트와 결혼하던 무렵의 심정을 담은 그림으로 해석됩니다."}],["네 그루의 나무","Four Trees","1917","belvedere","File:Egon Schiele - Vier Bäume - 3917 - Österreichische Galerie Belvedere.jpg"],["화가의 아내, 에디트 실레의 초상","Portrait of Edith Schiele","1918","belvedere","File:Egon Schiele - Bildnis der Frau des Künstlers, Edith Schiele - 1991 - Österreichische Galerie Belvedere.jpg",{tip:"그해 가을 에디트와 실레는 스페인 독감으로 사흘 간격으로 세상을 떠났습니다."}]],
+"Pablo Picasso":[["과학과 자비","Science and Charity","1897","museupicasso","x",{cr:1,tip:"열다섯 살에 그린 아카데미 양식의 대작입니다. 바르셀로나 피카소 미술관은 소년 시절 작품을 특히 많이 소장하고 있습니다."}],["다림질하는 여인","Woman Ironing","1904","guggenheim","x",{cr:1}],["세 무용수","The Three Dancers","1925","tatem","x",{cr:1}],["거울 앞의 소녀","Girl before a Mirror","1932","moma","x",{cr:1}]],
+"Georges Braque":[["병과 물고기","Bottle and Fishes","1910–1912경","tatem","x",{cr:1}],["과일 그릇과 유리잔","Fruit Dish and Glass","1912","met","x",{cr:1,tip:"신문지와 벽지를 오려 붙인 최초의 '파피에 콜레' 작품으로 꼽힙니다."}]],
+"Wassily Kandinsky":[["푸른 산","Blue Mountain","1908–1909","guggenheim","File:Blue Mountain by Vasily Kandinsky, 1908-09.JPG"],["검은 선들","Black Lines","1913","guggenheim","File:Black Lines by Vasily Kandinsky, 1913.JPG"]],
+"Kazimir Malevich":[["물통을 든 여인","Woman with Pails: Dynamic Arrangement","1912–1913","moma","File:Woman with Pails (Malevich, 1912).jpg"],["절대주의 구성: 비행기의 비행","Suprematist Composition: Airplane Flying","1915","moma","File:Suprematist Composition - Airplane Flying (Malevich, 1915).jpg"],["검은 십자가","Black Cross","1915","pompidou","File:Kazimir Malevich Black Cross.jpg"]],
+"Paul Klee":[["붉은 풍선","Red Balloon","1922","guggenheim","File:Paul Klee, 1922, Red Balloon, oil on chalk-primed gauze, mounted on board, 31.7 x 31.1 cm, Solomon R. Guggenheim Museum.jpg"],["저녁의 불","Fire in the Evening","1929","moma","File:Fire in the Evening by Paul Klee in the MOMA.jpg",{tip:"이집트 여행에서 본 풍경과 빛을 색 띠로 옮긴 작품입니다."}]],
+"Marc Chagall":[["창 너머 보이는 파리","Paris Through the Window","1913","guggenheim","x",{cr:1}],["초록 바이올린 연주자","Green Violinist","1923–1924","guggenheim","x",{cr:1}],["미국의 창","America Windows","1977","aic","x",{cr:1,tip:"미국 독립 200주년을 기념해 만든 스테인드글라스입니다."}]],
+"Joan Miró":[["농장","The Farm","1921–1922","nga","x",{cr:1,tip:"소설가 어니스트 헤밍웨이가 사들여 아꼈던 그림입니다."}],["자화상 I","Self-Portrait I","1937–1938","moma","x",{cr:1}],["미지의 세계를 연인에게 알려 주는 아름다운 새","The Beautiful Bird Revealing the Unknown to a Pair of Lovers","1941","moma","x",{cr:1,tip:"'별자리' 연작 23점 가운데 하나입니다."}]],
+"René Magritte":[["가짜 거울","The False Mirror","1929","moma","x",{cr:1}],["인간의 조건","The Human Condition","1933","nga","x",{cr:1}],["멈춘 시간","Time Transfixed","1938","aic","x",{cr:1,tip:"벽난로에서 기관차가 튀어나오는 장면으로, 마그리트의 대표적인 데페이즈망 작품입니다."}]],
+"Salvador Dalí":[["바닷가재 전화기 (오브제)","Lobster Telephone","1936","tatem","x",{cr:1}],["깨어나기 직전 석류 주위를 나는 벌 때문에 꾼 꿈","Dream Caused by the Flight of a Bee around a Pomegranate a Second Before Awakening","1944","thyssen","x",{cr:1}],["최후의 만찬의 성사","The Sacrament of the Last Supper","1955","nga","x",{cr:1}]],
+"Jackson Pollock":[["암늑대","The She-Wolf","1943","moma","x",{cr:1}],["하나: 넘버 31, 1950","One: Number 31, 1950","1950","moma","x",{cr:1,tip:"가로 5m가 넘는 드리핑 대작입니다."}]],
+"Mark Rothko":[["No. 5/No. 22","No. 5/No. 22","1950","moma","x",{cr:1}],["검정 위의 밝은 빨강","Light Red Over Black","1957","tatem","x",{cr:1}]],
+"Andy Warhol":[["오렌지 재앙 #5","Orange Disaster #5","1963","guggenheim","x",{cr:1}],["두 엘비스","Double Elvis","1963","moma","x",{cr:1}],["마오","Mao","1972","met","x",{cr:1}]],
+"Roy Lichtenstein":[["절망","Hopeless","1963","basel","x",{cr:1}],["차 안에서","In the Car","1963","snmga","x",{cr:1}]],
+"Jean-Michel Basquiat":[["여섯 범죄","Six Crimee","1982","moca","x",{cr:1}],["불쾌한 자유주의자들","Obnoxious Liberals","1982","broad","x",{cr:1}]],
+"Keith Haring":[["네케르 병원 탑 벽화","Tower (Necker Children's Hospital)","1987","necker","x",{cr:1,tip:"파리 네케르 아동병원 외벽 계단탑에 그린 벽화로, 아이들에게 희망을 주려는 뜻을 담았습니다."}],["우리, 청년들","We the Youth","1987","phillymural","x",{cr:1,tip:"필라델피아 지역 청소년들과 함께 그린 거리 벽화입니다."}]]
+};
+const EXTRA_WORKS5={
+"Johannes Vermeer":[["골목길","The Little Street","1658경","rijks","File:Johannes Vermeer - Gezicht op huizen in Delft, bekend als 'Het straatje' - Google Art Project.jpg",{tip:"델프트의 평범한 집 앞 풍경으로, 페르메이르가 남긴 단 두 점의 풍경화 가운데 하나입니다."}],["편지를 읽는 푸른 옷의 여인","Woman in Blue Reading a Letter","1662–1663경","rijks","File:Johannes Vermeer - Woman in Blue Reading a Letter - WGA24657.jpg"],["디아나와 님프들","Diana and Her Nymphs","1653–1654경","mauritshuis","File:Johannes Vermeer - Diana and her Nymphs - 406 - Mauritshuis.jpg",{tip:"풍속화로 유명해지기 전, 젊은 페르메이르가 그린 드문 신화화입니다."}]],
+"Rembrandt van Rijn":[["사도 바울로 분장한 자화상","Self-Portrait as the Apostle Paul","1661","rijks","File:Rembrandt - Self-Portrait as the Apostle Paul - WGA19222.jpg"]],
+"Frans Hals":[["웃는 소년","Laughing Boy","1625경","mauritshuis","File:Frans Hals - Laughing Boy - 1032 - Mauritshuis.jpg"],["이사크 마사와 베아트릭스 판 데르 란의 결혼 초상","Marriage Portrait of Isaac Massa and Beatrix van der Laen","1622경","rijks","File:Frans Hals - Portret van een stel in een landschap - Google Art Project.jpg",{tip:"딱딱한 격식 대신 미소 짓는 부부를 그린, 당시로서는 파격적인 결혼 초상입니다."}],["즐거운 술꾼","The Merry Drinker","1628–1630","rijks","File:Frans Hals - The Merry Drinker - WGA11095.jpg"]],
+"Vincent van Gogh":[["회색 펠트 모자를 쓴 자화상","Self-Portrait with Grey Felt Hat","1887","vgm","File:Vincent van Gogh - Self-portrait with grey felt hat - Google Art Project.jpg",{tip:"파리 시절 신인상주의 점묘법을 받아들여 짧은 붓질로 그린 자화상입니다."}],["수확","The Harvest","1888","vgm","File:Vincent van Gogh - De oogst - Google Art Project.jpg",{tip:"고흐 자신이 '다른 모든 것을 압도한다'고 할 만큼 아낀 그림입니다."}],["고갱의 의자","Gauguin's Chair","1888","vgm","File:De stoel van Gauguin - s0048V1962 - Van Gogh Museum.jpg",{tip:"고갱과 함께 지내던 아를에서, 자신의 소박한 의자(런던 내셔널 갤러리)와 짝을 이루도록 그렸습니다."}],["사이프러스와 별이 있는 길","Road with Cypress and Star","1890","kroller","File:Vincent van Gogh - Road with Cypress and Star - c. 12-15 May 1890.jpg",{tip:"생레미를 떠나기 직전에 그린 밤 풍경입니다."}],["영원의 문에서 (슬퍼하는 노인)","At Eternity's Gate","1890","kroller","File:Van Gogh - At Eternity's Gate.jpg"],["먹구름 아래의 밀밭","Wheatfield under Thunderclouds","1890","vgm","File:Vincent van Gogh - Wheatfield Under Thunderclouds - VGM F778.jpg",{tip:"오베르에서 세상을 떠나기 몇 주 전에 그린 그림입니다."}]],
+"Piet Mondrian":[["진화 (세 폭)","Evolution","1911","denhaag","File:Mondrian, Evolution (Triptychon), 1911.jpg",{tip:"신지학에 심취했던 시기의 작품으로, 영적 깨달음의 세 단계를 세 폭에 담았습니다."}]],
+"Kazimir Malevich":[["모스크바의 영국인","An Englishman in Moscow","1914","stedelijk","File:An Englishman in Moscow, by Kazimir Malevich.jpg",{tip:"스테델레이크 미술관은 러시아 밖에서 가장 큰 말레비치 컬렉션을 소장하고 있습니다."}]],
+"Marc Chagall":[["일곱 손가락의 자화상","Self-Portrait with Seven Fingers","1912–1913","stedelijk","x",{cr:1}],["바이올린 연주자","The Fiddler","1912–1913","stedelijk","x",{cr:1}]],
+"Raffaello Sanzio":[["성체 논의","Disputation of the Holy Sacrament","1509–1510","vatican","File:Raphael, Disputation of the Holy Sacrament, 1509-10, Vatican Museums (48759463557).jpg",{tip:"'서명의 방'에서 〈아테네 학당〉과 마주 보는 벽화입니다. 철학과 신학이 서로 마주한 셈입니다."}],["폴리뇨의 성모","Madonna of Foligno","1511–1512","vatican","File:Madonna of Foligno - Raphael (8590568151).jpg",{tip:"바티칸 회화관(피나코테카)에 있습니다."}],["성 베드로의 해방","The Liberation of Saint Peter","1514","vatican","File:Raphaël, La Libération de saint Pierre, 1512–1514, fresque, 660 × 500 cm, Chambre d’Héliodore, Stanze de Raphaël, Palais apostolique, Musées du Vatican.jpg",{tip:"천사의 빛, 횃불, 달빛 세 가지 빛을 그린 '헬리오도로스의 방'의 야경 벽화입니다."}]],
+"Michelangelo Buonarroti":[["델포이의 무녀 (시스티나 천장화)","Delphic Sibyl","1509","vatican","File:Michelangelo - Delphic Sibyl.jpg"]],
+"Leonardo da Vinci":[["광야의 성 히에로니무스 (미완성)","Saint Jerome in the Wilderness","1480경","vatican","File:Saint Jerome Leonardo - image only (Q972196).jpg",{tip:"19세기에 두 조각으로 잘린 채 발견되어, 하나는 상자 뚜껑, 다른 하나는 구둣방 의자로 쓰였다는 일화가 전합니다."}]],
+"Caravaggio":[["그리스도의 매장","The Entombment of Christ","1603–1604","vatican","File:Caravaggio - Entombment of Christ.jpg",{tip:"바티칸 회화관의 대표작으로, 나폴레옹이 파리로 가져갔다가 돌려받았습니다."}]],
+"Giotto di Bondone":[["스테파네스키 세 폭 제단화","Stefaneschi Triptych","1330경","vatican","File:Giotto. The Stefaneschi Triptych (recto) c.1330 220x245cm. Pinacoteca, Vatican..jpg",{tip:"옛 성 베드로 대성당의 제단을 위해 그린 작품으로, 앞뒤 양면에 모두 그림이 있습니다."}]],
+"Sandro Botticelli":[["그리스도의 세 가지 유혹 (시스티나 벽화)","Temptations of Christ","1481–1482","vatican","File:Sandro Botticelli - Three Temptations of Christ - WGA2755.jpg",{tip:"미켈란젤로의 천장화보다 30년 앞서 보티첼리, 페루지노, 기를란다요 등이 시스티나 예배당 벽을 장식했습니다."}]]
+};
 const EXTRA_MOVEMENTS=[{after:"abstraction",m:{id:"ecole-de-paris",name:"에콜 드 파리 (파리 화파)",en:"École de Paris",years:"1910년 – 1940년",s:1910,e:1940,color:"#4a5d6e",
  sum:"20세기 초 파리 몽마르트르와 몽파르나스에 모여든 외국 출신 화가들을 묶어 부르는 이름입니다. 선언이나 공통 양식이 있는 유파가 아니라, 러시아, 이탈리아, 벨라루스 등에서 온 이방인들이 파리에서 각자의 기억과 감성을 독자적인 화풍으로 그려 낸 흐름입니다.",
  traits:["유파나 선언 없이 화가 개인의 양식이 중심","고향의 기억, 유대 문화, 민속적인 환상 (샤갈)","길게 늘인 목과 아몬드형 눈의 초상 (모딜리아니)","격렬하게 뒤틀린 붓질과 진한 색 (수틴)","입체주의·야수주의·표현주의를 흡수하면서도 인물과 이야기를 지킴"],
@@ -1011,12 +1083,36 @@ EXTRA_MOVEMENTS.push({after:"abstract-expressionism",m:{id:"pop-neo-expressionis
    ["보헤미아는 바닷가에 있다","Bohemia Lies by the Sea","1996","met","x",{cr:1}]]}
  ]}});
 
+EXTRA_MOVEMENTS.push({after:"surrealism",m:{id:"american-realism",name:"미국 사실주의",en:"American Realism (American Scene)",years:"1910년 – 1960년대",s:1910,e:1965,color:"#2f5f63",
+ sum:"유럽에서 입체주의와 추상, 초현실주의가 이어지던 시기에 미국에서는 대도시의 거리, 주유소, 식당, 시골 마을 같은 미국의 일상 풍경을 사실적으로 그린 화가들이 등장했습니다. '아메리칸 신(American Scene) 회화'라고도 부르며, 대공황 시대 미국인의 고독과 정서를 담았습니다. 1930년대에는 그랜트 우드처럼 중서부 농촌의 삶을 그린 지역주의(Regionalism)가, 전후에는 앤드루 와이어스의 고요한 사실주의가 그 흐름을 이었습니다.",
+ traits:["평범한 미국의 도시와 시골 풍경을 사실적으로 묘사","텅 빈 거리, 늦은 밤 식당처럼 고요하고 쓸쓸한 분위기","강한 빛과 그림자, 영화의 한 장면 같은 구도","대도시 속 현대인의 고독과 소외"],
+ diff:"같은 시기 유럽 아방가르드가 형태를 해체하거나 무의식을 탐구했다면, 미국 사실주의는 눈에 보이는 일상의 풍경으로 시대의 정서를 그렸습니다.",
+ note:"호퍼는 어떤 유파에도 속하지 않으려 했지만, 미술사에서는 보통 미국 사실주의로 분류합니다. 호퍼(1967년 사망)와 와이어스(2009년 사망)는 작품 저작권이 보호되어 이미지를 싣지 않았고, 우드의 1931년 이후 작품도 미국에서 아직 저작권이 남아 있어 이미지를 싣지 않았습니다.",
+ artists:[
+  {n:"그랜트 우드",o:"Grant Wood",l:"1891–1942",d:"아이오와 출신으로, 미국 중서부 농촌의 사람과 풍경을 단순하고 정교한 형태로 그린 지역주의(Regionalism)의 대표 화가입니다.",w:[
+   ["아메리칸 고딕","American Gothic","1930","aic","File:Grant Wood - American Gothic - Google Art Project.jpg",{tip:"고딕 양식 창문이 있는 시골집 앞에 선 농부와 딸(흔히 부부로 오해받음)을 그렸습니다. 모델은 화가의 여동생과 치과의사였고, 미국에서 가장 많이 패러디된 그림 가운데 하나입니다."}],
+   ["스톤시티, 아이오와","Stone City, Iowa","1930","joslyn","File:Stone City Iowa 1930 Grant Wood.jpg"],
+   ["폴 리비어의 한밤의 질주","The Midnight Ride of Paul Revere","1931","met","x",{cr:1,tip:"미국 독립전쟁의 전설적인 장면을 장난감 마을처럼 내려다본 시점으로 그렸습니다."}],
+   ["타작꾼들의 저녁 식사","Dinner for Threshers","1934","deyoung","x",{cr:1}]]},
+  {n:"앤드루 와이어스",o:"Andrew Wyeth",l:"1917–2009",d:"펜실베이니아와 메인주의 시골 풍경과 이웃을 템페라와 수채로 섬세하게 그렸습니다. 쓸쓸하고 고요한 분위기의 사실적인 그림으로 20세기 미국에서 가장 사랑받은 화가 가운데 한 명입니다.",w:[
+   ["바다에서 부는 바람","Wind from the Sea","1947","nga","x",{cr:1}],
+   ["크리스티나의 세계","Christina's World","1948","moma","x",{cr:1,tip:"근육 질환으로 걷지 못하던 이웃 크리스티나 올슨이 언덕 위 집을 향해 몸을 끌고 가는 모습입니다. MoMA의 대표 소장품입니다."}],
+   ["성촉절 (그라운드호그 데이)","Groundhog Day","1959","philly","x",{cr:1}],
+   ["그 신사","That Gentleman","1960","dallas","x",{cr:1}]]},
+  {n:"에드워드 호퍼",o:"Edward Hopper",l:"1882–1967",d:"뉴욕을 중심으로 활동하며 도시의 식당, 극장, 주유소, 철길 옆 집을 그렸습니다. 고요한 빛과 쓸쓸한 인물로 '현대인의 고독'을 그린 화가로 불리며, 영화감독들에게도 큰 영향을 주었습니다.",w:[
+   ["철길 옆 집","House by the Railroad","1925","moma","x",{cr:1,tip:"앨프리드 히치콕 영화 〈사이코〉의 베이츠 저택이 이 그림에서 영감을 받은 것으로 알려져 있습니다."}],
+   ["자동판매 식당","Automat","1927","desmoines","x",{cr:1}],
+   ["찹 수이","Chop Suey","1929","private","x",{cr:1,tip:"2018년 경매에서 약 9,190만 달러에 낙찰되어 호퍼 작품 최고가를 기록했습니다."}],
+   ["이른 일요일 아침","Early Sunday Morning","1930","whitney","x",{cr:1,tip:"휘트니 미술관은 호퍼의 아내 조세핀의 유증으로 호퍼 작품을 가장 많이 소장하고 있습니다."}],
+   ["뉴욕의 영화관","New York Movie","1939","moma","x",{cr:1}],
+   ["밤을 지새우는 사람들 (나이트호크스)","Nighthawks","1942","aic","x",{cr:1,tip:"호퍼의 가장 유명한 작품으로, 시카고 미술관이 완성 직후 사들였습니다."}]]}]}});
+
 (function(){
   EXTRA_MOVEMENTS.forEach(x=>{const i=MOVEMENTS.findIndex(m=>m.id===x.after);MOVEMENTS.splice(i+1,0,x.m)});
   for(const [id,as] of [...Object.entries(EXTRA_ARTISTS),...Object.entries(EXTRA_ARTISTS3)]){const m=MOVEMENTS.find(x=>x.id===id);
     as.forEach(a=>{if(a.at!=null)m.artists.splice(a.at,0,a);else m.artists.push(a)})}
   const byO={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>byO[a.o]=a));
-  for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2),...Object.entries(EXTRA_WORKS3)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
+  for(const [o,ws] of [...Object.entries(EXTRA_WORKS),...Object.entries(EXTRA_WORKS2),...Object.entries(EXTRA_WORKS3),...Object.entries(EXTRA_WORKS4),...Object.entries(EXTRA_WORKS5)]){if(!byO[o])throw new Error("unknown artist "+o);byO[o].w.push(...ws)}
 })();
 
 // 사조 설명 보강 (추가된 화가·작품 반영)
@@ -1075,6 +1171,7 @@ const R={
 for(const [id,r] of Object.entries(R)){const m=MOVEMENTS.find(x=>x.id===id);if(!m)throw new Error("no movement "+id);
   if(r.sum)m.sum=r.sum;if(r.diff)m.diff=r.diff;if(r.note)m.note=r.note;if(r.years)m.years=r.years;if(r.e)m.e=r.e;if(r.s)m.s=r.s;
   if(r.addTraits)m.traits=m.traits.concat(r.addTraits)}
+{const m=MOVEMENTS.find(x=>x.id==="american-realism");const by=a=>+(a.l.match(/\d{4}/)||[0])[0];m.artists.sort((a,b)=>by(a)-by(b));}
 })();
 
 (function(){
