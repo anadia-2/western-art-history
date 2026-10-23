@@ -47,7 +47,21 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .loadstat{font-family:var(--f-mono);font-size:12px;color:var(--muted);white-space:nowrap}
 .themebtn{margin-left:auto;font:inherit;font-size:13px;padding:7px 10px;border:1px solid var(--line);border-radius:6px;background:transparent;color:var(--muted);cursor:pointer}
 
-@media (max-width:640px){.bar .wrap{gap:8px}.search{order:3;flex-basis:100%}.loadstat{order:4;white-space:normal}.room{scroll-margin-top:150px}}
+@media (max-width:640px){.bar .wrap{gap:8px}.search{order:3;flex-basis:100%}.loadstat{order:4;white-space:normal}}
+/* mobile timeline (vertical list) */
+.tl-m{display:none;list-style:none;margin:0;padding:6px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.tl-m li{margin:0}
+.tl-m button{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:2px 8px;align-items:center;width:100%;font:inherit;text-align:left;background:none;border:0;padding:7px 12px;color:var(--fg);cursor:pointer}
+.tl-m button:active{background:var(--mat)}
+.tl-m .no{font-family:var(--f-mono);font-size:11px;color:var(--muted);grid-row:span 2}
+.tl-m .nm{font-size:14px;font-weight:600;display:flex;justify-content:space-between;gap:8px;min-width:0}
+.tl-m .nm span:last-child{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--muted);white-space:nowrap}
+.tl-m .trk{position:relative;height:6px;background:var(--mat);border-radius:3px}
+.tl-m .trk i{position:absolute;top:0;bottom:0;border-radius:3px;min-width:4px}
+.tl-m .axis{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;color:var(--muted);padding:2px 12px 4px calc(2.2em + 20px)}
+.jump{display:none;font:inherit;font-size:14px;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);max-width:100%}
+.totop{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:25;font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer}
+@media (max-width:700px){.tl-scroll{display:none}.tl-m{display:block}.jump{display:block;order:1;flex:1 1 0;min-width:0}.tabs{order:0}.themebtn{order:2;margin-left:0;padding:7px 8px}.search{order:3}.loadstat{display:none}.tl-m button{padding:5px 12px}}
 /* timeline */
 .tl-sec{padding-block:28px 8px}
 .h2{font-family:var(--f-display);font-weight:600;font-size:22px;margin:0 0 4px}
@@ -66,6 +80,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* rooms */
 .room{margin-top:56px;scroll-margin-top:70px}
+@media (max-width:700px){.room{scroll-margin-top:122px}}
 .room-head{color:var(--ink-on-wall);border-radius:10px 10px 0 0}
 .room-head .inner{padding:26px 26px 22px}
 .room-no{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
@@ -161,6 +176,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
       <button id="tab-museums" role="tab" aria-selected="false">미술관별</button>
     </div>
     <div class="search"><input id="q" type="search" placeholder="화가, 작품, 미술관, 도시 검색 (예: 모네, 오르세, 런던)" aria-label="검색"></div>
+    <select class="jump" id="jump" aria-label="전시실로 이동"><option value="">전시실로 이동…</option></select>
     <span class="loadstat" id="loadstat"></span>
     <button class="themebtn" id="themebtn" type="button" aria-label="화면 테마 바꾸기">테마</button>
   </div>
@@ -170,8 +186,9 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
   <section id="view-rooms">
     <div class="wrap tl-sec">
       <h2 class="h2">연대표</h2>
-      <p class="sub">막대를 누르면 해당 전시실로 이동합니다. 사조의 시작과 끝은 대략적인 연도입니다.</p>
+      <p class="sub">막대나 사조 이름을 누르면 해당 전시실로 이동합니다. 사조의 시작과 끝은 대략적인 연도입니다.</p>
       <div class="tl-scroll"><div class="tl" id="timeline"></div></div>
+      <ol class="tl-m" id="timeline-m"></ol>
     </div>
     <div class="wrap" id="rooms"></div>
   </section>
@@ -192,6 +209,8 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
     <p><b>관람 전 확인</b> · 유명 작품도 해외 대여, 보존 처리, 전시 교체로 자리를 비울 수 있습니다. 방문 전에 각 미술관 웹사이트에서 전시 여부를 확인하세요. 소장처 정보는 2026년 10월 기준입니다.</p>
   </div>
 </footer>
+
+<button class="totop" id="totop" type="button" aria-label="연대표로 돌아가기" hidden>↑ 연대표</button>
 
 <dialog id="lb" aria-label="작품 크게 보기">
   <div class="lb">
@@ -1287,6 +1306,19 @@ $("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> 사조</span><span><b>${
   html+=`</div>`;
   el.innerHTML=html;
   el.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)document.getElementById(b.dataset.go).scrollIntoView()});
+  /* mobile: vertical list with proportional mini bars */
+  const pct=y=>Math.max(0,Math.min(100,(y-Y0)/(Y1-Y0)*100));
+  const ml=$("#timeline-m");
+  ml.innerHTML=MOVEMENTS.map((m,i)=>`<li><button type="button" data-go="${m.id}"><span class="no">${String(i+1).padStart(2,"0")}</span><span class="nm"><span>${esc(m.name)}</span><span>${m.s}–${m.e}</span></span><span class="trk"><i style="left:${pct(m.s)}%;width:${Math.max(1,pct(m.e)-pct(m.s))}%;background:${m.color}"></i></span></button></li>`).join("")+`<li class="axis"><span>1300</span><span>1500</span><span>1700</span><span>1900</span><span>2000</span></li>`;
+  ml.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)document.getElementById(b.dataset.go).scrollIntoView()});
+  /* jump select */
+  const jp=$("#jump");
+  jp.insertAdjacentHTML("beforeend",MOVEMENTS.map((m,i)=>`<option value="${m.id}">${i+1}. ${esc(m.name)}</option>`).join(""));
+  jp.addEventListener("change",()=>{if(jp.value){if(view!=="rooms")setView("rooms");document.getElementById(jp.value).scrollIntoView();jp.value=""}});
+  /* back-to-timeline button */
+  const tt=$("#totop"),sec=document.querySelector(".tl-sec");
+  tt.onclick=()=>sec.scrollIntoView();
+  addEventListener("scroll",()=>{tt.hidden=scrollY<900},{passive:true});
 })();
 
 /* rooms */
