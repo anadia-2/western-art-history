@@ -136,6 +136,9 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .mcard-head .o{color:var(--muted);font-style:italic}
 .mcard-head .cnt{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-left:auto}
 .mnote{font-size:13px;color:var(--muted);margin-top:4px}
+.maddr{font-size:13px;margin-top:6px;user-select:all;-webkit-user-select:all}
+.mlinks{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;margin-top:4px}
+.mlinks a{color:inherit;text-underline-offset:3px}
 .mlist{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:8px 18px}
 .mrow{display:flex;gap:10px;align-items:center;min-width:0}
 .mthumb{width:52px;height:52px;flex:none;background:var(--mat);border-radius:3px;display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -149,6 +152,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .empty{padding:40px 0;color:var(--muted)}
 footer{border-top:1px solid var(--line);margin-top:60px;padding-block:28px 48px;color:var(--muted);font-size:13.5px}
 footer p{max-width:80ch;margin:0 0 8px}
+.credit{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 16px;margin-top:20px;padding-top:14px;border-top:1px solid var(--line);font-size:12px;opacity:.85}
+.visits{font-family:var(--f-mono)}
 
 /* lightbox */
 dialog{border:0;padding:0;background:transparent;max-width:min(96vw,1400px);max-height:96vh;color:var(--fg)}
@@ -207,6 +212,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
     <p><b>이미지</b> · 저작권이 만료된 작품은 위키백과·위키미디어 공용에서 페이지를 열 때 실시간으로 불러옵니다. 인터넷 연결이 필요하며, 드물게 다른 판본이나 부분 이미지가 표시될 수 있습니다.</p>
     <p><b>저작권</b> · 피카소, 브라크, 달리, 미로, 마그리트, 폴록, 로스코, 드 쿠닝 등 20세기 작가 상당수는 작품 저작권이 아직 유효하여 이미지를 싣지 않고, 이미지 검색과 소장처 링크를 제공합니다.</p>
     <p><b>관람 전 확인</b> · 유명 작품도 해외 대여, 보존 처리, 전시 교체로 자리를 비울 수 있습니다. 방문 전에 각 미술관 웹사이트에서 전시 여부를 확인하세요. 소장처 정보는 2026년 10월 기준입니다.</p>
+    <div class="credit"><span>© 2026 JH Kim · 글과 구성의 무단 복제를 금합니다</span><span class="visits" id="visits" hidden></span></div>
   </div>
 </footer>
 
@@ -1815,6 +1821,619 @@ const TIPS={
 };
 (function(){for(const m of MOVEMENTS)for(const a of m.artists)for(const w of a.w){const t=TIPS[a.o+"||"+w[1]+"||"+w[2]];if(!t)continue;if(!w[5])w[5]={};if(!w[5].tip)w[5].tip=t;}})();
 
+const ADDR={
+"uffizi": {
+"addr": "Piazzale degli Uffizi, 6, 50122 Firenze FI, Italy",
+"q": "Galleria degli Uffizi, Piazzale degli Uffizi, 6, 50122 Firenze FI, Italy"
+},
+"smn": {
+"addr": "Piazza di Santa Maria Novella, 18, 50123 Firenze FI, Italy",
+"q": "Basilica di Santa Maria Novella, Piazza di Santa Maria Novella, 18, 50123 Firenze FI, Italy"
+},
+"brancacci": {
+"addr": "Piazza del Carmine, 14, 50124 Firenze FI, Italy",
+"q": "Cappella Brancacci, Santa Maria del Carmine, Piazza del Carmine, 14, 50124 Firenze FI, Italy"
+},
+"scrovegni": {
+"addr": "Piazza Eremitani, 8, 35121 Padova PD, Italy",
+"q": "Cappella degli Scrovegni, Piazza Eremitani, 8, 35121 Padova PD, Italy"
+},
+"grazie": {
+"addr": "Piazza di Santa Maria delle Grazie, 2, 20123 Milano MI, Italy",
+"q": "Cenacolo Vinciano, Santa Maria delle Grazie, Piazza di Santa Maria delle Grazie, 2, 20123 Milano MI, Italy"
+},
+"vatican": {
+"addr": "Viale Vaticano, 00120 Città del Vaticano, Vatican City",
+"q": "Musei Vaticani, Viale Vaticano, 00120 Città del Vaticano, Vatican City"
+},
+"frari": {
+"addr": "Campo dei Frari, San Polo 3072, 30125 Venezia VE, Italy",
+"q": "Basilica di Santa Maria Gloriosa dei Frari, Campo dei Frari, San Polo 3072, 30125 Venezia VE, Italy"
+},
+"accademia": {
+"addr": "Campo della Carità, Dorsoduro 1050, 30123 Venezia VE, Italy",
+"q": "Gallerie dell'Accademia, Campo della Carità, Dorsoduro 1050, 30123 Venezia VE, Italy"
+},
+"sanluigi": {
+"addr": "Piazza di San Luigi de' Francesi, 00186 Roma RM, Italy",
+"q": "Chiesa di San Luigi dei Francesi, Piazza di San Luigi de' Francesi, 00186 Roma RM, Italy"
+},
+"doria": {
+"addr": "Via del Corso, 305, 00186 Roma RM, Italy",
+"q": "Galleria Doria Pamphilj, Via del Corso, 305, 00186 Roma RM, Italy"
+},
+"louvre": {
+"addr": "Rue de Rivoli, 75001 Paris, France",
+"q": "Musée du Louvre, Rue de Rivoli, 75001 Paris, France"
+},
+"orsay": {
+"addr": "Esplanade Valéry Giscard d'Estaing, 75007 Paris, France",
+"q": "Musée d'Orsay, Esplanade Valéry Giscard d'Estaing, 75007 Paris, France"
+},
+"orangerie": {
+"addr": "Jardin des Tuileries, Place de la Concorde, 75001 Paris, France",
+"q": "Musée de l'Orangerie, Jardin des Tuileries, Place de la Concorde, 75001 Paris, France"
+},
+"marmottan": {
+"addr": "2 Rue Louis-Boilly, 75016 Paris, France",
+"q": "Musée Marmottan Monet, 2 Rue Louis-Boilly, 75016 Paris, France"
+},
+"pompidou": {
+"addr": "Place Georges-Pompidou, 75004 Paris, France",
+"q": "Centre Pompidou, Place Georges-Pompidou, 75004 Paris, France"
+},
+"fabre": {
+"addr": "39 Boulevard Bonne Nouvelle, 34000 Montpellier, France",
+"q": "Musée Fabre, 39 Boulevard Bonne Nouvelle, 34000 Montpellier, France"
+},
+"ngl": {
+"addr": "Trafalgar Square, London WC2N 5DN, United Kingdom",
+"q": "The National Gallery, Trafalgar Square, London WC2N 5DN, United Kingdom"
+},
+"tateb": {
+"addr": "Millbank, London SW1P 4RG, United Kingdom",
+"q": "Tate Britain, Millbank, London SW1P 4RG, United Kingdom"
+},
+"tatem": {
+"addr": "Bankside, London SE1 9TG, United Kingdom",
+"q": "Tate Modern, Bankside, London SE1 9TG, United Kingdom"
+},
+"courtauld": {
+"addr": "Somerset House, Strand, London WC2R 0RN, United Kingdom",
+"q": "The Courtauld Gallery, Somerset House, Strand, London WC2R 0RN, United Kingdom"
+},
+"wallace": {
+"addr": "Hertford House, Manchester Square, London W1U 3BN, United Kingdom",
+"q": "The Wallace Collection, Hertford House, Manchester Square, London W1U 3BN, United Kingdom"
+},
+"edinburgh": {
+"addr": "The Mound, Edinburgh EH2 2EL, United Kingdom",
+"q": "Scottish National Gallery, The Mound, Edinburgh EH2 2EL, United Kingdom"
+},
+"prado": {
+"addr": "Calle de Ruiz de Alarcón, 23, 28014 Madrid, Spain",
+"q": "Museo Nacional del Prado, Calle de Ruiz de Alarcón, 23, 28014 Madrid, Spain"
+},
+"reina": {
+"addr": "Calle de Santa Isabel, 52, 28012 Madrid, Spain",
+"q": "Museo Nacional Centro de Arte Reina Sofía, Calle de Santa Isabel, 52, 28012 Madrid, Spain"
+},
+"santotome": {
+"addr": "Plaza del Conde, 4, 45002 Toledo, Spain",
+"q": "Iglesia de Santo Tomé, Plaza del Conde, 4, 45002 Toledo, Spain"
+},
+"ghent": {
+"addr": "Sint-Baafsplein, 9000 Gent, Belgium",
+"q": "Sint-Baafskathedraal, Sint-Baafsplein, 9000 Gent, Belgium"
+},
+"antwerp": {
+"addr": "Groenplaats 21, 2000 Antwerpen, Belgium",
+"q": "Onze-Lieve-Vrouwekathedraal, Groenplaats 21, 2000 Antwerpen, Belgium"
+},
+"brussels": {
+"addr": "Rue de la Régence 3, 1000 Bruxelles, Belgium",
+"q": "Musées royaux des Beaux-Arts de Belgique, Rue de la Régence 3, 1000 Bruxelles, Belgium"
+},
+"rijks": {
+"addr": "Museumstraat 1, 1071 XX Amsterdam, Netherlands",
+"q": "Rijksmuseum, Museumstraat 1, 1071 XX Amsterdam, Netherlands"
+},
+"vgm": {
+"addr": "Museumplein 6, 1071 DJ Amsterdam, Netherlands",
+"q": "Van Gogh Museum, Museumplein 6, 1071 DJ Amsterdam, Netherlands"
+},
+"mauritshuis": {
+"addr": "Plein 29, 2511 CS Den Haag, Netherlands",
+"q": "Mauritshuis, Plein 29, 2511 CS Den Haag, Netherlands"
+},
+"kroller": {
+"addr": "Houtkampweg 6, 6731 AW Otterlo, Netherlands",
+"q": "Kröller-Müller Museum, Houtkampweg 6, 6731 AW Otterlo, Netherlands"
+},
+"alte": {
+"addr": "Barer Straße 27, 80333 München, Germany",
+"q": "Alte Pinakothek, Barer Straße 27, 80333 München, Germany"
+},
+"dresden": {
+"addr": "Theaterplatz 1, 01067 Dresden, Germany",
+"q": "Gemäldegalerie Alte Meister, Zwinger, Theaterplatz 1, 01067 Dresden, Germany"
+},
+"hamburg": {
+"addr": "Glockengießerwall 5, 20095 Hamburg, Germany",
+"q": "Hamburger Kunsthalle, Glockengießerwall 5, 20095 Hamburg, Germany"
+},
+"khm": {
+"addr": "Maria-Theresien-Platz, 1010 Wien, Austria",
+"q": "Kunsthistorisches Museum Wien, Maria-Theresien-Platz, 1010 Wien, Austria"
+},
+"albertina": {
+"addr": "Albertinaplatz 1, 1010 Wien, Austria",
+"q": "Albertina, Albertinaplatz 1, 1010 Wien, Austria"
+},
+"belvedere": {
+"addr": "Prinz-Eugen-Straße 27, 1030 Wien, Austria",
+"q": "Oberes Belvedere, Prinz-Eugen-Straße 27, 1030 Wien, Austria"
+},
+"leopold": {
+"addr": "Museumsplatz 1, 1070 Wien, Austria",
+"q": "Leopold Museum, Museumsplatz 1, 1070 Wien, Austria"
+},
+"basel": {
+"addr": "St. Alban-Graben 16, 4051 Basel, Switzerland",
+"q": "Kunstmuseum Basel, St. Alban-Graben 16, 4051 Basel, Switzerland"
+},
+"bern": {
+"addr": "Hodlerstrasse 8–12, 3011 Bern, Switzerland",
+"q": "Kunstmuseum Bern, Hodlerstrasse 8–12, 3011 Bern, Switzerland"
+},
+"zurich": {
+"addr": "Heimplatz 1, 8001 Zürich, Switzerland",
+"q": "Kunsthaus Zürich, Heimplatz 1, 8001 Zürich, Switzerland"
+},
+"oslo": {
+"addr": "Brynjulf Bulls plass 3, 0250 Oslo, Norway",
+"q": "Nasjonalmuseet, Brynjulf Bulls plass 3, 0250 Oslo, Norway"
+},
+"krakow": {
+"addr": "ul. Pijarska 15, 31-015 Kraków, Poland",
+"q": "Muzeum Książąt Czartoryskich (MNK Czartoryski Museum), ul. Pijarska 15, 31-015 Kraków, Poland"
+},
+"hermitage": {
+"addr": "Dvortsovaya Ploshchad, 2, Saint Petersburg, 190000, Russia",
+"q": "State Hermitage Museum, Dvortsovaya Ploshchad, 2, Saint Petersburg, 190000, Russia"
+},
+"tretyakov": {
+"addr": "Lavrushinsky Pereulok, 10, Moscow, 119017, Russia",
+"q": "State Tretyakov Gallery, Lavrushinsky Pereulok, 10, Moscow, 119017, Russia"
+},
+"moma": {
+"addr": "11 West 53rd Street, New York, NY 10019, United States",
+"q": "The Museum of Modern Art, 11 West 53rd Street, New York, NY 10019, United States"
+},
+"met": {
+"addr": "1000 Fifth Avenue, New York, NY 10028, United States",
+"q": "The Metropolitan Museum of Art, 1000 Fifth Avenue, New York, NY 10028, United States"
+},
+"guggenheim": {
+"addr": "1071 Fifth Avenue, New York, NY 10128, United States",
+"q": "Solomon R. Guggenheim Museum, 1071 Fifth Avenue, New York, NY 10128, United States"
+},
+"neue": {
+"addr": "1048 Fifth Avenue, New York, NY 10028, United States",
+"q": "Neue Galerie New York, 1048 Fifth Avenue, New York, NY 10028, United States"
+},
+"buffalo": {
+"addr": "1285 Elmwood Avenue, Buffalo, NY 14222, United States",
+"q": "Buffalo AKG Art Museum, 1285 Elmwood Avenue, Buffalo, NY 14222, United States"
+},
+"aic": {
+"addr": "111 S Michigan Ave, Chicago, IL 60603, United States",
+"q": "Art Institute of Chicago, 111 S Michigan Ave, Chicago, IL 60603, United States"
+},
+"mfa": {
+"addr": "465 Huntington Ave, Boston, MA 02115, United States",
+"q": "Museum of Fine Arts, Boston, 465 Huntington Ave, Boston, MA 02115, United States"
+},
+"philly": {
+"addr": "2600 Benjamin Franklin Pkwy, Philadelphia, PA 19130, United States",
+"q": "Philadelphia Art Museum, 2600 Benjamin Franklin Pkwy, Philadelphia, PA 19130, United States"
+},
+"nga": {
+"addr": "Constitution Ave NW & 6th St NW, Washington, DC 20565, United States",
+"q": "National Gallery of Art, Constitution Ave NW between 3rd and 9th St NW, Washington, DC 20565, United States"
+},
+"phillips": {
+"addr": "1600 21st St NW, Washington, DC 20009, United States",
+"q": "The Phillips Collection, 1600 21st St NW, Washington, DC 20009, United States"
+},
+"walker": {
+"addr": "725 Vineland Pl, Minneapolis, MN 55403, United States",
+"q": "Walker Art Center, 725 Vineland Pl, Minneapolis, MN 55403, United States"
+},
+"sfmoma": {
+"addr": "151 Third St, San Francisco, CA 94103, United States",
+"q": "San Francisco Museum of Modern Art, 151 Third St, San Francisco, CA 94103, United States"
+},
+"lacma": {
+"addr": "5905 Wilshire Blvd, Los Angeles, CA 90036, United States",
+"q": "Los Angeles County Museum of Art, 5905 Wilshire Blvd, Los Angeles, CA 90036, United States"
+},
+"rothko": {
+"addr": "3900 Yupon St, Houston, TX 77006, United States",
+"q": "Rothko Chapel, 3900 Yupon St, Houston, TX 77006, United States"
+},
+"mammx": {
+"addr": "Paseo de la Reforma y Gandhi s/n, Bosque de Chapultepec I Secc., Miguel Hidalgo, 11560 Ciudad de México, CDMX, Mexico",
+"q": "Museo de Arte Moderno, Paseo de la Reforma y Gandhi s/n, Bosque de Chapultepec I Secc., Miguel Hidalgo, 11560 Ciudad de México, CDMX, Mexico"
+},
+"ngaus": {
+"addr": "Parkes Place, Parkes ACT 2600, Australia",
+"q": "National Gallery of Australia, Parkes Place, Parkes ACT 2600, Australia"
+},
+"accademiafi": {
+"addr": "Via Ricasoli 58/60, 50122 Firenze FI, Italy",
+"q": "Galleria dell'Accademia, Via Ricasoli 58/60, 50122 Firenze FI, Italy"
+},
+"stpeter": {
+"addr": "Piazza San Pietro, 00120 Città del Vaticano, Vatican City",
+"q": "Basilica di San Pietro, Piazza San Pietro, 00120 Città del Vaticano, Vatican City"
+},
+"pitti": {
+"addr": "Piazza de' Pitti 1, 50125 Firenze FI, Italy",
+"q": "Galleria Palatina, Palazzo Pitti, Piazza de' Pitti 1, 50125 Firenze FI, Italy"
+},
+"borghese": {
+"addr": "Piazzale Scipione Borghese 5, 00197 Roma RM, Italy",
+"q": "Galleria Borghese, Piazzale Scipione Borghese 5, 00197 Roma RM, Italy"
+},
+"popolo": {
+"addr": "Piazza del Popolo 12, 00187 Roma RM, Italy",
+"q": "Basilica di Santa Maria del Popolo, Piazza del Popolo 12, 00187 Roma RM, Italy"
+},
+"felicita": {
+"addr": "Piazza di Santa Felicita 3, 50125 Firenze FI, Italy",
+"q": "Chiesa di Santa Felicita, Piazza di Santa Felicita 3, 50125 Firenze FI, Italy"
+},
+"pgc": {
+"addr": "Palazzo Venier dei Leoni, Dorsoduro 701, 30123 Venezia VE, Italy",
+"q": "Peggy Guggenheim Collection, Palazzo Venier dei Leoni, Dorsoduro 701, 30123 Venezia VE, Italy"
+},
+"lisbon": {
+"addr": "Rua das Janelas Verdes, 1249-017 Lisboa, Portugal",
+"q": "Museu Nacional de Arte Antiga, Rua das Janelas Verdes, 1249-017 Lisboa, Portugal"
+},
+"toledocat": {
+"addr": "Calle Cardenal Cisneros 1, 45002 Toledo, Spain",
+"q": "Catedral Primada de Toledo, Calle Cardenal Cisneros 1, 45002 Toledo, Spain"
+},
+"berlingg": {
+"addr": "Matthäikirchplatz, 10785 Berlin, Germany",
+"q": "Gemäldegalerie, Matthäikirchplatz, 10785 Berlin, Germany"
+},
+"altenat": {
+"addr": "Bodestraße 1-3, 10178 Berlin, Germany",
+"q": "Alte Nationalgalerie, Bodestraße 1-3, 10178 Berlin, Germany"
+},
+"neuenat": {
+"addr": "Potsdamer Straße 50, 10785 Berlin, Germany",
+"q": "Neue Nationalgalerie, Potsdamer Straße 50, 10785 Berlin, Germany"
+},
+"charlottenburg": {
+"addr": "Spandauer Damm 10-22, 14059 Berlin, Germany",
+"q": "Schloss Charlottenburg, Spandauer Damm 10-22, 14059 Berlin, Germany"
+},
+"sanssouci": {
+"addr": "Im Park Sanssouci 4, 14469 Potsdam, Germany",
+"q": "Bildergalerie Sanssouci, Im Park Sanssouci 4, 14469 Potsdam, Germany"
+},
+"mannheim": {
+"addr": "Friedrichsplatz 4, 68165 Mannheim, Germany",
+"q": "Kunsthalle Mannheim, Friedrichsplatz 4, 68165 Mannheim, Germany"
+},
+"sprengel": {
+"addr": "Kurt-Schwitters-Platz, 30169 Hannover, Germany",
+"q": "Sprengel Museum Hannover, Kurt-Schwitters-Platz, 30169 Hannover, Germany"
+},
+"reinhart": {
+"addr": "Stadthausstrasse 6, 8400 Winterthur, Switzerland",
+"q": "Kunst Museum Winterthur | Reinhart am Stadtgarten, Stadthausstrasse 6, 8400 Winterthur, Switzerland"
+},
+"geneva": {
+"addr": "Terrasse Saint-Victor 2, 1206 Genève, Switzerland",
+"q": "Musée du Petit Palais, Terrasse Saint-Victor 2, 1206 Genève, Switzerland"
+},
+"secession": {
+"addr": "Friedrichstraße 12, 1010 Wien, Austria",
+"q": "Secession, Friedrichstraße 12, 1010 Wien, Austria"
+},
+"mak": {
+"addr": "Stubenring 5, 1010 Wien, Austria",
+"q": "MAK – Museum of Applied Arts, Stubenring 5, 1010 Wien, Austria"
+},
+"versailles": {
+"addr": "Place d'Armes, 78000 Versailles, France",
+"q": "Château de Versailles, Place d'Armes, 78000 Versailles, France"
+},
+"malmaison": {
+"addr": "Avenue du Château de Malmaison, 92500 Rueil-Malmaison, France",
+"q": "Château de Malmaison, Avenue du Château de Malmaison, 92500 Rueil-Malmaison, France"
+},
+"armee": {
+"addr": "129 Rue de Grenelle, 75007 Paris, France",
+"q": "Musée de l'Armée, Hôtel des Invalides, 129 Rue de Grenelle, 75007 Paris, France"
+},
+"moreau": {
+"addr": "14 Rue de la Rochefoucauld, 75009 Paris, France",
+"q": "Musée Gustave Moreau, 14 Rue de la Rochefoucauld, 75009 Paris, France"
+},
+"albi": {
+"addr": "Place Sainte-Cécile, 81000 Albi, France",
+"q": "Musée Toulouse-Lautrec, Palais de la Berbie, Place Sainte-Cécile, 81000 Albi, France"
+},
+"royal": {
+"addr": "Buckingham Palace, London SW1A 1AA, United Kingdom",
+"q": "Buckingham Palace, Buckingham Palace, London SW1A 1AA, United Kingdom"
+},
+"kenwood": {
+"addr": "Hampstead Lane, London NW3 7JR, United Kingdom",
+"q": "Kenwood House, Hampstead Lane, London NW3 7JR, United Kingdom"
+},
+"va": {
+"addr": "Cromwell Road, London SW7 2RL, United Kingdom",
+"q": "Victoria and Albert Museum, Cromwell Road, London SW7 2RL, United Kingdom"
+},
+"keble": {
+"addr": "Keble College, Parks Road, Oxford OX1 3PG, United Kingdom",
+"q": "Keble College Chapel, Keble College, Parks Road, Oxford OX1 3PG, United Kingdom"
+},
+"kelvingrove": {
+"addr": "Argyle Street, Glasgow G3 8AG, United Kingdom",
+"q": "Kelvingrove Art Gallery and Museum, Argyle Street, Glasgow G3 8AG, United Kingdom"
+},
+"denhaag": {
+"addr": "Stadhouderslaan 41, 2517 HV Den Haag, Netherlands",
+"q": "Kunstmuseum Den Haag, Stadhouderslaan 41, 2517 HV Den Haag, Netherlands"
+},
+"munch": {
+"addr": "Edvard Munchs plass 1, 0194 Oslo, Norway",
+"q": "MUNCH, Edvard Munchs plass 1, 0194 Oslo, Norway"
+},
+"russian": {
+"addr": "Inzhenernaya ulitsa 4, Saint Petersburg, 191186, Russia",
+"q": "State Russian Museum, Mikhailovsky Palace, Inzhenernaya ulitsa 4, Saint Petersburg, 191186, Russia"
+},
+"israel": {
+"addr": "Derech Ruppin 11, Jerusalem 9171002, Israel",
+"q": "Israel Museum, Derech Ruppin 11, Jerusalem 9171002, Israel"
+},
+"frick": {
+"addr": "1 East 70th Street, New York, NY 10021, United States",
+"q": "The Frick Collection, 1 East 70th Street, New York, NY 10021, United States"
+},
+"getty": {
+"addr": "1200 Getty Center Drive, Los Angeles, CA 90049, United States",
+"q": "Getty Center, 1200 Getty Center Drive, Los Angeles, CA 90049, United States"
+},
+"barnes": {
+"addr": "2025 Benjamin Franklin Pkwy, Philadelphia, PA 19130, United States",
+"q": "Barnes Foundation, 2025 Benjamin Franklin Pkwy, Philadelphia, PA 19130, United States"
+},
+"yale": {
+"addr": "1111 Chapel Street, New Haven, CT 06510, United States",
+"q": "Yale University Art Gallery, 1111 Chapel Street, New Haven, CT 06510, United States"
+},
+"oberlin": {
+"addr": "87 North Main Street, Oberlin, OH 44074, United States",
+"q": "Allen Memorial Art Museum, 87 North Main Street, Oberlin, OH 44074, United States"
+},
+"cleveland": {
+"addr": "11150 East Boulevard, Cleveland, OH 44106, United States",
+"q": "Cleveland Museum of Art, 11150 East Boulevard, Cleveland, OH 44106, United States"
+},
+"menil": {
+"addr": "1533 Sul Ross Street, Houston, TX 77006, United States",
+"q": "The Menil Collection, 1533 Sul Ross Street, Houston, TX 77006, United States"
+},
+"ransom": {
+"addr": "300 West 21st Street, Austin, TX 78712, United States",
+"q": "Harry Ransom Center, 300 West 21st Street, Austin, TX 78712, United States"
+},
+"moca": {
+"addr": "250 South Grand Avenue, Los Angeles, CA 90012, United States",
+"q": "MOCA Grand Avenue, 250 South Grand Avenue, Los Angeles, CA 90012, United States"
+},
+"olmedo": {
+"addr": "Avenida México 5843, La Noria, Xochimilco, 16030 Ciudad de México, CDMX, Mexico",
+"q": "Museo Dolores Olmedo, Avenida México 5843, La Noria, Xochimilco, 16030 Ciudad de México, CDMX, Mexico"
+},
+"novecento": {
+"addr": "Piazza del Duomo 8, 20123 Milano MI, Italy",
+"q": "Museo del Novecento, Piazza del Duomo 8, 20123 Milano MI, Italy"
+},
+"mamparis": {
+"addr": "11 Avenue du Président Wilson, 75116 Paris, France",
+"q": "Musée d'Art Moderne de Paris, 11 Avenue du Président Wilson, 75116 Paris, France"
+},
+"garnier": {
+"addr": "Place de l'Opéra, 75009 Paris, France",
+"q": "Palais Garnier, Place de l'Opéra, 75009 Paris, France"
+},
+"chagallnice": {
+"addr": "36 Avenue du Docteur Ménard, 06000 Nice, France",
+"q": "Musée national Marc Chagall, 36 Avenue du Docteur Ménard, 06000 Nice, France"
+},
+"thyssen": {
+"addr": "Paseo del Prado 8, 28014 Madrid, Spain",
+"q": "Museo Nacional Thyssen-Bornemisza, Paseo del Prado 8, 28014 Madrid, Spain"
+},
+"wallraf": {
+"addr": "Obenmarspforten, 50667 Köln, Germany",
+"q": "Wallraf-Richartz-Museum, Obenmarspforten, 50667 Köln, Germany"
+},
+"lenbachhaus": {
+"addr": "Luisenstraße 33, 80333 München, Germany",
+"q": "Städtische Galerie im Lenbachhaus, Luisenstraße 33, 80333 München, Germany"
+},
+"pommersfelden": {
+"addr": "Schloß 1, 96178 Pommersfelden, Germany",
+"q": "Schloss Weißenstein, Schloß 1, 96178 Pommersfelden, Germany"
+},
+"carmignano": {
+"addr": "Piazza dei Santi Francesco e Michele 1, 59015 Carmignano PO, Italy",
+"q": "Pieve di San Michele Arcangelo, Piazza dei Santi Francesco e Michele 1, 59015 Carmignano PO, Italy"
+},
+"capodimonte": {
+"addr": "Via Miano 2, 80131 Napoli NA, Italy",
+"q": "Museo e Real Bosco di Capodimonte, Via Miano 2, 80131 Napoli NA, Italy"
+},
+"troyes": {
+"addr": "14 Place Saint-Pierre, 10000 Troyes, France",
+"q": "Musée d'Art Moderne de Troyes, 14 Place Saint-Pierre, 10000 Troyes, France"
+},
+"birmingham": {
+"addr": "Chamberlain Square, Birmingham B3 3DH, United Kingdom",
+"q": "Birmingham Museum and Art Gallery, Chamberlain Square, Birmingham B3 3DH, United Kingdom"
+},
+"ladylever": {
+"addr": "Lower Road, Port Sunlight, Wirral CH62 5EQ, United Kingdom",
+"q": "Lady Lever Art Gallery, Lower Road, Port Sunlight, Wirral CH62 5EQ, United Kingdom"
+},
+"manchester": {
+"addr": "Mosley Street, Manchester M2 3JL, United Kingdom",
+"q": "Manchester Art Gallery, Mosley Street, Manchester M2 3JL, United Kingdom"
+},
+"walkerliv": {
+"addr": "William Brown Street, Liverpool L3 8EL, United Kingdom",
+"q": "Walker Art Gallery, William Brown Street, Liverpool L3 8EL, United Kingdom"
+},
+"snmga": {
+"addr": "75 Belford Road, Edinburgh EH4 3DR, United Kingdom",
+"q": "Scottish National Gallery of Modern Art (Modern One), 75 Belford Road, Edinburgh EH4 3DR, United Kingdom"
+},
+"stedelijk": {
+"addr": "Museumplein 10, 1071 DJ Amsterdam, Netherlands",
+"q": "Stedelijk Museum Amsterdam, Museumplein 10, 1071 DJ Amsterdam, Netherlands"
+},
+"wadsworth": {
+"addr": "600 Main Street, Hartford, CT 06103, United States",
+"q": "Wadsworth Atheneum Museum of Art, 600 Main Street, Hartford, CT 06103, United States"
+},
+"whitney": {
+"addr": "99 Gansevoort Street, New York, NY 10014, United States",
+"q": "Whitney Museum of American Art, 99 Gansevoort Street, New York, NY 10014, United States"
+},
+"masp": {
+"addr": "Avenida Paulista 1578, Bela Vista, São Paulo - SP, 01310-200, Brazil",
+"q": "MASP Museu de Arte de São Paulo, Avenida Paulista 1578, Bela Vista, São Paulo - SP, 01310-200, Brazil"
+},
+"broad": {
+"addr": "221 South Grand Avenue, Los Angeles, CA 90012, United States",
+"q": "The Broad, 221 South Grand Avenue, Los Angeles, CA 90012, United States"
+},
+"pisa": {
+"addr": "Via Riccardo Zandonai, 56125 Pisa PI, Italy",
+"q": "Tuttomondo, Keith Haring mural, Sant'Antonio Abate, Via Riccardo Zandonai, 56125 Pisa PI, Italy"
+},
+"harlem": {
+"addr": "East 128th Street, 2nd Avenue & Harlem River Drive, New York, NY 10035, United States",
+"q": "Crack Is Wack Playground, East 128th Street, 2nd Avenue & Harlem River Drive, New York, NY 10035, United States"
+},
+"pau": {
+"addr": "10 Rue Mathieu Lalanne, 64000 Pau, France",
+"q": "Musée des Beaux-Arts de Pau, 10 Rue Mathieu Lalanne, 64000 Pau, France"
+},
+"muma": {
+"addr": "2 Boulevard Clemenceau, 76600 Le Havre, France",
+"q": "MuMa Musée d'art moderne André Malraux, 2 Boulevard Clemenceau, 76600 Le Havre, France"
+},
+"rodin": {
+"addr": "77 Rue de Varenne, 75007 Paris, France",
+"q": "Musée Rodin, 77 Rue de Varenne, 75007 Paris, France"
+},
+"dallas": {
+"addr": "1717 North Harwood Street, Dallas, TX 75201, United States",
+"q": "Dallas Museum of Art, 1717 North Harwood Street, Dallas, TX 75201, United States"
+},
+"mfah": {
+"addr": "1001 Bissonnet Street, Houston, TX 77005, United States",
+"q": "Museum of Fine Arts, Houston, 1001 Bissonnet Street, Houston, TX 77005, United States"
+},
+"legion": {
+"addr": "100 34th Avenue, San Francisco, CA 94121, United States",
+"q": "Legion of Honor, 100 34th Avenue, San Francisco, CA 94121, United States"
+},
+"harvard": {
+"addr": "32 Quincy Street, Cambridge, MA 02138, United States",
+"q": "Harvard Art Museums, 32 Quincy Street, Cambridge, MA 02138, United States"
+},
+"pushkin": {
+"addr": "Ulitsa Volkhonka 12, 119019 Moscow, Russia",
+"q": "Pushkin State Museum of Fine Arts, Ulitsa Volkhonka 12, 119019 Moscow, Russia"
+},
+"annonciade": {
+"addr": "2 Place Georges Grammont, 83990 Saint-Tropez, France",
+"q": "Musée de l'Annonciade, 2 Place Georges Grammont, 83990 Saint-Tropez, France"
+},
+"dia": {
+"addr": "5200 Woodward Avenue, Detroit, MI 48202, United States",
+"q": "Detroit Institute of Arts, 5200 Woodward Avenue, Detroit, MI 48202, United States"
+},
+"nortonsimon": {
+"addr": "411 West Colorado Boulevard, Pasadena, CA 91105, United States",
+"q": "Norton Simon Museum, 411 West Colorado Boulevard, Pasadena, CA 91105, United States"
+},
+"k20": {
+"addr": "Grabbeplatz 5, 40213 Düsseldorf, Germany",
+"q": "K20 Kunstsammlung Nordrhein-Westfalen, Grabbeplatz 5, 40213 Düsseldorf, Germany"
+},
+"hakf": {
+"addr": "Exercisplan 4, Skeppsholmen, 111 49 Stockholm, Sweden",
+"q": "Moderna Museet, Exercisplan 4, Skeppsholmen, 111 49 Stockholm, Sweden"
+},
+"desmoines": {
+"addr": "4700 Grand Avenue, Des Moines, IA 50312, United States",
+"q": "Des Moines Art Center, 4700 Grand Avenue, Des Moines, IA 50312, United States"
+},
+"ponce": {
+"addr": "2325 Avenida Las Américas, Ponce, PR 00717, Puerto Rico",
+"q": "Museo de Arte de Ponce, 2325 Avenida Las Américas, Ponce, PR 00717, Puerto Rico"
+},
+"joslyn": {
+"addr": "2200 Dodge Street, Omaha, NE 68102, United States",
+"q": "Joslyn Art Museum, 2200 Dodge Street, Omaha, NE 68102, United States"
+},
+"deyoung": {
+"addr": "50 Hagiwara Tea Garden Drive, Golden Gate Park, San Francisco, CA 94118, United States",
+"q": "de Young Museum, 50 Hagiwara Tea Garden Drive, Golden Gate Park, San Francisco, CA 94118, United States"
+},
+"vincoli": {
+"addr": "Piazza di San Pietro in Vincoli 4/a, 00184 Roma RM, Italy",
+"q": "Basilica di San Pietro in Vincoli, Piazza di San Pietro in Vincoli 4/a, 00184 Roma RM, Italy"
+},
+"stsulpice": {
+"addr": "2 Rue Palatine, 75006 Paris, France",
+"q": "Église Saint-Sulpice, 2 Rue Palatine, 75006 Paris, France"
+},
+"smk": {
+"addr": "Sølvgade 48-50, 1307 København K, Denmark",
+"q": "SMK Statens Museum for Kunst, Sølvgade 48-50, 1307 København K, Denmark"
+},
+"museupicasso": {
+"addr": "Carrer de Montcada 15-23, 08003 Barcelona, Spain",
+"q": "Museu Picasso de Barcelona, Carrer de Montcada 15-23, 08003 Barcelona, Spain"
+},
+"necker": {
+"addr": "149 Rue de Sèvres, 75015 Paris, France",
+"q": "Keith Haring Tower, Hôpital Necker-Enfants malades, 149 Rue de Sèvres, 75015 Paris, France"
+},
+"phillymural": {
+"addr": "2147 Ellsworth Street (at 22nd Street), Philadelphia, PA 19146, United States",
+"q": "We the Youth, Keith Haring mural, 2147 Ellsworth Street (at 22nd Street), Philadelphia, PA 19146, United States"
+}
+};
+for(const k in ADDR)if(MUSEUMS[k]){MUSEUMS[k].addr=ADDR[k].addr;MUSEUMS[k].q=ADDR[k].q;}
+if(MUSEUMS.geneva&&!MUSEUMS.geneva.note)MUSEUMS.geneva.note="1998년부터 휴관 중이라 소장품은 다른 미술관의 대여 전시 때만 볼 수 있습니다";
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -1921,7 +2540,7 @@ cOrder.forEach(c=>{
   mh+=`<div class="country" data-country><h2>${esc(c)}</h2>`;
   ms.forEach(k=>{const mu=MUSEUMS[k],list=byC[c][k];
     mh+=`<div class="mcard" data-mcard><div class="mcard-head"><h3>${esc(mu.n)}</h3><span class="o">${esc(mu.o)} · ${esc(mu.c)}</span><span class="cnt">${list.length}점</span></div>
-    ${mu.note?`<div class="mnote">${esc(mu.note)}</div>`:""}${mu.u?`<div class="mnote"><a href="${mu.u}" target="_blank" rel="noopener">${esc(mu.u.replace(/^https:\/\/(www\.)?/,""))} ↗</a></div>`:""}
+    ${mu.note?`<div class="mnote">${esc(mu.note)}</div>`:""}${mu.addr?`<div class="maddr">${esc(mu.addr)}</div>`:""}${(mu.u||mu.addr)?`<div class="mlinks">${mu.u?`<a href="${mu.u}" target="_blank" rel="noopener">웹사이트 ↗</a>`:""}${mu.addr?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mu.q||(mu.o+", "+mu.addr))}" target="_blank" rel="noopener">구글 지도 ↗</a>`:""}</div>`:""}
     <ul class="mlist">${list.map(w=>`<li class="mrow" data-hay="${esc(w.hay)}"><div class="mthumb" data-thumb="${w.id}">${w.cr?`<span class="dot" style="background:${w.m.color}" title="저작권 보호 작품"></span>`:""}</div>
       <div class="txt"><button type="button" data-jump="${w.id}">${esc(w.t)}</button><div class="meta">${esc(w.a.n)} · ${esc(w.y)} · ${esc(w.m.name)}</div></div></li>`).join("")}</ul></div>`;
   });
@@ -2021,6 +2640,13 @@ $("#rooms").addEventListener("click",e=>{
 });
 $("#lb-close").onclick=()=>lb.close();
 lb.addEventListener("click",e=>{if(e.target===lb)lb.close()});
+})();
+
+/* visitor counter (GoatCounter) */
+const GC_CODE="anadia2";
+(function(){if(!GC_CODE||!/^https?:$/.test(location.protocol))return;
+  const sc=document.createElement("script");sc.async=true;sc.src="https://gc.zgo.at/count.js";sc.dataset.goatcounter=`https://${GC_CODE}.goatcounter.com/count`;document.head.appendChild(sc);
+  fetch(`https://${GC_CODE}.goatcounter.com/counter/TOTAL.json`).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.count){const v=$("#visits");v.textContent=`누적 방문 ${d.count}`;v.hidden=false}}).catch(()=>{});
 })();
 </script>
 </body></html>
