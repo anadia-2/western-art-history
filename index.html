@@ -214,7 +214,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
     <p data-i18n="f1"><b>이미지</b> · 저작권이 만료된 작품은 위키백과·위키미디어 공용에서 페이지를 열 때 실시간으로 불러옵니다. 인터넷 연결이 필요하며, 드물게 다른 판본이나 부분 이미지가 표시될 수 있습니다.</p>
     <p data-i18n="f2"><b>저작권</b> · 피카소, 브라크, 달리, 미로, 마그리트, 폴록, 로스코, 드 쿠닝 등 20세기 작가 상당수는 작품 저작권이 아직 유효하여 이미지를 싣지 않고, 이미지 검색과 소장처 링크를 제공합니다.</p>
     <p data-i18n="f3"><b>관람 전 확인</b> · 유명 작품도 해외 대여, 보존 처리, 전시 교체로 자리를 비울 수 있습니다. 방문 전에 각 미술관 웹사이트에서 전시 여부를 확인하세요. 소장처 정보는 2026년 10월 기준입니다.</p>
-    <div class="credit"><span data-i18n="credit">© 2026 JH Kim · 글과 구성의 무단 복제를 금합니다</span><span class="visits" id="visits" hidden></span></div>
+    <div class="credit"><span data-i18n="credit">© 2026 JH Kim · 글과 구성의 무단 복제를 금합니다</span></div>
   </div>
 </footer>
 
@@ -2509,6 +2509,37 @@ const NOTES_EN={"impressionism": " Whistler and Sargent never showed at the Impr
 for(const k in NOTES_EN){const id='m.'+k+'.note';EN[id]=(EN[id]||'')+NOTES_EN[k]}
 })();
 
+/* v9: user-requested swaps */
+(function(){
+const DEL=[["Gustave Courbet","L'Origine du monde"],["Egon Schiele","Seated Male Nude (Self-Portrait)"],["Jackson Pollock","Blue Poles"],["Amedeo Modigliani","Portrait of Léopold Zborowski"],["Henri Matisse","The Green Stripe"]];
+const ADD={
+"Gustave Courbet":[
+ ["아름다운 아일랜드 여인, 조","Jo, La Belle Irlandaise","1865–1866","met","File:Jo, La Belle Irlandaise MET DT1909.jpg",{tip:"휘슬러의 연인이던 조애나 히퍼넌이 거울을 들고 붉은 머리칼을 쓸어내리는 모습입니다. 쿠르베는 같은 그림을 여러 점 그렸고, 그 가운데 하나가 메트로폴리탄에 있습니다."},
+  "Joanna Hiffernan, Whistler's companion, holds a mirror as she runs her fingers through her red hair. Courbet painted several versions; this one is at the Met."],
+ ["봄의 발정기, 수사슴의 싸움","Spring Rutting, Battle of Stags","1861","orsay","File:Courbet - Le Rut du printemps. Combat de cerfs, 1861, RF 326.jpg",{tip:"숲속에서 뿔을 맞부딪치며 싸우는 수사슴들을 커다란 화면에 담은 대작입니다. 사냥을 즐긴 쿠르베는 동물과 숲 풍경을 즐겨 그렸습니다."},
+  "A monumental canvas of stags clashing antlers in a forest. Courbet, a keen hunter, often painted animals and woodland."]],
+"Egon Schiele":[
+ ["자기를 보는 사람 II (죽음과 남자)","Self-Seers II (Death and Man)","1911","leopold","File:Egon Schiele - Self-Seer II (Death and Man) - Google Art Project.jpg",{tip:"화가 자신과 그 뒤에 겹쳐 선 창백한 형상을 그린 이중 자화상입니다. 뒤의 인물은 죽음으로 해석되며, 삶과 죽음에 대한 실레의 집착이 드러납니다."},
+  "A double self-portrait: the painter stands with a pale figure close behind him, usually read as Death. It shows Schiele's preoccupation with life and mortality."],
+ ["두 아이와 어머니 III","Mother with Two Children III","1915–1917","belvedere","File:Egon Schiele - Mutter mit zwei Kindern III - 4473 - Österreichische Galerie Belvedere.jpg",{tip:"창백한 얼굴의 어머니가 알록달록한 옷을 입은 두 아이를 안고 있습니다. 생기 있는 아이들과 지친 어머니의 대비가 눈에 띕니다."},
+  "A pale-faced mother holds two children in brightly patterned clothes. The contrast between the lively children and the weary mother is striking."]],
+"Jackson Pollock":[
+ ["메아리: 넘버 25, 1951","Echo: Number 25, 1951","1951","moma","x",{cr:1,tip:"화려한 색을 버리고 검은 에나멜 물감만으로 그린 '블랙 푸어링' 시기의 대표작입니다. 흘린 선 사이로 사람 형상 같은 이미지가 다시 나타납니다."},
+  "A key work from his 'black pourings' period, made with black enamel paint alone instead of colour. Figure-like images reappear among the poured lines."]],
+"Amedeo Modigliani":[
+ ["안나 즈보롭스카","Anna Zborowska","1917","moma","File:Anna Zborowska 1917 Amedeo Modigliani.jpg",{tip:"모딜리아니의 화상 레오폴드 즈보롭스키의 아내 안나를 그린 초상입니다. 긴 목과 기울어진 얼굴, 단순한 색면이 우아한 분위기를 만듭니다."},
+  "A portrait of Anna, wife of Modigliani's dealer Léopold Zborowski. The long neck, tilted head and simple planes of colour create an elegant mood."]],
+"Henri Matisse":[
+ ["앙드레 드랭의 초상","Portrait of André Derain","1905","tatem","File:Henri matisse, andré derain, 1905 (tate).jpg",{tip:"야수주의가 탄생한 1905년 여름, 콜리우르에서 함께 작업하던 동료 드랭을 그렸습니다. 얼굴에 칠한 초록과 빨강 같은 대담한 색이 눈에 띕니다."},
+  "Painted in the summer of 1905 at Collioure, where Matisse worked alongside Derain as Fauvism was born. Bold greens and reds are used on the face."]]
+};
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+DEL.forEach(([a,t])=>{const ar=idx[a];const i=ar.w.findIndex(w=>w[1]===t);if(i<0)throw new Error("del "+a+t);ar.w.splice(i,1)});
+for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
+MUSEUMS.olmedo.u="https://www.museodoloresolmedo.org.mx";
+MUSEUMS.mammx.u="https://mam.inba.gob.mx";
+})();
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -2741,13 +2772,6 @@ $("#rooms").addEventListener("click",e=>{
 });
 $("#lb-close").onclick=()=>lb.close();
 lb.addEventListener("click",e=>{if(e.target===lb)lb.close()});
-})();
-
-/* visitor counter (GoatCounter) */
-const GC_CODE="anadia2";
-(function(){if(!GC_CODE||!/^https?:$/.test(location.protocol))return;
-  const sc=document.createElement("script");sc.async=true;sc.src="https://gc.zgo.at/count.js";sc.dataset.goatcounter=`https://${GC_CODE}.goatcounter.com/count`;document.head.appendChild(sc);
-  fetch(`https://${GC_CODE}.goatcounter.com/counter/TOTAL.json`).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.count){const v=document.getElementById("visits");v.textContent=(document.documentElement.lang==="en"?"Total visits ":"누적 방문 ")+d.count;v.hidden=false}}).catch(()=>{});
 })();
 </script>
 </body></html>
