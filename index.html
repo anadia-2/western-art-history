@@ -2540,6 +2540,34 @@ MUSEUMS.olmedo.u="https://www.museodoloresolmedo.org.mx";
 MUSEUMS.mammx.u="https://mam.inba.gob.mx";
 })();
 
+/* v10: Avercamp, Vermeer (NG London), Corot (AIC) */
+(function(){
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+const bq=MOVEMENTS.find(m=>m.id==="baroque");
+const ri=bq.artists.findIndex(a=>a.o==="Rembrandt van Rijn");
+bq.artists.splice(ri<0?bq.artists.length:ri,0,{n:"헨드릭 아베르캄프",o:"Hendrick Avercamp",l:"1585–1634",d:"얼어붙은 네덜란드의 겨울 풍경을 그린 화가. 말을 하지 못해 '캄펜의 벙어리'라 불렸습니다.",w:[]});
+idx["Hendrick Avercamp"]=bq.artists[ri<0?bq.artists.length-1:ri];
+EN["a.Hendrick Avercamp"]="Painter of frozen Dutch winter landscapes. Unable to speak, he was known as 'the Mute of Kampen'.";
+const ADD={
+"Hendrick Avercamp":[
+ ["스케이트 타는 사람들이 있는 겨울 풍경","Winter Landscape with Ice Skaters","1608경","rijks","File:Avercamp, Hendrick - Winterlandschap met schaatsers - SK-A-1718.jpg",{tip:"꽁꽁 언 강 위에서 스케이트를 타고 썰매를 끄는 수많은 사람들을 높은 시점에서 내려다보았습니다. 아베르캄프의 대표작으로, 작은 인물 하나하나를 찾아보는 재미가 있습니다."},
+  "Crowds skating and pulling sleds on a frozen river, seen from a high viewpoint. Avercamp's best-known work, full of tiny figures to discover one by one."],
+ ["마을에서의 스케이트","Ice-skating in a Village","1610경","rijks","File:Schaatsenrijden in een dorp Rijksmuseum SK-A-1320.jpeg",{tip:"얼어붙은 마을 수로에서 스케이트와 겨울 놀이를 즐기는 사람들을 그렸습니다. 부유한 시민부터 농민까지 다양한 인물이 한 화면에 어우러져 있습니다."},
+  "Villagers enjoying skating and winter games on a frozen waterway. Wealthy townspeople and peasants mingle in a single scene."],
+ ["도시 근처의 얼음 위 풍경","A Scene on the Ice near a Town","1615경","ngl","File:Hendrick Avercamp - A Scene on the Ice near a Town - WGA1075.jpg",{tip:"도시 성벽 가까이 얼어붙은 물 위에서 사람들이 스케이트와 썰매를 즐기는 모습입니다. 옅은 겨울 하늘과 차가운 공기가 화면 전체에 감돕니다."},
+  "People skating and sledging on the frozen water near a town wall. A pale winter sky and cold air pervade the whole picture."],
+ ["성 근처에서 스케이트 타는 사람들이 있는 겨울 풍경","A Winter Scene with Skaters near a Castle","1608–1609경","ngl","File:Hendrick Averkamp A Winter Scene with Skaters near a Castle.jpg",{tip:"둥근 패널에 그린 작품으로, 성과 나무가 있는 얼음판 위에서 사람들이 겨울 놀이를 즐깁니다. 원형 화면이 마치 볼록 렌즈로 들여다보는 듯한 느낌을 줍니다."},
+  "Painted on a round panel: people enjoy winter pastimes on the ice beside a castle and trees. The circular format feels like looking through a lens."]],
+"Johannes Vermeer":[
+ ["버지널 앞에 선 여인","A Young Woman standing at a Virginal","1670–1672경","ngl","File:Jan Vermeer van Delft - Lady Standing at a Virginal - National Gallery, London.jpg",{tip:"버지널(작은 건반 악기) 앞에 선 여인이 관람자를 바라봅니다. 뒷벽에 걸린 큐피드 그림이 사랑을 암시하며, 같은 미술관에 〈버지널 앞에 앉은 여인〉도 있습니다."},
+  "A young woman standing at a virginal (a small keyboard instrument) looks out at the viewer. The Cupid painting on the wall hints at love; the same gallery also holds his 'Young Woman Seated at a Virginal'."]],
+"Jean-Baptiste-Camille Corot":[
+ ["중단된 독서","Interrupted Reading","1870경","aic","File:Jean Baptiste Camille Corot - Interrupted Reading - 1922.410 - Art Institute of Chicago.jpg",{tip:"책을 무릎에 내려놓고 생각에 잠긴 여인을 그린 말년의 인물화입니다. 풍경화로 이름을 떨친 코로는 이런 인물화를 생전에 거의 전시하지 않았습니다."},
+  "A late figure painting of a woman lost in thought, her book resting on her lap. Famous for his landscapes, Corot rarely exhibited figure paintings like this in his lifetime."]]
+};
+for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
+})();
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
