@@ -2568,6 +2568,27 @@ const ADD={
 for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
 })();
 
+/* v11: Dufy (MAM Paris), Matisse swap, Picasso swap */
+(function(){
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+const DEL=[["Henri Matisse","Woman at the Window"],["Pablo Picasso","Portrait of Daniel-Henry Kahnweiler"]];
+DEL.forEach(([a,t])=>{const ar=idx[a];const i=ar.w.findIndex(w=>w[1]===t);if(i<0)throw new Error("del "+a+t);ar.w.splice(i,1)});
+const ADD={
+"Raoul Dufy":[
+ ["30년 혹은 장밋빛 인생","Thirty Years, or La Vie en Rose","1931","mamparis","x",{cr:1,tip:"작업실 벽과 이젤에 그동안 그린 그림들이 가득한 모습을 분홍빛 화면에 담아, 화가로 보낸 30년을 돌아본 작품입니다."},
+  "His studio walls and easels crowded with earlier paintings, set in a rosy pink: a look back at thirty years as a painter."]],
+"Henri Matisse":[
+ ["곧은 머리의 나디아","Nadia aux cheveux lisses","1948","various","x",{cr:1,tip:"말년에 제작한 애쿼틴트(동판화) 초상으로, 붓으로 그은 듯한 몇 개의 굵은 선만으로 젊은 여인 나디아의 얼굴을 표현했습니다. 판화라 여러 미술관이 판본을 소장하고 있습니다."},
+  "A late aquatint portrait that captures the young model Nadia's face in just a few bold, brush-like lines. As a print, impressions are held by several museums."]],
+"Pablo Picasso":[
+ ["마리테레즈의 초상","Portrait of Marie-Thérèse","1937","picassoparis","x",{cr:1,tip:"연인 마리테레즈 발테르를 밝은 색과 부드러운 곡선으로 그린 초상입니다. 같은 해에 그린 〈도라 마르의 초상〉과 함께 파리 피카소 미술관의 대표 소장품입니다."},
+  "A portrait of his lover Marie-Thérèse Walter in bright colours and soft curves. Together with 'Portrait of Dora Maar', painted the same year, it is a highlight of the Musée Picasso in Paris."],
+ ["프랑수아즈의 초상","Portrait of Françoise","1946","picassoparis","x",{cr:1,tip:"화가 프랑수아즈 질로를 연필과 목탄으로 그린 초상 드로잉입니다. 종이 작품이라 늘 전시되지는 않습니다."},
+  "A portrait drawing of the painter Françoise Gilot in pencil and charcoal. As a work on paper, it is not always on display."]]
+};
+for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
+})();
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
