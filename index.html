@@ -2589,6 +2589,36 @@ const ADD={
 for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
 })();
 
+/* v12: Fragonard (Toledo), Raimundo de Madrazo */
+(function(){
+Object.assign(MUSEUMS,{
+ toledoma:{n:"털리도 미술관",o:"Toledo Museum of Art",c:"미국 털리도",u:"https://www.toledomuseum.org",addr:"2445 Monroe Street, Toledo, OH 43620, USA",q:"Toledo Museum of Art, 2445 Monroe Street, Toledo, OH 43620"}});
+EN["city.미국 털리도"]="Toledo, USA";
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+const fr=idx["Jean-Honoré Fragonard"];const b=fr.w.find(w=>w[1]==="Blindman's Buff");if(b)b[0]="정원의 까막잡기 놀이";
+const re=MOVEMENTS.find(m=>m.id==="realism");
+re.artists.push({n:"라이문도 데 마드라소 이 가레타",o:"Raimundo de Madrazo y Garreta",l:"1841–1920",d:"로마에서 태어난 스페인 화가. 파리 상류층 여성의 초상과 화사한 풍속화로 큰 인기를 얻었습니다.",w:[]});
+idx["Raimundo de Madrazo y Garreta"]=re.artists[re.artists.length-1];
+EN["a.Raimundo de Madrazo y Garreta"]="Rome-born Spanish painter who won great popularity in Paris with portraits of society women and elegant genre scenes.";
+re.note=(re.note||"")+" 라이문도 데 마드라소는 사실주의 운동의 화가는 아니지만, 같은 시대 파리에서 활약한 초상·풍속화가로 이 전시실에서 함께 소개합니다.";
+EN["m.realism.note"]=(EN["m.realism.note"]||"")+" Raimundo de Madrazo was not part of the Realist movement, but as a portrait and genre painter active in Paris in the same period he is presented in this room.";
+const ADD={
+"Jean-Honoré Fragonard":[
+ ["까막잡기 놀이","Blind-Man's Buff","1750–1752경","toledoma","File:Jean-Honoré Fragonard - Blind-Man’s Buff - Google Art Project.jpg",{tip:"눈을 가린 젊은 여인이 술래가 되어 손을 뻗는 장면을 화사한 정원 속에 그렸습니다. 워싱턴 내셔널 갤러리의 초기작 〈그네〉와 짝을 이루는 그림입니다."},
+  "A blindfolded young woman, 'it' in the game, reaches out in a sunny garden. It is the pendant to his early 'The Swing' in the National Gallery of Art, Washington."]],
+"Raimundo de Madrazo y Garreta":[
+ ["목욕 후","After the Bath","1895경","prado","File:RAIMUNDO DE MADRAZO Y GARRETA - Después del baño (Museo del Prado, Madrid, c. 1895).jpg",{tip:"목욕을 마친 여인을 그린 작품으로, 부드러운 살결과 천의 질감을 섬세하게 표현했습니다."},
+  "A woman after her bath, with her soft skin and the textures of the fabrics rendered with great delicacy."],
+ ["창가의 소녀들","Girls at a Window","1875경","met","File:Girls at a Window MET DT253717.jpg",{tip:"창가에 기대어 바깥을 내다보는 소녀들을 그린 풍속화입니다. 밝은 빛과 옷감의 질감을 생생하게 살렸습니다."},
+  "A genre scene of girls leaning at a window and looking out, with bright light and vividly rendered fabrics."],
+ ["가면무도회 참가자들","Masqueraders","1875–1878","met","File:Masqueraders MET DT3156.jpg",{tip:"가면무도회 의상을 차려입은 인물들을 비단과 레이스의 질감까지 섬세하게 그렸습니다. 로버트 레먼 컬렉션 소장품으로 늘 전시되지는 않습니다."},
+  "Figures dressed for a masked ball, painted down to the texture of silk and lace. Part of the Robert Lehman Collection, it is not always on view."],
+ ["마리아 한의 초상","Portrait of María Hahn","1901","prado","File:María Hahn, esposa del pintor, por Raimundo de Madrazo.jpg",{tip:"화가의 아내 마리아 한을 그린 초상으로, 우아한 의상과 차분한 표정이 돋보입니다."},
+  "A portrait of the painter's wife, María Hahn, notable for her elegant dress and calm expression."]]
+};
+for(const a in ADD)ADD[a].forEach(x=>{idx[a].w.push(x.slice(0,6));EN[a+"||"+x[1]+"||"+x[2]]=x[6]});
+})();
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
