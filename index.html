@@ -77,7 +77,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tl-bar{height:10px;border-radius:2px;flex:none}
 .tl-label{font-size:12.5px;white-space:nowrap}
 .tl-item:hover .tl-label{text-decoration:underline}
-.tl-item.flip{flex-direction:row-reverse}
+.tl-item.flip .tl-label{position:absolute;right:calc(100% + 6px);top:50%;transform:translateY(-50%)}
 
 /* rooms */
 .room{margin-top:56px;scroll-margin-top:70px}
@@ -496,7 +496,7 @@ const MOVEMENTS = [
    ["파리의 거리, 비 오는 날","Paris Street; Rainy Day","1877","aic","Paris Street; Rainy Day"],
    ["마루 깎는 사람들","The Floor Scrapers","1875","orsay","The Floor Scrapers"]]}
  ]},
-{id:"post-impressionism",name:"신인상주의 · 후기인상주의",en:"Neo- & Post-Impressionism",years:"1886년 – 1905년",s:1886,e:1906,color:"#94690f",
+{id:"post-impressionism",name:"신인상주의 · 후기인상주의",en:"Neo- & Post-Impressionism",years:"1886년 – 1905년",s:1886,e:1905,color:"#94690f",
  sum:"인상주의를 거친 화가들이 각자 다른 길로 나아간 시기입니다. '후기인상주의'는 하나의 양식이 아니라, 1910년 영국 평론가 로저 프라이가 이들을 묶어 붙인 이름입니다. 이들의 길이 20세기 미술의 출발점이 됩니다.",
  traits:["신인상주의: 색점을 과학적으로 배치하는 점묘법 (쇠라, 시냐크)","세잔: 자연을 원통·구·원뿔로 → 입체주의로","고흐: 감정을 담은 색과 붓질 → 표현주의로","고갱: 평면적 색면과 원시에 대한 동경 → 야수주의와 원시주의로"],
  diff:"인상주의가 눈에 비친 순간의 빛을 기록했다면, 이들은 구조(세잔), 감정(고흐), 상징(고갱), 과학(쇠라)을 더했습니다.",
@@ -520,7 +520,7 @@ const MOVEMENTS = [
   {n:"앙리 드 툴루즈로트레크",o:"Henri de Toulouse-Lautrec",l:"1864–1901",d:"몽마르트르의 밤 문화와 포스터 예술을 그렸습니다.",w:[
    ["물랭 루주에서","At the Moulin Rouge","1892–1895","aic","File:Henri de Toulouse-Lautrec - At the Moulin Rouge - Google Art Project.jpg"]]}
  ]},
-{id:"symbolism",name:"상징주의 · 빈 분리파",en:"Symbolism & Vienna Secession",years:"1880년 – 1910년",s:1880,e:1912,color:"#7a6020",
+{id:"symbolism",name:"상징주의 · 빈 분리파",en:"Symbolism & Vienna Secession",years:"1880년 – 1910년",s:1880,e:1910,color:"#7a6020",
  sum:"눈에 보이는 현실보다 꿈, 신화, 죽음, 관능 같은 내면 세계를 상징으로 표현한 흐름입니다. 빈에서는 클림트가 아카데미에서 벗어난 '빈 분리파'를 만들어 장식적이고 화려한 양식을 펼쳤습니다.",
  traits:["꿈과 신화, 신비주의","팜 파탈, 사랑과 죽음","금박과 장식 문양 (클림트, 아르누보)"],
  diff:"사실주의와 인상주의가 바깥 세계를 관찰했다면, 상징주의는 안쪽의 정신 세계로 눈을 돌립니다. 뭉크도 이 흐름에서 출발했습니다.",
@@ -2680,7 +2680,7 @@ $("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> ${U("rooms","사조")}</
     const x0=x(m.s),bw=Math.max(6,x(m.e)-x0),lw=m.name.length*(isEN?7.6:12.5)+10;
     const flip=x0+bw+6+lw>W, start=flip?x0+bw-(bw+6+lw):x0, end=flip?x0+bw:x0+bw+6+lw;
     let lane=lanesEnd.findIndex(e=>e+8<start);if(lane<0){lane=lanesEnd.length;lanesEnd.push(0)}lanesEnd[lane]=end;
-    m._lane=lane;m._x=start;m._w=bw;m._flip=flip;
+    m._lane=lane;m._x=x0;m._w=bw;m._flip=flip;
   });
   const H=lanesEnd.length*28+4;
   for(let y=1300;y<=2000;y+=50)html+=`<div class="tl-grid" style="left:${x(y)+12}px"></div>`;
