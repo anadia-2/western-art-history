@@ -59,7 +59,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tl-m .nm span:last-child{font-family:var(--f-mono);font-weight:400;font-size:11px;color:var(--muted);white-space:nowrap}
 .tl-m .trk{position:relative;height:6px;background:var(--mat);border-radius:3px}
 .tl-m .trk i{position:absolute;top:0;bottom:0;border-radius:3px;min-width:4px}
-.tl-m .axis{display:flex;justify-content:space-between;font-family:var(--f-mono);font-size:10px;color:var(--muted);padding:2px 12px 4px calc(2.2em + 20px)}
+.tl-m .ax{position:relative;height:14px;font-size:10px}.tl-m .ax span{position:absolute;top:0;transform:translateX(-50%)}.tl-m .ax span:first-child{transform:none}.tl-m .ax span:last-child{transform:translateX(-100%)}.tl-m .axis{display:block;font-family:var(--f-mono);color:var(--muted);padding:2px 12px 4px calc(2.2em + 20px)}
 .jump{display:none;font:inherit;font-size:14px;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);max-width:100%}
 .totop{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:25;font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer}
 @media (max-width:700px){.tl-scroll{display:none}.tl-m{display:block}.jump{display:block;order:1;flex:1 1 0;min-width:0}.tabs{order:0}.themebtn{order:2;margin-left:0;padding:7px 8px}.langbtn{order:2;padding:7px 8px}html[lang=en] .tabs button{padding:7px 9px;font-size:13px}html[lang=en] .jump{padding-left:6px;padding-right:2px;font-size:13px}.search{order:3}.loadstat{display:none}.tl-m button{padding:5px 12px}}
@@ -2694,7 +2694,7 @@ $("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> ${U("rooms","사조")}</
   /* mobile: vertical list with proportional mini bars */
   const pct=y=>Math.max(0,Math.min(100,(y-Y0)/(Y1-Y0)*100));
   const ml=$("#timeline-m");
-  ml.innerHTML=MOVEMENTS.map((m,i)=>`<li><button type="button" data-go="${m.id}"><span class="no">${String(i+1).padStart(2,"0")}</span><span class="nm"><span>${esc(m.name)}</span><span>${m.s}–${m.e}</span></span><span class="trk"><i style="left:${pct(m.s)}%;width:${Math.max(1,pct(m.e)-pct(m.s))}%;background:${m.color}"></i></span></button></li>`).join("")+`<li class="axis"><span>1300</span><span>1500</span><span>1700</span><span>1900</span><span>2000</span></li>`;
+  ml.innerHTML=MOVEMENTS.map((m,i)=>`<li><button type="button" data-go="${m.id}"><span class="no">${String(i+1).padStart(2,"0")}</span><span class="nm"><span>${esc(m.name)}</span><span>${m.s}–${m.e}</span></span><span class="trk"><i style="left:${pct(m.s)}%;width:${Math.max(1,pct(m.e)-pct(m.s))}%;background:${m.color}"></i></span></button></li>`).join("")+`<li class="axis"><div class="ax">${[1300,1400,1500,1600,1700,1800,1900,2000].map(y=>`<span style="left:${pct(y)}%">${y}</span>`).join("")}</div></li>`;
   ml.addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)document.getElementById(b.dataset.go).scrollIntoView()});
   /* jump select */
   const jp=$("#jump");
