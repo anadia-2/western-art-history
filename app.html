@@ -198,8 +198,11 @@ dialog.sheet::backdrop{background:rgba(10,10,8,.72)}
 @media (max-width:760px){.top .lang{margin-left:auto}}
 /* v3: 작품 상세 화면, 이미지가 제목을 가리지 않도록 높이 제한 */
 @media (max-width:760px){
-  .sheet .viewer{height:48vh;height:48dvh;min-height:0;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px}
-  .sheet .viewer img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain}
+  /* 퍼센트 높이 대신 화면 단위로 직접 제한 (iOS Safari에서 flex 안의 % max-height가 무시되는 문제 방지) */
+  .sheet-in{display:block}
+  .sheet .viewer{display:block;height:auto;min-height:0;overflow:hidden;text-align:center;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px}
+  .sheet .viewer img{display:block;margin:0 auto;flex:none;width:auto;height:auto;max-width:100%;max-height:44vh;max-height:44dvh;object-fit:contain}
+  .sheet .viewer .ph{min-height:30vh;display:flex}
   .sheet .info{padding-top:18px}
   .sheet h2{font-size:23px}
 }
