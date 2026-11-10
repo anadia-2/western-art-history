@@ -196,6 +196,13 @@ dialog.sheet::backdrop{background:rgba(10,10,8,.72)}
 .lang:hover{border-color:var(--fg)}
 .top .lang{margin-left:8px}
 @media (max-width:760px){.top .lang{margin-left:auto}}
+/* v3: 작품 상세 화면, 이미지가 제목을 가리지 않도록 높이 제한 */
+@media (max-width:760px){
+  .sheet .viewer{height:48vh;height:48dvh;min-height:0;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px}
+  .sheet .viewer img{max-height:100%;max-width:100%;width:auto;height:auto;object-fit:contain}
+  .sheet .info{padding-top:18px}
+  .sheet h2{font-size:23px}
+}
 </style>
 </head>
 <body>
