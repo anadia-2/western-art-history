@@ -195,12 +195,6 @@ dialog.sheet::backdrop{background:rgba(10,10,8,.72)}
 .lang{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-family:var(--f-mono);font-size:12px;cursor:pointer;white-space:nowrap;flex:none}
 .lang:hover{border-color:var(--fg)}
 .top .lang{margin-left:8px}
-.offp{margin-top:18px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;max-width:720px}
-.offp .msg{flex:1;min-width:0;font-size:13.5px;line-height:1.5}
-.offp .msg b{font-weight:600}
-.offp .bar{flex-basis:100%;height:6px;border-radius:3px;background:var(--mat);overflow:hidden}
-.offp .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .3s}
-.offp .acts{display:flex;gap:8px;flex:none}
 @media (max-width:760px){.top .lang{margin-left:auto}}
 /* v3: 작품 상세 화면, 이미지가 제목을 가리지 않도록 높이 제한 */
 @media (max-width:760px){
@@ -284,17 +278,6 @@ const UI={
  foot:['작품 해설·분류는 <a href="./" target="_blank" rel="noopener">서양미술 전시실</a>(© 2026 JH Kim) 내용을 바탕으로 했습니다. 퍼블릭 도메인 작품 이미지는 위키백과·위키미디어 공용에서 실시간으로 불러오므로 인터넷 연결이 필요합니다. 저작권이 남은 20세기 작품은 이미지를 싣지 않았습니다.',
        'Text and selection are based on <a href="./?lang=en" target="_blank" rel="noopener">Western Art Gallery</a> (© 2026 JH Kim). Public-domain images load live from Wikipedia and Wikimedia Commons, so an internet connection is required. 20th-century works still in copyright are shown without images.'],
 offH:["오프라인 저장","Offline use"],
- offIdle:[n=>`작품 이미지 ${n}점을 휴대폰에 저장하면 인터넷 없이도 볼 수 있어요. 약 80MB이니 와이파이에서 받으세요.`,n=>`Save all ${n} images to this device to browse without an internet connection. About 80 MB, so use Wi-Fi.`],
- offPart:[(s,n)=>`${s} / ${n}점 저장됨. 이어서 저장하면 나머지도 받아요.`,(s,n)=>`${s} of ${n} images saved. Resume to get the rest.`],
- offDone:[n=>`작품 이미지 ${n}점이 모두 저장되어 인터넷 없이도 볼 수 있어요.`,n=>`All ${n} images are saved. The app works without an internet connection.`],
- offNoImg:[n=>` 위키백과에 이미지가 없는 작품 ${n}점은 온라인에서도 이미지가 나오지 않아 제외했어요.`,n=>` ${n} works have no image on Wikipedia, even online, so they are left out.`],
- offBg:["저장 중에는 앱을 화면에 띄워 두세요. 다른 앱으로 넘어가면 멈출 수 있어요.","Keep the app on screen while saving. Switching apps may pause it."],
- offPrep:["이미지 목록을 확인하는 중…","Checking the image list…"],
- offRun:[pc=>`저장 중 ${pc}% · 앱을 화면에 띄워 두세요. 다른 앱으로 넘어가면 멈출 수 있어요.`,pc=>`Saving ${pc}% · keep the app on screen; switching apps may pause it.`],
- offFail:[n=>` · ${n}점은 받지 못했어요. 다시 확인을 누르면 다시 시도해요.`,n=>` · ${n} failed. Tap Check again to retry.`],
- offNet:["인터넷에 연결된 상태에서 저장할 수 있어요.","Connect to the internet to save images."],
- offUsed:[mb=>` 사용 중인 저장 공간 약 ${mb}MB.`,mb=>` About ${mb} MB used.`],
- offSave:["모두 저장","Save all"],offResume:["이어서 저장","Resume"],offStop:["멈춤","Pause"],offAgain:["다시 확인","Check again"],
  sugg:[["모네","고흐","루브르","바로크","렘브란트","Klimt","피렌체","수련","자화상","프라도"],["Monet","Van Gogh","Louvre","Baroque","Rembrandt","Klimt","Florence","Water Lilies","Self-Portrait","Prado"]]
 };
 const U=(k,...a)=>{const v=UI[k][isEN?1:0];return typeof v==="function"?v(...a):v};
@@ -352,13 +335,7 @@ function want(title,cb){
   (waiting[title]??=[]).push(cb);
   queue.add(title);clearTimeout(timer);timer=setTimeout(flush,40);
 }
-function resolve(t,v){IMG[t]=v;if(v)saveMap();(waiting[t]||[]).forEach(cb=>cb(v));delete waiting[t]}
-const HAS_CACHE="caches" in window;
-const OFF_OK="serviceWorker" in navigator&&HAS_CACHE&&(location.protocol==="https:"||location.hostname==="localhost");
-const META="wa-meta-v1",IMGC="wa-img-v1";
-async function loadMap(){if(!HAS_CACHE)return;try{const r=await (await caches.open(META)).match("img-map.json");if(r){const m=await r.json();for(const k in m)if(!(k in IMG))IMG[k]=m[k]}}catch(e){}}
-let saveT=0;
-function saveMap(){if(!HAS_CACHE)return;clearTimeout(saveT);saveT=setTimeout(async()=>{try{const m={};for(const k in IMG)if(IMG[k])m[k]=IMG[k];await (await caches.open(META)).put("img-map.json",new Response(JSON.stringify(m),{headers:{"Content-Type":"application/json"}}))}catch(e){}},800)}
+function resolve(t,v){IMG[t]=v;(waiting[t]||[]).forEach(cb=>cb(v));delete waiting[t]}
 function flush(){
   const all=[...queue];queue=new Set();
   const wt=all.filter(t=>!t.startsWith("File:")),ft=all.filter(t=>t.startsWith("File:"));
@@ -397,73 +374,6 @@ function fill(el){
 const io="IntersectionObserver" in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){io.unobserve(e.target);fill(e.target)}}),{rootMargin:"400px 0px"}):null;
 function hydrate(root){root.querySelectorAll("[data-w]:not([data-done])").forEach(el=>{el.dataset.done=1;io?io.observe(el):fill(el)})}
 
-/* ---------- offline: save every image ---------- */
-const ALL_TITLES=[...new Set(WORKS.filter(w=>!w.cr).map(w=>w.wiki))];
-const OFF={state:"idle",saved:0,total:ALL_TITLES.length,done:0,todo:0,failed:0,mb:0,stop:false};
-async function cachedSet(){try{return new Set((await (await caches.open(IMGC)).keys()).map(r=>r.url))}catch(e){return new Set()}}
-const sleep=ms=>new Promise(r=>setTimeout(r,ms));
-async function offCount(){
-  if(!OFF_OK)return;
-  const have=await cachedSet();
-  const known=ALL_TITLES.filter(t=>t in IMG);
-  OFF.noimg=known.filter(t=>IMG[t]===null).length;
-  OFF.total=ALL_TITLES.length-OFF.noimg;
-  OFF.saved=ALL_TITLES.filter(t=>IMG[t]&&have.has(IMG[t].s)).length;
-  try{const est=await navigator.storage?.estimate?.();if(est)OFF.mb=Math.round(est.usage/1048576)}catch(e){}
-  if(OFF.state!=="run"&&OFF.state!=="prep")OFF.state=OFF.saved>=OFF.total&&known.length===ALL_TITLES.length?"done":OFF.saved>0?"part":"idle";
-  offDraw();
-}
-async function getOne(cache,u){
-  for(let k=0;k<5&&!OFF.stop;k++){
-    try{
-      const r=await fetch(u,{mode:"cors",credentials:"omit"});
-      if(r.ok){await cache.put(u,r);return true}
-      if(r.status===404||r.status===403)return false;
-      const ra=+r.headers.get("Retry-After");await sleep(Math.min(20000,(ra>0?ra*1000:0)||[1500,4000,8000,15000,20000][k]));
-    }catch(e){if(!navigator.onLine)return false;await sleep([1500,4000,8000,15000,20000][k])}
-  }
-  return false;
-}
-async function offSave(){
-  if(OFF.state==="run"||OFF.state==="prep")return;
-  if(!navigator.onLine){OFF.state="net";offDraw();return}
-  OFF.stop=false;OFF.failed=0;OFF.state="prep";offDraw();
-  try{navigator.storage?.persist?.()}catch(e){}
-  // 1) 이미지 주소 확인 (실패한 묶음은 최대 4번 다시 시도)
-  for(let pass=0;pass<4&&!OFF.stop;pass++){
-    const need=ALL_TITLES.filter(t=>!(t in IMG));if(!need.length)break;
-    if(pass)await sleep(2000*pass);
-    const wt=need.filter(t=>!t.startsWith("File:")),ft=need.filter(t=>t.startsWith("File:"));
-    for(let i=0;i<wt.length&&!OFF.stop;i+=50){await batch(wt.slice(i,i+50),false);await sleep(150)}
-    for(let i=0;i<ft.length&&!OFF.stop;i+=50){await batch(ft.slice(i,i+50),true);await sleep(150)}
-  }
-  saveMap();
-  // 2) 이미지 받기 (동시에 3장, 실패하면 간격을 늘려 다시 시도)
-  const have=await cachedSet();
-  const urls=[...new Set(ALL_TITLES.map(t=>IMG[t]&&IMG[t].s).filter(Boolean))].filter(u=>!have.has(u));
-  OFF.todo=urls.length;OFF.done=0;OFF.state="run";offDraw();
-  const cache=await caches.open(IMGC);let i=0;
-  async function worker(){while(!OFF.stop&&i<urls.length){const u=urls[i++];
-    if(!(await getOne(cache,u)))OFF.failed++;
-    OFF.done++;if(OFF.done%3===0||OFF.done===urls.length)offDraw();await sleep(120)}}
-  await Promise.all(Array.from({length:3},worker));
-  OFF.state="idle";await offCount();
-}
-const offPanel=()=>OFF_OK?`<div class="offp" id="offp"></div>`:"";
-function offDraw(){
-  const el=document.getElementById("offp");if(!el)return;
-  let msg,acts="",bar="";
-  const fail=OFF.failed?U("offFail",OFF.failed):"";
-  if(OFF.state==="prep"){msg=U("offPrep");acts=`<button class="btn" data-off="stop">${U("offStop")}</button>`}
-  else if(OFF.state==="run"){const pc=OFF.todo?Math.round(OFF.done/OFF.todo*100):0;msg=U("offRun",pc);acts=`<button class="btn" data-off="stop">${U("offStop")}</button>`;bar=`<div class="bar"><i style="width:${OFF.todo?Math.round(OFF.done/OFF.todo*100):0}%"></i></div>`}
-  else if(OFF.state==="done"){msg=U("offDone",OFF.total)+(OFF.noimg?U("offNoImg",OFF.noimg):"")+(OFF.mb?U("offUsed",OFF.mb):"");acts=`<button class="btn" data-off="save">${U("offAgain")}</button>`}
-  else if(OFF.state==="part"){msg=U("offPart",OFF.saved,OFF.total)+fail+(OFF.noimg?U("offNoImg",OFF.noimg):"");acts=`<button class="btn" data-off="save">${U("offResume")}</button>`}
-  else if(OFF.state==="net"){msg=U("offNet");acts=`<button class="btn" data-off="save">${U("offAgain")}</button>`}
-  else{msg=U("offIdle",OFF.total);acts=`<button class="btn" data-off="save">${U("offSave")}</button>`}
-  el.innerHTML=`<div class="msg"><b>${U("offH")}</b> · ${msg}</div><div class="acts">${acts}</div>${bar}`;
-}
-document.addEventListener("click",e=>{const b=e.target.closest("[data-off]");if(!b)return;if(b.dataset.off==="stop"){OFF.stop=true}else offSave()});
-
 /* ---------- building blocks ---------- */
 const SEARCH_ICON=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg>`;
 const th=(w,cls="th")=>w?`<div class="${cls}" data-w="${w.id}"></div>`:`<div class="${cls}"></div>`;
@@ -480,7 +390,7 @@ function vMovements(){
   <section class="wrap timeline">${MOVEMENTS.map(m=>{
     const picks=[];m.artists.forEach(a=>{const w=firstImg(a.works);if(w&&!w.cr&&picks.length<4)picks.push(w)});
     return `<a class="mrow" href="#/m/${m.id}"><div><div class="myears">${m.s}–${m.e}</div><div class="mbar" style="background:${m.color}"></div></div>
-    <div class="mmain"><div class="mname">${esc(mN(m))}</div><div class="mthumbs">${picks.map(w=>th(w)).join("")}</div><div class="men">${isEN?"":esc(m.en)+" · "}${U("sArt")} ${m.artists.length} · ${U("worksN",m.works.length)}</div></div></a>`}).join("")}</section>`+`<section class="wrap" style="margin-top:28px">${offPanel()}</section>`;
+    <div class="mmain"><div class="mname">${esc(mN(m))}</div><div class="mthumbs">${picks.map(w=>th(w)).join("")}</div><div class="men">${isEN?"":esc(m.en)+" · "}${U("sArt")} ${m.artists.length} · ${U("worksN",m.works.length)}</div></div></a>`}).join("")}</section>`;
 }
 function vMovement(id){
   const m=movById[id];if(!m)return notFound();
@@ -649,7 +559,6 @@ function route(){
   view.innerHTML=html;
   document.querySelectorAll("[data-tab]").forEach(a=>{if(a.dataset.tab===tab)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   $("#back").hidden=!["m","a","mu"].includes(kind);
-  if(!["m","artists","a","museums","mu","search"].includes(kind)){offDraw();offCount()}
   if(kind==="artists")drawArtists();
   if(kind==="museums")drawMuseums();
   if(kind==="search"){drawSearch();if(!st.q&&matchMedia("(hover:hover)").matches)$("#q").focus()}
@@ -675,8 +584,10 @@ view.addEventListener("input",e=>{
   deb=setTimeout(()=>{if(id==="aq"){st.aq=e.target.value;drawArtists()}else if(id==="mq"){st.mq=e.target.value;drawMuseums()}else if(id==="q"){st.q=e.target.value;drawSearch()}},120);
 });
 applyLang();
-Promise.race([loadMap(),new Promise(r=>setTimeout(r,800))]).then(route);
-if(OFF_OK)navigator.serviceWorker.register("sw.js").catch(()=>{});
+route();
+/* 예전 버전의 오프라인 저장(서비스 워커와 저장된 이미지)을 정리 */
+try{navigator.serviceWorker?.getRegistrations?.().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{})}catch(e){}
+try{window.caches?.keys?.().then(ks=>ks.filter(k=>k.startsWith("wa-")).forEach(k=>caches.delete(k))).catch(()=>{})}catch(e){}
 })();
 </script>
 </body>
