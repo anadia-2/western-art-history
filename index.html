@@ -130,6 +130,27 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* museum view */
 .mv{padding-block:28px 40px}
 .country{margin-top:30px}
+.quiz{max-width:720px;margin-top:18px}
+.qz-img{background:var(--mat);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:14px;min-height:240px}
+.qz-img img{max-height:min(56vh,520px);width:auto;max-width:100%;object-fit:contain}
+.qz-q{font-weight:700;font-size:17px;margin:16px 0 10px}
+.qz-opts{display:grid;gap:8px}
+.qz-opts button{font:inherit;text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);cursor:pointer;line-height:1.4}
+.qz-opts button:hover:not(:disabled){border-color:var(--fg)}
+.qz-opts button b{display:block;font-size:15px}
+.qz-opts button span{font-size:13px;color:var(--muted)}
+.qz-opts button.wrong{border-color:#b3261e;background:color-mix(in srgb,#b3261e 10%,var(--surface));text-decoration:line-through;cursor:default;opacity:.75}
+.qz-opts button.right{border-color:#1e7a3a;background:color-mix(in srgb,#1e7a3a 12%,var(--surface))}
+.qz-msg{scroll-margin-top:90px;margin-top:12px;font-weight:600;min-height:1.4em}
+.qz-msg.no{color:#b3261e}.qz-msg.ok{color:#1e7a3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .qz-msg.no{color:#f2a49e}:root:not([data-theme="light"]) .qz-msg.ok{color:#8fd6a2}}
+:root[data-theme="dark"] .qz-msg.no{color:#f2a49e}:root[data-theme="dark"] .qz-msg.ok{color:#8fd6a2}
+.qz-ans{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:16px 18px}
+.qz-ans .t{font-weight:700;font-size:17px}.qz-ans .row{margin-top:4px;font-size:14px}.qz-ans .lbl{color:var(--muted);margin:0 8px 0 0;letter-spacing:0;text-transform:none;font-size:13px;font-family:inherit;display:inline}
+.qz-ans .tip{font-size:14px;color:var(--fg);margin-top:10px}
+.qz-ans .mlinks{margin-top:10px}
+@media (max-width:700px){.qz-msg{scroll-margin-top:170px}.qz-img{min-height:200px}}
+.qz-next{margin-top:14px;font:inherit;font-weight:600;padding:10px 18px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
 .alpha{margin-top:26px}.alpha>h2{font-family:var(--f-display);font-weight:800;font-size:24px;margin:0 0 2px;color:var(--muted)}
 .acard .mv-tag{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .country h2{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0 0 4px}
@@ -183,6 +204,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
       <button id="tab-rooms" role="tab" aria-selected="true" data-i18n="tabRooms">사조별</button>
       <button id="tab-artists" role="tab" aria-selected="false" data-i18n="tabArtists">화가별</button>
       <button id="tab-museums" role="tab" aria-selected="false" data-i18n="tabMuseums">미술관별</button>
+      <button id="tab-quiz" role="tab" aria-selected="false" data-i18n="tabQuiz">퀴즈</button>
     </div>
     <div class="search"><input id="q" type="search" placeholder="화가, 작품, 미술관, 도시 검색 (예: 모네, 오르세, 런던)" aria-label="검색"></div>
     <select class="jump" id="jump" aria-label="전시실로 이동"><option value="" data-i18n="jump">전시실로 이동…</option></select>
@@ -214,6 +236,13 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
       <h2 class="h2" data-i18n="mvH">미술관별로 보기</h2>
       <p class="sub" data-i18n="mvSub">여행 계획용입니다. 나라별로 묶었고, 작품이 많은 미술관부터 보여 줍니다. 작품 이름을 누르면 사조별 전시실의 해당 작품으로 이동합니다.</p>
       <div id="museums"></div>
+    </div>
+  </section>
+  <section id="view-quiz" hidden>
+    <div class="wrap mv">
+      <h2 class="h2" data-i18n="qzH">퀴즈</h2>
+      <p class="sub" data-i18n="qzSub">작품을 보고 화가와 제목을 맞혀 보세요. 퀴즈 탭을 누르거나 '다음 문제'를 누를 때마다 새 문제가 나옵니다. 이미지가 있는 작품만 나옵니다.</p>
+      <div id="quiz" class="quiz" aria-live="polite"></div>
     </div>
   </section>
   <div class="wrap empty" id="empty" hidden data-i18n="empty">검색 결과가 없습니다. 한글 이름이나 원어 이름으로 다시 찾아보세요.</div>
@@ -2456,6 +2485,19 @@ const UI_EN={
 "tabRooms": "By movement",
 "tabMuseums": "By museum",
 "tabArtists": "By artist",
+"tabQuiz": "Quiz",
+"qzWait": "Images are still loading. Tap the Quiz tab again in a moment.",
+"qzAlt": "Quiz artwork",
+"qzQ": "Who painted this work, and what is it called?",
+"qzWrong": "Not quite. Try again.",
+"qzRight": "Correct.",
+"qzArtist": "Artist",
+"qzMove": "Movement",
+"qzWhere": "Where to see it",
+"qzRoom": "See it in its room →",
+"qzNext": "Next question",
+"qzH": "Quiz",
+"qzSub": "Look at the work and guess the artist and title. A new question appears each time you tap the Quiz tab or Next question. Only works with an image are used.",
 "avH": "Browse by artist",
 "avSub": "Artists in alphabetical order. Tap a work to jump to it in its movement room.",
 "totopTop": "↑ Top",
@@ -2687,7 +2729,7 @@ if(isEN){document.documentElement.lang="en";document.title=UI_EN.title;
     m.traits=m.traits.map((t,i)=>E("m."+m.id+".t"+i,t));if(m.note)m.note=E("m."+m.id+".note",m.note);
     m.artists.forEach(a=>{a.d=E("a."+a.o,a.d);a.l=enDate(a.l)})});
 }
-if(isEN&&narrow.matches){$("#tab-rooms").textContent="Movements";$("#tab-artists").textContent="Artists";$("#tab-museums").textContent="Museums";$("#jump option").textContent="Rooms"}
+if(isEN&&narrow.matches){$("#tab-rooms").textContent="Movements";$("#tab-artists").textContent="Artists";$("#tab-quiz").textContent="Quiz";$("#tab-museums").textContent="Museums";$("#jump option").textContent="Rooms"}
 $("#langbtn").onclick=()=>{const nl=isEN?"ko":"en";store.set("wa-lang",nl);const u=new URL(location.href);u.searchParams.set("lang",nl);location.href=u.toString()};
 
 /* theme */
@@ -2823,9 +2865,10 @@ $("#artists").innerHTML=ah;
 
 /* tabs */
 let view="rooms";
-const VIEWS=["rooms","artists","museums"];
+const VIEWS=["rooms","artists","museums","quiz"];
 function setView(v){view=v;VIEWS.forEach(k=>{$("#view-"+k).hidden=v!==k;$("#tab-"+k).setAttribute("aria-selected",v===k)});
   const tt=$("#totop");tt.textContent=v==="rooms"?U("totop","↑ 연대표"):U("totopTop","↑ 맨 위로");tt.setAttribute("aria-label",v==="rooms"?U("totop","연대표로 돌아가기"):U("totopTop","맨 위로"));
+  if(v==="quiz")newQuiz();
   filter();scrollTo({top:0})}
 VIEWS.forEach(k=>$("#tab-"+k).onclick=()=>setView(k));
 const jumpTo=e=>{const b=e.target.closest("[data-jump]");if(!b)return;
@@ -2835,6 +2878,7 @@ $("#museums").addEventListener("click",jumpTo);$("#artists").addEventListener("c
 
 /* search */
 function filter(){
+  if(view==="quiz"){$("#empty").hidden=true;return}
   const q=$("#q").value.trim().toLowerCase();let any=false;
   if(view==="rooms"){
     document.querySelectorAll(".room").forEach(r=>{let rv=false;
@@ -2902,6 +2946,43 @@ async function loadImages(){
   store.set(CACHE_KEY,cache);progress();
 }
 loadImages();
+
+/* quiz: show a work (image only), pick artist + title from 4 options */
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let lastQ=null;
+function newQuiz(){
+  const box=$("#quiz");
+  const pool=pd.filter(w=>imgs[w.id]&&w.id!==lastQ);
+  if(!pool.length){box.innerHTML=`<p class="sub">${U("qzWait","작품 이미지를 불러오는 중입니다. 잠시 후 퀴즈 탭을 다시 눌러 주세요.")}</p>`;return}
+  const ans=pick(pool);lastQ=ans.id;
+  /* distractors: other artists, about half from the same movement */
+  const used=new Set([ans.a.o]),opts=[ans];
+  const same=shuffle(WORKS.filter(w=>w.mi===ans.mi&&w.a.o!==ans.a.o)),rest=shuffle(WORKS.filter(w=>w.a.o!==ans.a.o));
+  for(const w of [...same.slice(0,2),...rest]){if(opts.length>=4)break;if(!used.has(w.a.o)){used.add(w.a.o);opts.push(w)}}
+  shuffle(opts);
+  const info=imgs[ans.id],big=info.s.replace(/\/\d+px-/,"/800px-");
+  box.innerHTML=`<div class="qz-img"><img src="${big}" alt="${U("qzAlt","퀴즈 작품 이미지")}" onerror="this.onerror=null;this.src='${info.s}'"></div>
+   <div class="qz-q">${U("qzQ","이 작품의 화가와 제목은 무엇일까요?")}</div>
+   <div class="qz-opts">${opts.map(w=>`<button type="button" data-ok="${w===ans?1:0}"><b>${esc(w.an)}</b><span>${esc(w.t)}</span></button>`).join("")}</div>
+   <div class="qz-msg" role="status"></div><div class="qz-res"></div>`;
+  box.querySelector(".qz-opts").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const msg=box.querySelector(".qz-msg");
+    if(b.dataset.ok!=="1"){b.classList.add("wrong");b.disabled=true;msg.className="qz-msg no";msg.textContent=U("qzWrong","오답입니다. 다시 선택해 보세요.");return}
+    b.classList.add("right");box.querySelectorAll(".qz-opts button").forEach(x=>x.disabled=true);
+    msg.className="qz-msg ok";msg.textContent=U("qzRight","정답입니다.");
+    const mu=ans.mu,w=ans;
+    box.querySelector(".qz-res").innerHTML=`<div class="qz-ans"><div class="t">${esc(w.t)}</div>${w.o?`<div class="row" style="color:var(--muted);font-style:italic">${esc(w.o)}</div>`:""}
+      <div class="row"><span class="lbl">${U("qzArtist","화가")}</span>${esc(w.an)}${isEN?"":` (${esc(w.a.o)})`} · ${esc(w.y)}</div>
+      <div class="row"><span class="lbl">${U("qzMove","사조")}</span><span class="mv-tag" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:${w.m.color}"></span>${esc(w.m.name)}</div>
+      <div class="row"><span class="lbl">${U("qzWhere","볼 수 있는 곳")}</span>${esc(w.mn)}${w.mc?", "+esc(w.mc):""}</div>
+      ${w.tip?`<div class="tip">${esc(w.tip)}</div>`:""}
+      <div class="mlinks">${mu.u?`<a href="${mu.u}" target="_blank" rel="noopener">${U("site","웹사이트 ↗")}</a>`:""}${mu.addr?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mu.q||(mu.o+", "+mu.addr))}" target="_blank" rel="noopener">${U("map","구글 지도 ↗")}</a>`:""}<a href="#" data-go-work="${w.id}">${U("qzRoom","전시실에서 보기 →")}</a></div></div>
+      <button type="button" class="qz-next">${U("qzNext","다음 문제")}</button>`;
+    msg.scrollIntoView({block:"start",behavior:"smooth"});
+    box.querySelector(".qz-next").onclick=()=>{newQuiz();scrollTo({top:0})};
+    box.querySelector("[data-go-work]").onclick=ev=>{ev.preventDefault();setView("rooms");const el=document.getElementById(w.id);el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)};
+  };
+}
 
 /* lightbox */
 const lb=$("#lb");
