@@ -185,6 +185,30 @@ dialog.sheet::backdrop{background:rgba(10,10,8,.72)}
   .sheet .info{overflow:visible;padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 }
 .foot{color:var(--muted);font-size:12.5px;padding-block:30px 10px;border-top:1px solid var(--line);margin-top:40px;line-height:1.6}
+/* quiz */
+.qz{max-width:720px}
+.qz-img{position:relative;background:var(--mat);border-radius:10px;display:flex;align-items:center;justify-content:center;padding:14px;min-height:260px}
+.qz-img img{max-height:min(55vh,520px);width:auto;max-width:100%;object-fit:contain;display:block}
+.qz-img .wait{color:var(--muted);font-size:13px}
+.qz-q{font-weight:700;font-size:17px;margin:18px 0 10px}
+.qz-opts{display:grid;gap:8px}
+.qz-opts button{font:inherit;text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);cursor:pointer;line-height:1.4}
+.qz-opts button:hover:not(:disabled){border-color:var(--fg)}
+.qz-opts button b{display:block;font-size:15px}
+.qz-opts button span{font-size:13px;color:var(--muted)}
+.qz-opts button.wrong{border-color:#b3261e;background:color-mix(in srgb,#b3261e 10%,var(--surface));text-decoration:line-through;cursor:default;opacity:.75}
+.qz-opts button.right{border-color:#1e7a3a;background:color-mix(in srgb,#1e7a3a 12%,var(--surface));cursor:default}
+.qz-opts button:disabled{color:var(--fg)}
+.qz-msg{margin-top:12px;font-weight:600;min-height:1.4em;scroll-margin-top:80px}
+.qz-msg.no{color:#b3261e}.qz-msg.ok{color:#1e7a3a}
+@media (prefers-color-scheme:dark){.qz-msg.no{color:#f2a49e}.qz-msg.ok{color:#8fd6a2}}
+.qz-ans{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:16px 18px}
+.qz-ans h2{font-family:var(--f-display);font-size:21px;margin:6px 0 2px}
+.qz-ans .orig{color:var(--muted);font-style:italic;margin-bottom:12px}
+.qz-ans .tip{margin:0 0 12px}
+.qz-ans .meta dt{font-family:inherit;font-size:13px;letter-spacing:0}
+.qz-next{margin-top:16px;font:inherit;font-weight:600;padding:10px 20px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
+@media (max-width:760px){.qz-img{min-height:200px}.qz-msg{scroll-margin-top:70px}.qz{padding-bottom:20px}}
 </style>
 <style>
 /* v2: 작품 전체가 보이도록 액자(매트) 안에 맞춤, 언어 전환 버튼 */
@@ -217,6 +241,7 @@ dialog.sheet::backdrop{background:rgba(10,10,8,.72)}
       <a href="#/movements" data-tab="movements"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 20h18M5 20V9l7-5 7 5v11M9 20v-6h6v6"/></svg><span data-i="tMov"></span></a>
       <a href="#/artists" data-tab="artists"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.6-.8 1.6-1.6 0-1.1-.9-1.4-.9-2.4 0-.9.8-1.6 1.7-1.6H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3Z"/><circle cx="7.5" cy="11" r="1.2"/><circle cx="10.5" cy="7.5" r="1.2"/><circle cx="15" cy="7.5" r="1.2"/></svg><span data-i="tArt"></span></a>
       <a href="#/museums" data-tab="museums"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span data-i="tMus"></span></a>
+      <a href="#/quiz" data-tab="quiz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.3a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.2-2.5 3.8"/><circle cx="12" cy="17" r=".6" fill="currentColor"/></svg><span data-i="tQuiz"></span></a>
       <a href="#/search" data-tab="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.2-4.2"/></svg><span data-i="tSearch"></span></a>
     </nav>
     <button class="lang" id="lang" type="button"></button>
@@ -250,7 +275,11 @@ const OTHER_KEYS=["private","unknown","various","lost"];
 const qp=new URLSearchParams(location.search).get("lang");
 let isEN=qp?qp==="en":!(navigator.language||"ko").toLowerCase().startsWith("ko");
 const UI={
- brand:["서양미술 전시실","Western Art Gallery"],tMov:["사조","Movements"],tArt:["화가","Artists"],tMus:["미술관","Museums"],tSearch:["검색","Search"],
+ brand:["서양미술 전시실","Western Art Gallery"],tMov:["사조","Movements"],tArt:["화가","Artists"],tMus:["미술관","Museums"],tSearch:["검색","Search"],tQuiz:["퀴즈","Quiz"],
+ qzEyebrow:["퀴즈","Quiz"],qzH:["이 작품은 누구의 무엇일까요?","Whose work is this?"],qzLead:["작품을 보고 화가와 제목을 맞혀 보세요. 퀴즈 탭이나 '다음 문제'를 누를 때마다 새 문제가 나옵니다. 이미지가 있는 작품만 나옵니다.","Look at the work and guess the artist and title. A new question appears each time you tap Quiz or Next question. Only works with an image are used."],
+ qzQ:["이 작품의 화가와 제목은 무엇일까요?","Who painted this work, and what is it called?"],qzWrong:["오답입니다. 다시 선택해 보세요.","Not quite. Try again."],qzRight:["정답입니다.","Correct."],
+ qzNext:["다음 문제","Next question"],qzWait:["작품을 고르는 중…","Choosing a work…"],qzFail:["이미지를 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 퀴즈 탭을 다시 눌러 주세요.","Couldn't load an image. Check your connection and tap Quiz again."],
+ qzMov:["사조","Movement"],qzWhere:["볼 수 있는 곳","Where to see it"],qzMusPage:["이 미술관의 다른 작품 →","More works at this museum →"],
  langBtn:["EN","한국어"],back:["뒤로","Back"],close:["닫기","Close"],
  movEyebrow:["사조별 전시실 · 연대순","Rooms by movement · in time order"],movH:["르네상스에서 신표현주의까지","From the Renaissance to Neo-Expressionism"],
  movLead:["23개 전시실을 시대 순서로 걸었습니다. 전시실을 누르면 사조의 특징과 화가, 작품을 볼 수 있습니다.","23 rooms hung in time order. Open a room to see what defines the movement, its artists and their works."],
@@ -489,6 +518,52 @@ function drawSearch(){
 }
 const notFound=()=>`<section class="wrap intro"><h1 class="title">${U("nf")}</h1><p class="lead"><a href="#/movements">${U("nfBack")}</a></p></section>`;
 
+/* ---------- quiz ---------- */
+function vQuiz(){
+  return `<section class="wrap intro qz"><div class="eyebrow">${U("qzEyebrow")}</div><h1 class="title">${U("qzH")}</h1><p class="lead">${U("qzLead")}</p>
+  <div id="qzbox" style="margin-top:18px" aria-live="polite"></div></section>`;
+}
+const QPOOL=WORKS.filter(w=>!w.cr&&w.wiki&&w.wiki!=="x");
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+let qzToken=0,qzLast=-1;
+function drawQuiz(tries=0){
+  const box=$("#qzbox");if(!box)return;const tok=++qzToken;
+  if(tries>12){box.innerHTML=`<div class="empty">${U("qzFail")}</div>`;return}
+  if(!tries)box.innerHTML=`<div class="qz-img"><span class="wait">${U("qzWait")}</span></div>`;
+  let ans;do{ans=rnd(QPOOL)}while(QPOOL.length>1&&ans.id===qzLast);
+  want(ans.wiki,info=>{
+    if(tok!==qzToken)return;
+    if(!info){drawQuiz(tries+1);return}
+    qzLast=ans.id;
+    const used=new Set([ans.a.o]),opts=[ans];
+    const same=shuf(WORKS.filter(w=>w.m===ans.m&&w.a.o!==ans.a.o)),rest=shuf(WORKS.filter(w=>w.a.o!==ans.a.o));
+    for(const w of [...same.slice(0,2),...rest]){if(opts.length>=4)break;if(!used.has(w.a.o)){used.add(w.a.o);opts.push(w)}}
+    shuf(opts);
+    box.innerHTML=`<div class="qz-img"><img alt="${esc(U("qzQ"))}"></div>
+     <div class="qz-q">${U("qzQ")}</div>
+     <div class="qz-opts">${opts.map(w=>`<button type="button" data-ok="${w===ans?1:0}"><b>${esc(aN(w.a))}</b><span>${esc(wT(w))}</span></button>`).join("")}</div>
+     <div class="qz-msg" role="status"></div><div class="qz-res"></div>`;
+    const img=box.querySelector(".qz-img img");img.onerror=()=>{if(img.src!==info.s){img.src=info.s}else{drawQuiz(tries+1)}};img.src=info.s.replace(/\/\d+px-/,"/800px-");
+    box.querySelector(".qz-opts").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const msg=box.querySelector(".qz-msg");
+      if(b.dataset.ok!=="1"){b.classList.add("wrong");b.disabled=true;msg.className="qz-msg no";msg.textContent=U("qzWrong");return}
+      b.classList.add("right");box.querySelectorAll(".qz-opts button").forEach(x=>x.disabled=true);msg.className="qz-msg ok";msg.textContent=U("qzRight");
+      const w=ans,mu=w.mu,isOther=OTHER_KEYS.includes(w.mk),tip=wTip(w);
+      box.querySelector(".qz-res").innerHTML=`<div class="qz-ans"><div class="eyebrow"><span class="dot" style="background:${w.m.color}"></span> ${esc(mN(w.m))}</div>
+       <h2>${esc(wT(w))}</h2>${wO(w)?`<div class="orig">${esc(wO(w))}</div>`:`<div style="height:10px"></div>`}
+       <dl class="meta"><dt>${U("artist")}</dt><dd><a href="#/a/${w.a.id}">${esc(aN(w.a))}</a> <span style="color:var(--muted)">${esc(w.a.l)}</span></dd>
+       <dt>${U("date")}</dt><dd>${esc(D(w.y))}</dd>
+       <dt>${U("qzMov")}</dt><dd><a href="#/m/${w.m.id}">${esc(mN(w.m))}</a></dd>
+       <dt>${U("qzWhere")}</dt><dd>${isOther?esc(muN(w.mk)):`<a href="#/mu/${w.mk}">${esc(muN(w.mk))}</a>`}<br><span style="color:var(--muted)">${esc(muC(w.mk))}</span></dd></dl>
+       ${tip?`<p class="tip">${esc(tip)}</p>`:""}
+       <div class="mlinks">${mu.u?`<a class="btn" target="_blank" rel="noopener" href="${esc(mu.u)}">${U("museumSite")}</a>`:""}${mu.q||mu.addr?`<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mu.q||mu.addr)}">${U("map")}</a>`:""}${isOther?"":`<a class="btn" href="#/mu/${w.mk}">${U("qzMusPage")}</a>`}</div></div>
+       <button type="button" class="qz-next">${U("qzNext")}</button>`;
+      box.querySelector(".qz-next").onclick=()=>{drawQuiz();scrollTo(0,0)};
+      msg.scrollIntoView({block:"start",behavior:"smooth"});
+    };
+  });
+}
+
 /* ---------- work sheet ---------- */
 const sheet=$("#sheet");let cur=null,curList=null;
 const imgSearchBtn=w=>`<a class="btn" style="color:#eee;border-color:#666;background:transparent" target="_blank" rel="noopener" href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(w.o+" "+w.a.o)}">${U("imgSearch")}</a>`;
@@ -553,6 +628,7 @@ function route(){
     case "museums":tab="museums";html=vMuseums();break;
     case "mu":tab="museums";html=vMuseum(arg);break;
     case "search":tab="search";html=vSearch();break;
+    case "quiz":tab="quiz";html=vQuiz();break;
     default:html=vMovements();
   }
   if(sheet.open)closeSheet();
@@ -561,6 +637,7 @@ function route(){
   $("#back").hidden=!["m","a","mu"].includes(kind);
   if(kind==="artists")drawArtists();
   if(kind==="museums")drawMuseums();
+  if(kind==="quiz"){drawQuiz();scrollMem[key]=0}
   if(kind==="search"){drawSearch();if(!st.q&&matchMedia("(hover:hover)").matches)$("#q").focus()}
   hydrate(view);
   scrollTo(0,scrollMem[key]||0);
@@ -568,6 +645,7 @@ function route(){
   document.title=t?`${t} · ${U("brand")}`:U("brand");
 }
 window.addEventListener("hashchange",route);
+document.querySelector('[data-tab="quiz"]').addEventListener("click",e=>{if(location.hash==="#/quiz"){e.preventDefault();drawQuiz();scrollTo(0,0)}});
 $("#back").onclick=()=>history.length>1?history.back():(location.hash="#/movements");
 
 view.addEventListener("click",e=>{
