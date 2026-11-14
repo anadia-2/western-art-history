@@ -62,7 +62,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .tl-m .ax{position:relative;height:14px;font-size:10px}.tl-m .ax span{position:absolute;top:0;transform:translateX(-50%)}.tl-m .ax span:first-child{transform:none}.tl-m .ax span:last-child{transform:translateX(-100%)}.tl-m .axis{display:block;font-family:var(--f-mono);color:var(--muted);padding:2px 12px 4px calc(2.2em + 20px)}
 .jump{display:none;font:inherit;font-size:14px;padding:7px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);max-width:100%}
 .totop{position:fixed;right:max(14px,env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:25;font:inherit;font-size:13px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);box-shadow:0 2px 8px rgba(0,0,0,.18);cursor:pointer}
-@media (max-width:700px){.tl-scroll{display:none}.tl-m{display:block}.jump{display:block;order:1;flex:1 1 0;min-width:0}.tabs{order:0}.themebtn{order:2;margin-left:0;padding:7px 8px}.langbtn{order:2;padding:7px 8px}html[lang=en] .tabs button{padding:7px 9px;font-size:13px}html[lang=en] .jump{padding-left:6px;padding-right:2px;font-size:13px}.search{order:3}.loadstat{display:none}.tl-m button{padding:5px 12px}}
+@media (max-width:700px){.tl-scroll{display:none}.tl-m{display:block}.jump{display:block;order:1;flex:1 1 0;min-width:0}.tabs{order:0;flex:1 1 100%}.tabs button{flex:1 1 0;padding:7px 4px}.themebtn{order:2;margin-left:0;padding:7px 8px}.langbtn{order:2;padding:7px 8px}html[lang=en] .tabs button{padding:7px 9px;font-size:13px}html[lang=en] .jump{padding-left:6px;padding-right:2px;font-size:13px}.search{order:3}.loadstat{display:none}.tl-m button{padding:5px 12px}}
 /* timeline */
 .tl-sec{padding-block:28px 8px}
 .h2{font-family:var(--f-display);font-weight:600;font-size:22px;margin:0 0 4px}
@@ -81,7 +81,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 /* rooms */
 .room{margin-top:56px;scroll-margin-top:70px}
-@media (max-width:700px){.room{scroll-margin-top:122px}}
+@media (max-width:700px){.room{scroll-margin-top:164px}}
 .room-head{color:var(--ink-on-wall);border-radius:10px 10px 0 0}
 .room-head .inner{padding:26px 26px 22px}
 .room-no{font-family:var(--f-mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;opacity:.85}
@@ -130,6 +130,8 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* museum view */
 .mv{padding-block:28px 40px}
 .country{margin-top:30px}
+.alpha{margin-top:26px}.alpha>h2{font-family:var(--f-display);font-weight:800;font-size:24px;margin:0 0 2px;color:var(--muted)}
+.acard .mv-tag{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .country h2{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0 0 4px}
 .mcard{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:16px 18px;margin-top:12px}
 .mcard-head{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline}
@@ -179,6 +181,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
   <div class="wrap">
     <div class="tabs" role="tablist">
       <button id="tab-rooms" role="tab" aria-selected="true" data-i18n="tabRooms">사조별</button>
+      <button id="tab-artists" role="tab" aria-selected="false" data-i18n="tabArtists">화가별</button>
       <button id="tab-museums" role="tab" aria-selected="false" data-i18n="tabMuseums">미술관별</button>
     </div>
     <div class="search"><input id="q" type="search" placeholder="화가, 작품, 미술관, 도시 검색 (예: 모네, 오르세, 런던)" aria-label="검색"></div>
@@ -198,6 +201,13 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
       <ol class="tl-m" id="timeline-m"></ol>
     </div>
     <div class="wrap" id="rooms"></div>
+  </section>
+  <section id="view-artists" hidden>
+    <div class="wrap mv">
+      <h2 class="h2" data-i18n="avH">화가별로 보기</h2>
+      <p class="sub" data-i18n="avSub">화가 이름의 가나다순입니다. 작품 이름을 누르면 사조별 전시실의 해당 작품으로 이동합니다.</p>
+      <div id="artists"></div>
+    </div>
   </section>
   <section id="view-museums" hidden>
     <div class="wrap mv">
@@ -2445,6 +2455,10 @@ const UI_EN={
 "intro": "A personal art-history notebook: walk through the eras and movements, meet the key artists and their works, and see which museum each work hangs in today.",
 "tabRooms": "By movement",
 "tabMuseums": "By museum",
+"tabArtists": "By artist",
+"avH": "Browse by artist",
+"avSub": "Artists in alphabetical order. Tap a work to jump to it in its movement room.",
+"totopTop": "↑ Top",
 "search": "Search artists, works, museums, cities (e.g. Monet, Orsay, London)",
 "jump": "Go to room…",
 "tlH": "Timeline",
@@ -2637,6 +2651,19 @@ for(const a in ADD){if(!idx[a])throw new Error('unknown artist '+a);idx[a].w.pus
 Object.assign(EN,EN14);
 })();
 
+/* v15: removals (4), Picasso Barcelona, Modigliani row fill */
+(function(){
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+const DEL=[["Michelangelo Buonarroti","The Manchester Madonna","ngl"],["Gustave Caillebotte","Le Pont de l'Europe","geneva"],["Caspar David Friedrich","Chalk Cliffs on Rügen","reinhart"],["Amedeo Modigliani","Portrait of the Artist's Wife","nortonsimon"]];
+DEL.forEach(([a,t,mk])=>{const ar=idx[a];const i=ar.w.findIndex(w=>w[1]===t&&w[3]===mk);if(i<0)throw new Error("not found "+t);ar.w.splice(i,1)});
+const ADD={"Pablo Picasso":[["시녀들 (벨라스케스 연작)","Las Meninas","1957","museupicasso","x",{"cr":1,"tip":"벨라스케스의 「시녀들」을 1957년 58점의 연작으로 다시 해석했는데, 그중 화면 전체를 회색조로 옮긴 가장 큰 첫 작품입니다. 피카소는 이 연작 전체를 바르셀로나 피카소 미술관에 기증했습니다."}]],
+"Amedeo Modigliani":[["아기를 안은 집시 여인","Gypsy Woman with Baby","1919","nga","File:Amedeo Modigliani, Gypsy Woman with Baby, 1919, NGA 46649.jpg",{"tip":"길게 늘인 얼굴과 목, 눈동자 없이 칠한 눈으로 아기를 안은 집시 여인을 그렸습니다. 모딜리아니가 세상을 떠나기 한 해 전인 1919년 작품입니다."}]]};
+const EN15={"Pablo Picasso||Las Meninas||1957":"In 1957 Picasso reinterpreted Velázquez's Las Meninas in a series of 58 works; this is the first and largest, recasting the whole scene in greys. He donated the entire series to the Museu Picasso in Barcelona.",
+"Amedeo Modigliani||Gypsy Woman with Baby||1919":"A Roma woman holding her baby, painted with an elongated face and neck and eyes left without pupils. It dates from 1919, the year before Modigliani's death."};
+for(const a in ADD){if(!idx[a])throw new Error('unknown artist '+a);idx[a].w.push(...ADD[a])}
+Object.assign(EN,EN15);
+})();
+
 (function(){
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -2660,7 +2687,7 @@ if(isEN){document.documentElement.lang="en";document.title=UI_EN.title;
     m.traits=m.traits.map((t,i)=>E("m."+m.id+".t"+i,t));if(m.note)m.note=E("m."+m.id+".note",m.note);
     m.artists.forEach(a=>{a.d=E("a."+a.o,a.d);a.l=enDate(a.l)})});
 }
-if(isEN&&narrow.matches){$("#tab-rooms").textContent="Movements";$("#tab-museums").textContent="Museums";$("#jump option").textContent="Rooms"}
+if(isEN&&narrow.matches){$("#tab-rooms").textContent="Movements";$("#tab-artists").textContent="Artists";$("#tab-museums").textContent="Museums";$("#jump option").textContent="Rooms"}
 $("#langbtn").onclick=()=>{const nl=isEN?"ko":"en";store.set("wa-lang",nl);const u=new URL(location.href);u.searchParams.set("lang",nl);location.href=u.toString()};
 
 /* theme */
@@ -2668,7 +2695,7 @@ const themes=["system","light","dark"],tnames={system:U("thSystem","테마: 시�
 let theme=store.get("wa-theme")||"system";
 const ticons={system:"◐",light:"☀",dark:"☾"};
 function applyTheme(){if(theme==="system")document.documentElement.removeAttribute("data-theme");else document.documentElement.setAttribute("data-theme",theme);const b=$("#themebtn");b.textContent=narrow.matches?(isEN?"Theme":"테마"):tnames[theme];b.title=tnames[theme];b.setAttribute("aria-label",tnames[theme])}
-narrow.addEventListener&&narrow.addEventListener("change",()=>{applyTheme();if(isEN){$("#tab-rooms").textContent=narrow.matches?"Movements":UI_EN.tabRooms;$("#tab-museums").textContent=narrow.matches?"Museums":UI_EN.tabMuseums}});
+narrow.addEventListener&&narrow.addEventListener("change",()=>{applyTheme();if(isEN){$("#tab-rooms").textContent=narrow.matches?"Movements":UI_EN.tabRooms;$("#tab-artists").textContent=narrow.matches?"Artists":UI_EN.tabArtists;$("#tab-museums").textContent=narrow.matches?"Museums":UI_EN.tabMuseums}});
 $("#themebtn").onclick=()=>{theme=themes[(themes.indexOf(theme)+1)%3];store.set("wa-theme",theme);applyTheme()};
 applyTheme();
 
@@ -2720,7 +2747,7 @@ $("#stats").innerHTML=`<span><b>${MOVEMENTS.length}</b> ${U("rooms","사조")}</
   jp.addEventListener("change",()=>{if(jp.value){if(view!=="rooms")setView("rooms");document.getElementById(jp.value).scrollIntoView();jp.value=""}});
   /* back-to-timeline button */
   const tt=$("#totop"),sec=document.querySelector(".tl-sec");
-  tt.onclick=()=>sec.scrollIntoView();
+  tt.onclick=()=>{if(view==="rooms"&&!sec.hidden)sec.scrollIntoView();else scrollTo({top:0})};
   addEventListener("scroll",()=>{tt.hidden=scrollY<900},{passive:true});
 })();
 
@@ -2777,14 +2804,34 @@ cOrder.forEach(c=>{
 });
 $("#museums").innerHTML=mh;
 
+/* artists (가나다 / ABC) */
+const CHO="ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",CHO1={"ㄲ":"ㄱ","ㄸ":"ㄷ","ㅃ":"ㅂ","ㅆ":"ㅅ","ㅉ":"ㅈ"};
+const initialOf=n=>{const c=n.charCodeAt(0);if(c>=0xAC00&&c<=0xD7A3){const ch=CHO[Math.floor((c-0xAC00)/588)];return CHO1[ch]||ch}return n[0].normalize("NFD").replace(/[\u0300-\u036f]/g,"").toUpperCase()};
+const AR={};WORKS.forEach(w=>{(AR[w.a.o]??={a:w.a,ws:[]}).ws.push(w)});
+const arList=Object.values(AR).map(x=>({...x,name:isEN?x.a.o:x.a.n})).sort((p,q)=>p.name.localeCompare(q.name,isEN?"en":"ko",{sensitivity:"base"}));
+let ah="",curI="";
+arList.forEach(x=>{const ini=initialOf(x.name);
+  if(ini!==curI){if(curI)ah+=`</div>`;ah+=`<div class="alpha" data-country><h2>${esc(ini)}</h2>`;curI=ini}
+  const mvs=[...new Set(x.ws.map(w=>w.m))];
+  ah+=`<div class="mcard acard" data-mcard><div class="mcard-head"><h3>${esc(x.name)}</h3><span class="o">${isEN?"":esc(x.a.o)+" · "}${esc(x.a.l)}</span><span class="cnt">${x.ws.length}${U("cnt","점")}</span></div>
+    <div class="maddr">${mvs.map(m=>`<span class="mv-tag" style="background:${m.color}"></span>${esc(m.name)}`).join(" · ")}</div>
+    <ul class="mlist">${x.ws.map(w=>`<li class="mrow" data-hay="${esc(w.hay)}"><div class="mthumb" data-thumb="${w.id}">${w.cr?`<span class="dot" style="background:${w.m.color}" title="${U("crDot","저작권 보호 작품")}"></span>`:""}</div>
+      <div class="txt"><button type="button" data-jump="${w.id}">${esc(w.t)}</button><div class="meta">${esc(w.y)} · ${esc(w.mn)}${w.mc?", "+esc(w.mc):""}</div></div></li>`).join("")}</ul></div>`;
+});
+if(curI)ah+=`</div>`;
+$("#artists").innerHTML=ah;
+
 /* tabs */
 let view="rooms";
-function setView(v){view=v;$("#view-rooms").hidden=v!=="rooms";$("#view-museums").hidden=v!=="museums";
-  $("#tab-rooms").setAttribute("aria-selected",v==="rooms");$("#tab-museums").setAttribute("aria-selected",v==="museums");filter()}
-$("#tab-rooms").onclick=()=>setView("rooms");$("#tab-museums").onclick=()=>setView("museums");
-$("#museums").addEventListener("click",e=>{const b=e.target.closest("[data-jump]");if(!b)return;
+const VIEWS=["rooms","artists","museums"];
+function setView(v){view=v;VIEWS.forEach(k=>{$("#view-"+k).hidden=v!==k;$("#tab-"+k).setAttribute("aria-selected",v===k)});
+  const tt=$("#totop");tt.textContent=v==="rooms"?U("totop","↑ 연대표"):U("totopTop","↑ 맨 위로");tt.setAttribute("aria-label",v==="rooms"?U("totop","연대표로 돌아가기"):U("totopTop","맨 위로"));
+  filter();scrollTo({top:0})}
+VIEWS.forEach(k=>$("#tab-"+k).onclick=()=>setView(k));
+const jumpTo=e=>{const b=e.target.closest("[data-jump]");if(!b)return;
   $("#q").value="";setView("rooms");const el=document.getElementById(b.dataset.jump);el.scrollIntoView({block:"center"});
-  el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)});
+  el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)};
+$("#museums").addEventListener("click",jumpTo);$("#artists").addEventListener("click",jumpTo);
 
 /* search */
 function filter(){
@@ -2797,7 +2844,7 @@ function filter(){
       r.hidden=!rv;any=any||rv});
     document.querySelector(".tl-sec").hidden=!!q;
   }else{
-    document.querySelectorAll("[data-country]").forEach(c=>{let cv=false;
+    document.querySelectorAll(`#${view} [data-country]`).forEach(c=>{let cv=false;
       c.querySelectorAll("[data-mcard]").forEach(m=>{let mv=false;
         m.querySelectorAll(".mrow").forEach(r=>{const ok=!q||r.dataset.hay.includes(q);r.hidden=!ok;mv=mv||ok});
         m.hidden=!mv;cv=cv||mv});
@@ -2817,8 +2864,7 @@ function show(w,info){
   if(f){f.innerHTML=info?`<img src="${info.s}" alt="${esc(w.an)}, ${isEN?esc(w.t):"〈"+esc(w.t)+"〉"}" loading="lazy">`:`<span class="ph">${U("notfound","이미지를 찾지 못했습니다")}</span>`;
     if(!info){f.style.cursor="default";const cap=f.parentElement.querySelector(".links")||f.parentElement.querySelector(".caption").appendChild(Object.assign(document.createElement("div"),{className:"links"}));
       cap.insertAdjacentHTML("afterbegin",`<a href="https://www.google.com/search?tbm=isch&q=${encodeURIComponent(w.o+" "+w.a.o)}" target="_blank" rel="noopener">${U("imgSearch","이미지 검색 ↗")}</a>`)}}
-  const t=document.querySelector(`[data-thumb="${w.id}"]`);
-  if(t&&info)t.innerHTML=`<img src="${info.s}" alt="" loading="lazy">`;
+  if(info)document.querySelectorAll(`[data-thumb="${w.id}"]`).forEach(t=>t.innerHTML=`<img src="${info.s}" alt="" loading="lazy">`);
 }
 const pd=WORKS.filter(w=>!w.cr&&!w.noimg);
 let done=0;
