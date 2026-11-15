@@ -131,26 +131,51 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .mv{padding-block:28px 40px}
 .country{margin-top:30px}
 .quiz{max-width:720px;margin-top:18px}
-.qz-img{background:var(--mat);border-radius:8px;display:flex;align-items:center;justify-content:center;padding:14px;min-height:240px}
-.qz-img img{max-height:min(56vh,520px);width:auto;max-width:100%;object-fit:contain}
-.qz-q{font-weight:700;font-size:17px;margin:16px 0 10px}
+.qz-top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px}
+.qz-score{font-weight:700;color:var(--fg)}
+.qz-bar{height:4px;background:var(--line);border-radius:4px;overflow:hidden;margin-bottom:14px}
+.qz-bar i{display:block;height:100%;background:var(--fg);transition:width .3s}
+.qz-img{position:relative;background:var(--mat);border-radius:10px;display:flex;align-items:center;justify-content:center;padding:14px;min-height:240px}
+.qz-img img{max-height:min(55vh,520px);width:auto;max-width:100%;object-fit:contain;display:block}
+.qz-wait{color:var(--muted);font-size:13px}
+.qz-q{font-weight:700;font-size:17px;margin:18px 0 10px}
 .qz-opts{display:grid;gap:8px}
-.qz-opts button{font:inherit;text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--fg);cursor:pointer;line-height:1.4}
+.qz-opts button{font:inherit;text-align:left;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);cursor:pointer;line-height:1.4}
 .qz-opts button:hover:not(:disabled){border-color:var(--fg)}
-.qz-opts button b{display:block;font-size:15px}
-.qz-opts button span{font-size:13px;color:var(--muted)}
-.qz-opts button.wrong{border-color:#b3261e;background:color-mix(in srgb,#b3261e 10%,var(--surface));text-decoration:line-through;cursor:default;opacity:.75}
-.qz-opts button.right{border-color:#1e7a3a;background:color-mix(in srgb,#1e7a3a 12%,var(--surface))}
-.qz-msg{scroll-margin-top:90px;margin-top:12px;font-weight:600;min-height:1.4em}
+.qz-opts button b{font-size:15px}
+.qz-opts button span{display:block;font-size:13px;color:var(--muted)}
+.qz-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:8px;vertical-align:middle}
+.qz-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.qz-tile{font:inherit;color:var(--fg);background:var(--mat);border:2px solid transparent;border-radius:10px;padding:8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;min-height:150px;justify-content:center}
+.qz-tile img{max-width:100%;max-height:200px;object-fit:contain;display:block}
+.qz-tile:hover:not(:disabled){border-color:var(--fg)}
+.qz-cap{font-size:12px;line-height:1.35;text-align:center;color:var(--muted)}
+.qz-cap b{display:block;color:var(--fg)}
+.qz-opts button.wrong,.qz-tile.wrong{border-color:#b3261e;background:color-mix(in srgb,#b3261e 10%,var(--surface));cursor:default}
+.qz-opts button.wrong b{text-decoration:line-through;opacity:.7}
+.qz-tile.wrong img{opacity:.55}
+.qz-opts button.right,.qz-tile.right{border-color:#1e7a3a;background:color-mix(in srgb,#1e7a3a 12%,var(--surface));cursor:default}
+.qz-opts button:disabled,.qz-tile:disabled{color:var(--fg)}
+.qz-msg{margin-top:12px;font-weight:600;min-height:1.4em;scroll-margin-top:90px}
 .qz-msg.no{color:#b3261e}.qz-msg.ok{color:#1e7a3a}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .qz-msg.no{color:#f2a49e}:root:not([data-theme="light"]) .qz-msg.ok{color:#8fd6a2}}
 :root[data-theme="dark"] .qz-msg.no{color:#f2a49e}:root[data-theme="dark"] .qz-msg.ok{color:#8fd6a2}
+.qz-next{margin-top:16px;font:inherit;font-weight:600;padding:10px 20px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
+.qz-result{text-align:center;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:26px 18px}
+.qz-eyebrow{font-size:13px;color:var(--muted)}
+.qz-big{font-size:56px;font-weight:800;line-height:1.1;margin-top:6px}.qz-big small{font-size:22px;color:var(--muted);font-weight:600}
+.qz-grade{font-size:24px;font-weight:800;margin-top:4px}
+.qz-gtxt{color:var(--muted);margin:6px 0 0}
+.qz-best{font-size:13px;margin-top:10px;color:var(--muted)}
+.qz-log{list-style:none;padding:0;margin:18px auto 0;max-width:520px;text-align:left;font-size:14px}
+.qz-log li{display:flex;gap:10px;padding:6px 0;border-top:1px solid var(--line)}
+.qz-log .mk{font-weight:800;width:1.2em;flex:none;text-align:center}
+.qz-log li.ok .mk{color:#1e7a3a}.qz-log li.no .mk{color:#b3261e}
+@media (max-width:700px){.qz-img{min-height:200px}.qz-msg{scroll-margin-top:170px}.qz-tile{min-height:120px}.qz-tile img{max-height:150px}}
 .qz-ans{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:16px 18px}
 .qz-ans .t{font-weight:700;font-size:17px}.qz-ans .row{margin-top:4px;font-size:14px}.qz-ans .lbl{color:var(--muted);margin:0 8px 0 0;letter-spacing:0;text-transform:none;font-size:13px;font-family:inherit;display:inline}
 .qz-ans .tip{font-size:14px;color:var(--fg);margin-top:10px}
 .qz-ans .mlinks{margin-top:10px}
-@media (max-width:700px){.qz-msg{scroll-margin-top:170px}.qz-img{min-height:200px}}
-.qz-next{margin-top:14px;font:inherit;font-weight:600;padding:10px 18px;border-radius:999px;border:0;background:var(--fg);color:var(--bg);cursor:pointer}
 .alpha{margin-top:26px}.alpha>h2{font-family:var(--f-display);font-weight:800;font-size:24px;margin:0 0 2px;color:var(--muted)}
 .acard .mv-tag{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .country h2{font-family:var(--f-display);font-weight:800;font-size:26px;margin:0 0 4px}
@@ -241,7 +266,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
   <section id="view-quiz" hidden>
     <div class="wrap mv">
       <h2 class="h2" data-i18n="qzH">퀴즈</h2>
-      <p class="sub" data-i18n="qzSub">작품을 보고 화가와 제목을 맞혀 보세요. 퀴즈 탭을 누르거나 '다음 문제'를 누를 때마다 새 문제가 나옵니다. 이미지가 있는 작품만 나옵니다.</p>
+      <p class="sub" data-i18n="qzSub">10문제 도전입니다. 화가와 제목, 사조, 제작 시기, 소장 미술관, 같은 화가의 그림 찾기 문제가 섞여 나옵니다. 처음 고른 답이 맞아야 점수를 얻고, 끝나면 점수와 등급을 알려 드립니다.</p>
       <div id="quiz" class="quiz" aria-live="polite"></div>
     </div>
   </section>
@@ -2497,7 +2522,7 @@ const UI_EN={
 "qzRoom": "See it in its room →",
 "qzNext": "Next question",
 "qzH": "Quiz",
-"qzSub": "Look at the work and guess the artist and title. A new question appears each time you tap the Quiz tab or Next question. Only works with an image are used.",
+"qzSub": "A 10-question challenge mixing artist and title, movement, date, museum and spot-the-artist questions. Only your first answer scores; at the end you get your score and a rank.",
 "avH": "Browse by artist",
 "avSub": "Artists in alphabetical order. Tap a work to jump to it in its movement room.",
 "totopTop": "↑ Top",
@@ -2705,6 +2730,150 @@ const EN15={"Pablo Picasso||Las Meninas||1957":"In 1957 Picasso reinterpreted Ve
 for(const a in ADD){if(!idx[a])throw new Error('unknown artist '+a);idx[a].w.push(...ADD[a])}
 Object.assign(EN,EN15);
 })();
+
+/* v16: Bonnard The White Cat */
+(function(){
+const idx={};MOVEMENTS.forEach(m=>m.artists.forEach(a=>idx[a.o]=a));
+idx["Pierre Bonnard"].w.push(["흰 고양이","The White Cat","1894","orsay","File:Le Chat blanc.jpg",{"tip":"등을 활처럼 구부리고 다리를 길게 뻗은 흰 고양이를 익살스럽게 그린 작품입니다. 단순한 윤곽과 평면적인 화면에서 나비파 시절 보나르가 받은 일본 판화의 영향을 엿볼 수 있습니다."}]);
+EN["Pierre Bonnard||The White Cat||1894"]="A white cat arches its back and stretches its long legs in a playfully drawn pose. The simple outlines and flat picture plane show the influence of Japanese prints on Bonnard in his Nabi years.";
+})();
+
+/* Quiz engine (shared by the homepage and the app).
+   makeQuiz(cfg) → {enter, restart}
+   cfg: box (element), isEN, works ([{id,t,o,an,ak,mkey,mname,mcolor,y,yn,mk,mn,mc,other,img}]),
+        movs ([{key,name,color}]), esc, getImg(w)→Promise<url|null>, answerHTML(w), onAnswer(box)?, store {get,set}  */
+function makeQuiz(cfg){
+  const {box,isEN,esc}=cfg;
+  const L=(ko,en)=>isEN?en:ko;
+  const N=10,TYPES=["who","move","when","where","pick"];
+  const rnd=a=>a[Math.floor(Math.random()*a.length)];
+  const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const big=s=>s.replace(/\/\d+px-/,"/800px-");
+  const IMGW=cfg.works.filter(w=>w.img);
+  const WHEREW=IMGW.filter(w=>!w.other);
+  const WHENW=IMGW.filter(w=>w.yn>=1300&&w.yn<2000);
+  const byArtist={};cfg.works.forEach(w=>(byArtist[w.ak]??=[]).push(w));
+  const museums={};cfg.works.forEach(w=>{if(!w.other)museums[w.mk]={mk:w.mk,mn:w.mn,mc:w.mc}});
+  const MK=Object.keys(museums);
+  let S=null,tok=0;
+
+  function newGame(){S={i:0,score:0,log:[],last:"",q:null,answered:false,first:true}}
+  function enter(){
+    if(!S||S.done){newGame();ask();return}
+    if(S.answered){if(S.i>=N){S.done=true;result()}else ask();return}
+    if(!S.q){ask();return}
+    render();
+  }
+  function restart(){newGame();ask()}
+  const head=()=>`<div class="qz-top"><span class="qz-prog">${L("문제","Question")} ${S.i+1} / ${N}</span><span class="qz-score">${L("점수","Score")} ${S.score}</span></div><div class="qz-bar"><i style="width:${S.i/N*100}%"></i></div>`;
+
+  /* ---------- build a question ---------- */
+  function otherArtists(ans,n){
+    const used=new Set([ans.ak]),out=[];
+    const same=shuf(cfg.works.filter(w=>w.mkey===ans.mkey&&w.ak!==ans.ak)),rest=shuf(cfg.works.filter(w=>w.ak!==ans.ak));
+    for(const w of [...same.slice(0,2),...rest]){if(out.length>=n)break;if(!used.has(w.ak)){used.add(w.ak);out.push(w)}}
+    return out;
+  }
+  async function build(type){
+    if(type==="pick"){
+      const ans=rnd(IMGW);const pool=IMGW.filter(w=>w.ak!==ans.ak);
+      const used=new Set([ans.ak]),opts=[ans];
+      const cand=[...shuf(pool.filter(w=>w.mkey===ans.mkey)).slice(0,2),...shuf(pool)];
+      for(const w of cand){if(opts.length>=4)break;if(!used.has(w.ak)){used.add(w.ak);opts.push(w)}}
+      const urls=await Promise.all(opts.map(w=>cfg.getImg(w)));
+      if(urls.some(u=>!u))return null;
+      const o=shuf(opts.map((w,i)=>({w,url:urls[i],ok:w===ans})));
+      return {type,ans,opts:o,q:L(`다음 중 ${ans.an}의 작품은 어느 것일까요?`,`Which of these is by ${ans.an}?`)};
+    }
+    const pool=type==="where"?WHEREW:type==="when"?WHENW:IMGW;
+    const ans=rnd(pool);const url=await cfg.getImg(ans);if(!url)return null;
+    let opts,q;
+    if(type==="who"){q=L("이 작품의 화가와 제목은 무엇일까요?","Who painted this work, and what is it called?");
+      opts=[ans,...otherArtists(ans,3)].map(w=>({ok:w===ans,b:w.an,s:w.t}))}
+    else if(type==="move"){q=L("이 작품은 어느 사조에 속할까요?","Which movement does this work belong to?");
+      const others=shuf(cfg.movs.filter(m=>m.key!==ans.mkey)).slice(0,3);
+      opts=[{ok:true,b:ans.mname,c:ans.mcolor},...others.map(m=>({ok:false,b:m.name,c:m.color}))]}
+    else if(type==="when"){q=L("이 작품은 언제 그려졌을까요?","When was this work made?");
+      const b0=Math.floor(ans.yn/50)*50;const all=[];for(let y=1300;y<2000;y+=50)all.push(y);
+      const pickD=[];for(const y of shuf(all)){if(pickD.length>=3)break;if([b0,...pickD].every(z=>Math.abs(z-y)>=100))pickD.push(y)}
+      if(pickD.length<3)return null;
+      const lab=y=>L(`${y}–${y+49}년`,`${y}–${y+49}`);
+      opts=[{ok:true,b:lab(b0),yy:b0},...pickD.map(y=>({ok:false,b:lab(y),yy:y}))].sort((a,b)=>a.yy-b.yy);
+      return {type,ans,url,q,opts}}
+    else{q=L("이 작품은 어디에 가면 볼 수 있을까요?","Where can you see this work?");
+      const avoid=new Set((byArtist[ans.ak]||[]).map(w=>w.mk));
+      const others=shuf(MK.filter(k=>!avoid.has(k))).slice(0,3).map(k=>museums[k]);
+      opts=[{ok:true,b:ans.mn,s:ans.mc},...others.map(m=>({ok:false,b:m.mn,s:m.mc}))]}
+    return {type,ans,url,q,opts:shuf(opts)};
+  }
+  async function ask(){
+    const t=++tok;S.answered=false;S.first=true;S.q=null;
+    box.innerHTML=head()+`<div class="qz-img"><span class="qz-wait">${L("문제를 고르는 중…","Choosing a question…")}</span></div>`;
+    for(let tries=0;tries<15;tries++){
+      let type;do{type=rnd(TYPES)}while(type===S.last&&TYPES.length>1);
+      const q=await build(type);if(t!==tok)return;
+      if(q){S.q=q;S.last=type;render();return}
+    }
+    box.innerHTML=head()+`<p class="qz-msg no">${L("작품 이미지를 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.","Couldn't load the images. Check your connection and try again.")}</p><button type="button" class="qz-next" data-qz="retry">${L("다시 시도","Try again")}</button>`;
+  }
+
+  /* ---------- render ---------- */
+  function render(){
+    if(S.done){result();return}
+    const q=S.q;if(!q){ask();return}
+    let body;
+    if(q.type==="pick"){
+      body=`<div class="qz-q">${esc(q.q)}</div><div class="qz-grid">${q.opts.map((o,i)=>`<button type="button" class="qz-tile" data-qi="${i}"><img src="${big(o.url)}" alt="${L("보기","Option")} ${i+1}" onerror="this.onerror=null;this.src='${o.url}'"><span class="qz-cap"></span></button>`).join("")}</div>`;
+    }else{
+      body=`<div class="qz-img"><img src="${big(q.url)}" alt="${esc(q.q)}" onerror="this.onerror=null;this.src='${q.url}'"></div>
+       <div class="qz-q">${esc(q.q)}</div>
+       <div class="qz-opts">${q.opts.map((o,i)=>`<button type="button" data-qi="${i}">${o.c?`<i class="qz-dot" style="background:${o.c}"></i>`:""}<b>${esc(o.b)}</b>${o.s?`<span>${esc(o.s)}</span>`:""}</button>`).join("")}</div>`;
+    }
+    box.innerHTML=head()+body+`<div class="qz-msg" role="status"></div><div class="qz-res"></div>`;
+  }
+  function choose(i){
+    if(!S||!S.q||S.answered)return;
+    const q=S.q,o=q.opts[i],btn=box.querySelector(`[data-qi="${i}"]`);if(!btn||btn.disabled)return;
+    const msg=box.querySelector(".qz-msg");
+    if(!o.ok){btn.classList.add("wrong");btn.disabled=true;S.first=false;msg.className="qz-msg no";msg.textContent=L("오답입니다. 다시 선택해 보세요.","Not quite. Try again.");
+      if(q.type==="pick"){btn.querySelector(".qz-cap").innerHTML=`<b>${esc(o.w.an)}</b>${esc(o.w.t)}`}
+      return}
+    S.answered=true;btn.classList.add("right");box.querySelectorAll("[data-qi]").forEach(x=>x.disabled=true);
+    if(q.type==="pick")q.opts.forEach((p,j)=>{box.querySelector(`[data-qi="${j}"] .qz-cap`).innerHTML=`<b>${esc(p.w.an)}</b>${esc(p.w.t)}`});
+    if(S.first)S.score++;
+    S.log.push({w:q.ans,ok:S.first});S.i++;
+    msg.className="qz-msg ok";msg.textContent=S.first?L("정답입니다.","Correct."):L("정답입니다. (첫 시도가 아니어서 점수는 없습니다)","Correct. (No point, as it wasn't your first try.)");
+    box.querySelector(".qz-score").textContent=`${L("점수","Score")} ${S.score}`;box.querySelector(".qz-bar i").style.width=`${S.i/N*100}%`;
+    const last=S.i>=N;
+    box.querySelector(".qz-res").innerHTML=cfg.answerHTML(q.ans)+`<button type="button" class="qz-next" data-qz="${last?"done":"next"}">${last?L("결과 보기","See results"):L("다음 문제","Next question")}</button>`;
+    cfg.onAnswer&&cfg.onAnswer(box);
+    msg.scrollIntoView({block:"start",behavior:"smooth"});
+  }
+  const GRADES=[[10,"큐레이터","Curator","만점입니다. 미술관 하나쯤 맡겨도 되겠습니다.","A perfect score. You could run a museum."],
+    [8,"도슨트","Docent","관람객에게 작품을 안내해도 될 실력입니다.","Good enough to give gallery tours."],
+    [6,"미술 애호가","Art lover","미술관이 즐거운 분입니다. 조금만 더 보면 도슨트입니다.","You clearly enjoy museums. A little more and you'll be a docent."],
+    [4,"관람객","Visitor","전시실을 한 바퀴 더 걸어 보면 금방 늘 겁니다.","Another walk through the rooms and you'll improve fast."],
+    [0,"첫 방문객","First-time visitor","이제 시작입니다. 사조별 전시실부터 둘러보세요.","Just getting started. Try a stroll through the movement rooms."]];
+  function result(){
+    const g=GRADES.find(x=>S.score>=x[0]);
+    let best=0;try{best=+(cfg.store&&cfg.store.get("wa-quiz-best"))||0}catch(e){}
+    const isBest=S.score>best;if(isBest){best=S.score;try{cfg.store&&cfg.store.set("wa-quiz-best",best)}catch(e){}}
+    box.innerHTML=`<div class="qz-result"><div class="qz-eyebrow">${L("10문제 도전 결과","Your 10-question result")}</div>
+     <div class="qz-big">${S.score}<small> / ${N}</small></div><div class="qz-grade">${L(g[1],g[2])}</div><p class="qz-gtxt">${L(g[3],g[4])}</p>
+     <div class="qz-best">${isBest&&S.score>0?L("최고 기록을 새로 세웠습니다.","New personal best."):L(`최고 기록 ${best}점`,`Best score: ${best}`)}</div>
+     <ol class="qz-log">${S.log.map(x=>`<li class="${x.ok?"ok":"no"}"><span class="mk">${x.ok?"○":"×"}</span><span><b>${esc(x.w.t)}</b> · ${esc(x.w.an)}</span></li>`).join("")}</ol>
+     <button type="button" class="qz-next" data-qz="again">${L("다시 도전","Play again")}</button></div>`;
+  }
+  box.addEventListener("click",e=>{
+    const c=e.target.closest("[data-qi]");if(c&&box.contains(c)){choose(+c.dataset.qi);return}
+    const b=e.target.closest("[data-qz]");if(!b)return;
+    const a=b.dataset.qz;
+    if(a==="next"||a==="retry"){ask();cfg.scrollTop&&cfg.scrollTop()}
+    else if(a==="done"){S.done=true;result();cfg.scrollTop&&cfg.scrollTop()}
+    else if(a==="again"){restart();cfg.scrollTop&&cfg.scrollTop()}
+  });
+  return {enter,restart};
+}
 
 (function(){
 const $=s=>document.querySelector(s);
@@ -2947,42 +3116,21 @@ async function loadImages(){
 }
 loadImages();
 
-/* quiz: show a work (image only), pick artist + title from 4 options */
-const pick=a=>a[Math.floor(Math.random()*a.length)];
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-let lastQ=null;
-function newQuiz(){
-  const box=$("#quiz");
-  const pool=pd.filter(w=>imgs[w.id]&&w.id!==lastQ);
-  if(!pool.length){box.innerHTML=`<p class="sub">${U("qzWait","작품 이미지를 불러오는 중입니다. 잠시 후 퀴즈 탭을 다시 눌러 주세요.")}</p>`;return}
-  const ans=pick(pool);lastQ=ans.id;
-  /* distractors: other artists, about half from the same movement */
-  const used=new Set([ans.a.o]),opts=[ans];
-  const same=shuffle(WORKS.filter(w=>w.mi===ans.mi&&w.a.o!==ans.a.o)),rest=shuffle(WORKS.filter(w=>w.a.o!==ans.a.o));
-  for(const w of [...same.slice(0,2),...rest]){if(opts.length>=4)break;if(!used.has(w.a.o)){used.add(w.a.o);opts.push(w)}}
-  shuffle(opts);
-  const info=imgs[ans.id],big=info.s.replace(/\/\d+px-/,"/800px-");
-  box.innerHTML=`<div class="qz-img"><img src="${big}" alt="${U("qzAlt","퀴즈 작품 이미지")}" onerror="this.onerror=null;this.src='${info.s}'"></div>
-   <div class="qz-q">${U("qzQ","이 작품의 화가와 제목은 무엇일까요?")}</div>
-   <div class="qz-opts">${opts.map(w=>`<button type="button" data-ok="${w===ans?1:0}"><b>${esc(w.an)}</b><span>${esc(w.t)}</span></button>`).join("")}</div>
-   <div class="qz-msg" role="status"></div><div class="qz-res"></div>`;
-  box.querySelector(".qz-opts").onclick=e=>{const b=e.target.closest("button");if(!b||b.disabled)return;const msg=box.querySelector(".qz-msg");
-    if(b.dataset.ok!=="1"){b.classList.add("wrong");b.disabled=true;msg.className="qz-msg no";msg.textContent=U("qzWrong","오답입니다. 다시 선택해 보세요.");return}
-    b.classList.add("right");box.querySelectorAll(".qz-opts button").forEach(x=>x.disabled=true);
-    msg.className="qz-msg ok";msg.textContent=U("qzRight","정답입니다.");
-    const mu=ans.mu,w=ans;
-    box.querySelector(".qz-res").innerHTML=`<div class="qz-ans"><div class="t">${esc(w.t)}</div>${w.o?`<div class="row" style="color:var(--muted);font-style:italic">${esc(w.o)}</div>`:""}
+/* quiz (10-question challenge, shared engine in quiz.js) */
+const QZ=makeQuiz({box:$("#quiz"),isEN,esc,store,
+  works:WORKS.map(w=>({id:w.id,t:w.t,o:w.o,an:w.an,ak:w.a.o,mkey:w.m.id,mname:w.m.name,mcolor:w.m.color,y:w.y,yn:yearOf(w.y),mk:w.mk,mn:w.mn,mc:w.mc,
+    other:["private","unknown","various","lost"].includes(w.mk),img:!w.cr&&!w.noimg,src:w})),
+  movs:MOVEMENTS.map(m=>({key:m.id,name:m.name,color:m.color})),
+  getImg:q=>Promise.resolve(imgs[q.id]?imgs[q.id].s:null),
+  scrollTop:()=>scrollTo({top:0}),
+  answerHTML:q=>{const w=q.src,mu=w.mu;return `<div class="qz-ans"><div class="t">${esc(w.t)}</div>${w.o?`<div class="row" style="color:var(--muted);font-style:italic">${esc(w.o)}</div>`:""}
       <div class="row"><span class="lbl">${U("qzArtist","화가")}</span>${esc(w.an)}${isEN?"":` (${esc(w.a.o)})`} · ${esc(w.y)}</div>
-      <div class="row"><span class="lbl">${U("qzMove","사조")}</span><span class="mv-tag" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:${w.m.color}"></span>${esc(w.m.name)}</div>
+      <div class="row"><span class="lbl">${U("qzMove","사조")}</span><span style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;background:${w.m.color}"></span>${esc(w.m.name)}</div>
       <div class="row"><span class="lbl">${U("qzWhere","볼 수 있는 곳")}</span>${esc(w.mn)}${w.mc?", "+esc(w.mc):""}</div>
       ${w.tip?`<div class="tip">${esc(w.tip)}</div>`:""}
-      <div class="mlinks">${mu.u?`<a href="${mu.u}" target="_blank" rel="noopener">${U("site","웹사이트 ↗")}</a>`:""}${mu.addr?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mu.q||(mu.o+", "+mu.addr))}" target="_blank" rel="noopener">${U("map","구글 지도 ↗")}</a>`:""}<a href="#" data-go-work="${w.id}">${U("qzRoom","전시실에서 보기 →")}</a></div></div>
-      <button type="button" class="qz-next">${U("qzNext","다음 문제")}</button>`;
-    msg.scrollIntoView({block:"start",behavior:"smooth"});
-    box.querySelector(".qz-next").onclick=()=>{newQuiz();scrollTo({top:0})};
-    box.querySelector("[data-go-work]").onclick=ev=>{ev.preventDefault();setView("rooms");const el=document.getElementById(w.id);el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)};
-  };
-}
+      <div class="mlinks">${mu.u?`<a href="${mu.u}" target="_blank" rel="noopener">${U("site","웹사이트 ↗")}</a>`:""}${mu.addr?`<a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mu.q||(mu.o+", "+mu.addr))}" target="_blank" rel="noopener">${U("map","구글 지도 ↗")}</a>`:""}<a href="#" data-go-work="${w.id}">${U("qzRoom","전시실에서 보기 →")}</a></div></div>`}});
+function newQuiz(){QZ.enter()}
+$("#quiz").addEventListener("click",ev=>{const g=ev.target.closest("[data-go-work]");if(!g)return;ev.preventDefault();setView("rooms");const el=document.getElementById(g.dataset.goWork);el.scrollIntoView({block:"center"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1800)});
 
 /* lightbox */
 const lb=$("#lb");
