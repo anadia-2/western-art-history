@@ -172,6 +172,11 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qz-log .mk{font-weight:800;width:1.2em;flex:none;text-align:center}
 .qz-log li.ok .mk{color:#1e7a3a}.qz-log li.no .mk{color:#b3261e}
 @media (max-width:700px){.qz-img{min-height:200px}.qz-msg{scroll-margin-top:170px}.qz-tile{min-height:120px}.qz-tile img{max-height:150px}}
+.qz-tile{position:relative}
+.qz-badge{position:absolute;top:8px;left:8px;width:28px;height:28px;border-radius:50%;background:#1e7a3a;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px;z-index:1}
+.qz-tile.shake{animation:qzshake .35s;border-color:#b3261e}
+@keyframes qzshake{0%,100%{transform:none}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.qz-order ol{margin:0;padding-left:1.4em}.qz-order li{margin:6px 0;font-size:14px}.qz-order li span{display:block;font-size:12.5px;color:var(--muted)}
 .qz-ans{margin-top:12px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:16px 18px}
 .qz-ans .t{font-weight:700;font-size:17px}.qz-ans .row{margin-top:4px;font-size:14px}.qz-ans .lbl{color:var(--muted);margin:0 8px 0 0;letter-spacing:0;text-transform:none;font-size:13px;font-family:inherit;display:inline}
 .qz-ans .tip{font-size:14px;color:var(--fg);margin-top:10px}
@@ -266,7 +271,7 @@ dialog::backdrop{background:rgba(10,10,9,.88)}
   <section id="view-quiz" hidden>
     <div class="wrap mv">
       <h2 class="h2" data-i18n="qzH">퀴즈</h2>
-      <p class="sub" data-i18n="qzSub">10문제 도전입니다. 화가와 제목, 사조, 제작 시기, 소장 미술관, 같은 화가의 그림 찾기 문제가 섞여 나옵니다. 처음 고른 답이 맞아야 점수를 얻고, 끝나면 점수와 등급을 알려 드립니다.</p>
+      <p class="sub" data-i18n="qzSub">10문제 도전입니다. 화가와 제목, 사조, 제작 시기, 시대 순서, 같은 화가의 그림 찾기 문제가 섞여 나옵니다. 처음 고른 답이 맞아야 점수를 얻고, 끝나면 점수와 등급을 알려 드립니다.</p>
       <div id="quiz" class="quiz" aria-live="polite"></div>
     </div>
   </section>
@@ -2522,7 +2527,7 @@ const UI_EN={
 "qzRoom": "See it in its room →",
 "qzNext": "Next question",
 "qzH": "Quiz",
-"qzSub": "A 10-question challenge mixing artist and title, movement, date, museum and spot-the-artist questions. Only your first answer scores; at the end you get your score and a rank.",
+"qzSub": "A 10-question challenge mixing artist and title, movement, date, oldest-to-newest and spot-the-artist questions. Only your first answer scores; at the end you get your score and a rank.",
 "avH": "Browse by artist",
 "avSub": "Artists in alphabetical order. Tap a work to jump to it in its movement room.",
 "totopTop": "↑ Top",
@@ -2745,12 +2750,11 @@ EN["Pierre Bonnard||The White Cat||1894"]="A white cat arches its back and stret
 function makeQuiz(cfg){
   const {box,isEN,esc}=cfg;
   const L=(ko,en)=>isEN?en:ko;
-  const N=10,TYPES=["who","move","when","where","pick"];
+  const N=10,TYPES=["who","move","when","order","pick"];
   const rnd=a=>a[Math.floor(Math.random()*a.length)];
   const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
   const big=s=>s.replace(/\/\d+px-/,"/800px-");
   const IMGW=cfg.works.filter(w=>w.img);
-  const WHEREW=IMGW.filter(w=>!w.other);
   const WHENW=IMGW.filter(w=>w.yn>=1300&&w.yn<2000);
   const byArtist={};cfg.works.forEach(w=>(byArtist[w.ak]??=[]).push(w));
   const museums={};cfg.works.forEach(w=>{if(!w.other)museums[w.mk]={mk:w.mk,mn:w.mn,mc:w.mc}});
@@ -2785,7 +2789,16 @@ function makeQuiz(cfg){
       const o=shuf(opts.map((w,i)=>({w,url:urls[i],ok:w===ans})));
       return {type,ans,opts:o,q:L(`다음 중 ${ans.an}의 작품은 어느 것일까요?`,`Which of these is by ${ans.an}?`)};
     }
-    const pool=type==="where"?WHEREW:type==="when"?WHENW:IMGW;
+    if(type==="order"){
+      const picks=[];for(const w of shuf(WHENW)){if(picks.length>=4)break;if(picks.every(p=>Math.abs(p.yn-w.yn)>=30&&p.ak!==w.ak))picks.push(w)}
+      if(picks.length<4)return null;
+      const urls=await Promise.all(picks.map(w=>cfg.getImg(w)));
+      if(urls.some(u=>!u))return null;
+      const order=picks.slice().sort((a,b)=>a.yn-b.yn);
+      return {type,order,step:0,opts:shuf(picks.map((w,i)=>({w,url:urls[i]}))),
+        q:L("4점을 오래된 작품부터 차례로 눌러 보세요.","Tap the four works from oldest to newest.")};
+    }
+    const pool=type==="when"?WHENW:IMGW;
     const ans=rnd(pool);const url=await cfg.getImg(ans);if(!url)return null;
     let opts,q;
     if(type==="who"){q=L("이 작품의 화가와 제목은 무엇일까요?","Who painted this work, and what is it called?");
@@ -2822,32 +2835,50 @@ function makeQuiz(cfg){
     if(S.done){result();return}
     const q=S.q;if(!q){ask();return}
     let body;
-    if(q.type==="pick"){
-      body=`<div class="qz-q">${esc(q.q)}</div><div class="qz-grid">${q.opts.map((o,i)=>`<button type="button" class="qz-tile" data-qi="${i}"><img src="${big(o.url)}" alt="${L("보기","Option")} ${i+1}" onerror="this.onerror=null;this.src='${o.url}'"><span class="qz-cap"></span></button>`).join("")}</div>`;
+    if(q.type==="pick"||q.type==="order"){
+      const cap=o=>q.type==="order"?`<b>${esc(o.w.an)}</b>${esc(o.w.t)}`:"";
+      body=`<div class="qz-q">${esc(q.q)}</div><div class="qz-grid">${q.opts.map((o,i)=>`<button type="button" class="qz-tile" data-qi="${i}"><span class="qz-badge" hidden></span><img src="${big(o.url)}" alt="${L("보기","Option")} ${i+1}" onerror="this.onerror=null;this.src='${o.url}'"><span class="qz-cap">${cap(o)}</span></button>`).join("")}</div>`;
     }else{
       body=`<div class="qz-img"><img src="${big(q.url)}" alt="${esc(q.q)}" onerror="this.onerror=null;this.src='${q.url}'"></div>
        <div class="qz-q">${esc(q.q)}</div>
        <div class="qz-opts">${q.opts.map((o,i)=>`<button type="button" data-qi="${i}">${o.c?`<i class="qz-dot" style="background:${o.c}"></i>`:""}<b>${esc(o.b)}</b>${o.s?`<span>${esc(o.s)}</span>`:""}</button>`).join("")}</div>`;
     }
     box.innerHTML=head()+body+`<div class="qz-msg" role="status"></div><div class="qz-res"></div>`;
+    if(q.type==="order")for(let k=0;k<q.step;k++)markOrder(q,q.opts.findIndex(o=>o.w===q.order[k]),k);
+  }
+  function markOrder(q,i,k){const b=box.querySelector(`[data-qi="${i}"]`);b.classList.add("right");b.disabled=true;const g=b.querySelector(".qz-badge");g.textContent=k+1;g.hidden=false}
+  function finish(q,ansHTML,label){
+    S.answered=true;box.querySelectorAll("[data-qi]").forEach(x=>x.disabled=true);
+    if(S.first)S.score++;
+    S.log.push({...label,ok:S.first});S.i++;
+    const msg=box.querySelector(".qz-msg");
+    msg.className="qz-msg ok";msg.textContent=S.first?L("정답입니다.","Correct."):L("정답입니다. (첫 시도가 아니어서 점수는 없습니다)","Correct. (No point, as it wasn't your first try.)");
+    box.querySelector(".qz-score").textContent=`${L("점수","Score")} ${S.score}`;box.querySelector(".qz-bar i").style.width=`${S.i/N*100}%`;
+    const last=S.i>=N;
+    box.querySelector(".qz-res").innerHTML=ansHTML+`<button type="button" class="qz-next" data-qz="${last?"done":"next"}">${last?L("결과 보기","See results"):L("다음 문제","Next question")}</button>`;
+    cfg.onAnswer&&cfg.onAnswer(box);
+    msg.scrollIntoView({block:"start",behavior:"smooth"});
   }
   function choose(i){
     if(!S||!S.q||S.answered)return;
     const q=S.q,o=q.opts[i],btn=box.querySelector(`[data-qi="${i}"]`);if(!btn||btn.disabled)return;
     const msg=box.querySelector(".qz-msg");
+    if(q.type==="order"){
+      if(o.w!==q.order[q.step]){S.first=false;msg.className="qz-msg no";msg.textContent=L("오답입니다. 다시 선택해 보세요.","Not quite. Try again.");
+        btn.classList.remove("shake");void btn.offsetWidth;btn.classList.add("shake");setTimeout(()=>btn.classList.remove("shake"),450);return}
+      markOrder(q,i,q.step);q.step++;msg.className="qz-msg";msg.textContent="";
+      if(q.step<4)return;
+      q.opts.forEach((p,j)=>{box.querySelector(`[data-qi="${j}"] .qz-cap`).innerHTML=`<b>${esc(p.w.y)}</b>${esc(p.w.an)} · ${esc(p.w.t)}`});
+      const html=`<div class="qz-ans qz-order"><ol>${q.order.map(w=>`<li><b>${esc(w.y)}</b> · ${esc(w.an)}, ${esc(w.t)}<span>${esc(w.mname)} · ${esc(w.mn)}${w.mc?", "+esc(w.mc):""}</span></li>`).join("")}</ol></div>`;
+      finish(q,html,{t:L("시대 순서 맞히기","Oldest to newest"),an:q.order.map(w=>w.an).join(" → ")});
+      return;
+    }
     if(!o.ok){btn.classList.add("wrong");btn.disabled=true;S.first=false;msg.className="qz-msg no";msg.textContent=L("오답입니다. 다시 선택해 보세요.","Not quite. Try again.");
       if(q.type==="pick"){btn.querySelector(".qz-cap").innerHTML=`<b>${esc(o.w.an)}</b>${esc(o.w.t)}`}
       return}
-    S.answered=true;btn.classList.add("right");box.querySelectorAll("[data-qi]").forEach(x=>x.disabled=true);
+    btn.classList.add("right");
     if(q.type==="pick")q.opts.forEach((p,j)=>{box.querySelector(`[data-qi="${j}"] .qz-cap`).innerHTML=`<b>${esc(p.w.an)}</b>${esc(p.w.t)}`});
-    if(S.first)S.score++;
-    S.log.push({w:q.ans,ok:S.first});S.i++;
-    msg.className="qz-msg ok";msg.textContent=S.first?L("정답입니다.","Correct."):L("정답입니다. (첫 시도가 아니어서 점수는 없습니다)","Correct. (No point, as it wasn't your first try.)");
-    box.querySelector(".qz-score").textContent=`${L("점수","Score")} ${S.score}`;box.querySelector(".qz-bar i").style.width=`${S.i/N*100}%`;
-    const last=S.i>=N;
-    box.querySelector(".qz-res").innerHTML=cfg.answerHTML(q.ans)+`<button type="button" class="qz-next" data-qz="${last?"done":"next"}">${last?L("결과 보기","See results"):L("다음 문제","Next question")}</button>`;
-    cfg.onAnswer&&cfg.onAnswer(box);
-    msg.scrollIntoView({block:"start",behavior:"smooth"});
+    finish(q,cfg.answerHTML(q.ans),{t:q.ans.t,an:q.ans.an});
   }
   const GRADES=[[10,"큐레이터","Curator","만점입니다. 미술관 하나쯤 맡겨도 되겠습니다.","A perfect score. You could run a museum."],
     [8,"도슨트","Docent","관람객에게 작품을 안내해도 될 실력입니다.","Good enough to give gallery tours."],
@@ -2861,7 +2892,7 @@ function makeQuiz(cfg){
     box.innerHTML=`<div class="qz-result"><div class="qz-eyebrow">${L("10문제 도전 결과","Your 10-question result")}</div>
      <div class="qz-big">${S.score}<small> / ${N}</small></div><div class="qz-grade">${L(g[1],g[2])}</div><p class="qz-gtxt">${L(g[3],g[4])}</p>
      <div class="qz-best">${isBest&&S.score>0?L("최고 기록을 새로 세웠습니다.","New personal best."):L(`최고 기록 ${best}점`,`Best score: ${best}`)}</div>
-     <ol class="qz-log">${S.log.map(x=>`<li class="${x.ok?"ok":"no"}"><span class="mk">${x.ok?"○":"×"}</span><span><b>${esc(x.w.t)}</b> · ${esc(x.w.an)}</span></li>`).join("")}</ol>
+     <ol class="qz-log">${S.log.map(x=>`<li class="${x.ok?"ok":"no"}"><span class="mk">${x.ok?"○":"×"}</span><span><b>${esc(x.t)}</b> · ${esc(x.an)}</span></li>`).join("")}</ol>
      <button type="button" class="qz-next" data-qz="again">${L("다시 도전","Play again")}</button></div>`;
   }
   box.addEventListener("click",e=>{
